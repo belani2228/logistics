@@ -18,13 +18,23 @@ def get_data():
 			"items": [
 				{
 					"type": "doctype",
-					"name": "Port",
-					"description": _("Pelabuhan")
+					"name": "Carrier",
+					"description": _("Carrier")
 				},
 				{
 					"type": "doctype",
-					"name": "Carrier",
-					"description": _("Carrier")
+					"name": "Commodity",
+					"description": _("Commodity")
+				},
+				{
+					"type": "doctype",
+					"name": "Port",
+					"description": _("Port")
+				},
+				{
+					"type": "doctype",
+					"name": "Shipper",
+					"description": _("Shipper")
 				},
 				{
 					"type": "doctype",
