@@ -1,0 +1,99 @@
+// Copyright (c) 2016, Abcgroups and contributors
+// For license information, please see license.txt
+
+frappe.ui.form.on('Deposite Note', {
+	refresh: function(frm) {
+		var me = this;
+		
+		/*
+		if(frm.doc.docstatus==1) {
+			cur_frm.add_custom_button(__('Make Purchase Invoice'), cur_frm.cscript['Purchase Invoice'], "icon-exclamation", "btn-default");
+		};
+		*/
+		if(frm.doc.docstatus==1) {
+			cur_frm.add_custom_button(__('Purchase Invoice'), this.make_purchase_invoice, __("Make"));
+			cur_frm.add_custom_button(__('Journal Voucher'), this.make_journal_voucher, __("Make"));
+			cur_frm.page.set_inner_btn_group_as_primary(__("Make"));
+		}
+	},
+	/*
+	make_purchase_invoice: function() {
+		frappe.model.open_mapped_doc({
+			method: "logistics.logistics.doctype.deposite_note.deposite_note.make_purchase_invoice",
+			frm: cur_frm
+		})
+	},
+	*/
+});
+/*
+cur_frm.cscript['Purchase Invoice'] = function() {
+	frappe.model.open_mapped_doc({
+		method: "logistics.logistics.doctype.deposite_note.deposite_note.make_purchase_invoice",
+		frm: cur_frm
+	})
+}
+*/
+
+cur_frm.set_query("account_paid_to",  function (frm) {
+    return {
+        filters: {
+            'root_type': 'Asset',
+			'is_group': 0
+        }
+	}
+});
+cur_frm.add_fetch("deposite_amount", "difference")
+cur_frm.set_query("item_code", "items",  function (doc, cdt, cdn) {
+	var c_doc= locals[cdt][cdn];
+    return {
+        filters: {
+            'item_group': 'Services'
+        }
+    }
+});
+frappe.ui.form.on("Deposite Note Item", "item_code", function(frm, cdt, cdn) {
+    row = locals[cdt][cdn];
+    frappe.call({
+        method: "frappe.client.get",
+        args: {
+            doctype: "Item",
+			name: row.item_code
+        },
+        callback: function (data) {
+            frappe.model.set_value(cdt, cdn, "expense_account", data.message.expense_account);
+		}
+    })
+});
+cur_frm.set_query("expense_account", "items",  function (doc, cdt, cdn) {
+	var c_doc= locals[cdt][cdn];
+    return {
+        filters: {
+            'root_type': 'Expense',
+			'is_group': 0
+        }
+	}
+});
+
+var calculate_total_claim = function(frm) {
+    var total_claim = frappe.utils.sum(
+        (frm.doc.items || []).map(function(i) {
+			return (i.claim_amount);
+		})
+    );
+    frm.set_value("total_claim", total_claim);
+}
+frappe.ui.form.on("Deposite Note Item", "claim_amount", function(frm, cdt, cdn) {
+    calculate_total_claim(frm, cdt, cdn);
+})
+
+var calculate_sisa = function(frm) {
+	var sisa = flt(frm.doc.deposite_amount) - flt(frm.doc.total_claim);
+	frm.set_value("difference", sisa);
+}
+frappe.ui.form.on("Deposite Note", "deposite_amount", function(frm) {
+	calculate_sisa(frm);
+})
+frappe.ui.form.on("Deposite Note", "total_claim", function(frm) {
+	calculate_sisa(frm);
+})
+
