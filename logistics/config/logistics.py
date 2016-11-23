@@ -16,6 +16,11 @@ def get_data():
 					"name": "Rekap Export",
 					"description": _("Rekap Export")
 				},
+				{
+					"type": "doctype",
+					"name": "Deposite Note",
+					"description": _("Deposite Note")
+				},
 			]
 		},
 		{
