@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 # Copyright (c) 2015, Abcgroups and contributors
 # For license information, please see license.txt
+# Gunakan bahasa indonesia saja ya
 
 from __future__ import unicode_literals
 import frappe
@@ -10,11 +11,11 @@ from frappe.model.mapper import get_mapped_doc
 
 class DepositeNote(Document):
 	pass
-	
+
 @frappe.whitelist()
 def make_purchase_invoice(source_name, target_doc=None):
 	def set_missing_values(source, target):
-		target.is_paid = 1
+		#target.is_paid = 1
 		#target.credit_to = "Cash"
 		target.run_method("set_missing_values")
 
@@ -24,7 +25,9 @@ def make_purchase_invoice(source_name, target_doc=None):
 			"field_map": {
 				"posting_date": "due_date",
 				"account_paid_to": "cash_bank_account",
-				"total_claim": "paid_amount"
+				"total_claim": "paid_amount",
+				"vendor": "supplier",
+				"name": "remarks",
 			},
 			"validation": {
 				"docstatus": ["=", 1],
@@ -34,9 +37,9 @@ def make_purchase_invoice(source_name, target_doc=None):
 			"doctype": "Purchase Invoice Item",
 			"field_map": {
 				"stock_uom": "uom",
-				"claim_amount": "rate"
+				"rate": "rate"
 			}
 		},
 	}, target_doc, set_missing_values)
-	
+
 	return doc
