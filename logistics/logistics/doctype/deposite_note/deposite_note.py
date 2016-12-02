@@ -36,7 +36,6 @@ def make_purchase_invoice(source_name, target_doc=None):
 		"Deposite Note Item": {
 			"doctype": "Purchase Invoice Item",
 			"field_map": {
-				"stock_uom": "uom",
 				"rate": "rate"
 			}
 		},

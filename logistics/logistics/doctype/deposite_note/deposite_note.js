@@ -79,9 +79,9 @@ cur_frm.set_query("expense_account", "items",  function (doc, cdt, cdn) {
 
 cur_frm.cscript.qty = function(doc, cdt, cdn) {
 	var d = locals[cdt][cdn];
-		d.claim_amount = flt(d.qty) * flt(d.rate);
+		d.amount = flt(d.qty) * flt(d.rate);
 
-		refresh_field('claim_amount', d.name, 'items');
+		refresh_field('amount', d.name, 'items');
 }
 cur_frm.cscript.rate = cur_frm.cscript.qty;
 
@@ -93,7 +93,7 @@ var calculate_total_claim = function(frm) {
     );
     frm.set_value("total_claim", total_claim);
 }
-frappe.ui.form.on("Deposite Note Item", "claim_amount", function(frm, cdt, cdn) {
+frappe.ui.form.on("Deposite Note Item", "amount", function(frm, cdt, cdn) {
     calculate_total_claim(frm, cdt, cdn);
 })
 frappe.ui.form.on("Deposite Note Item", "qty", function(frm, cdt, cdn) {
@@ -113,3 +113,44 @@ frappe.ui.form.on("Deposite Note", "deposite_amount", function(frm) {
 frappe.ui.form.on("Deposite Note", "total_claim", function(frm) {
 	calculate_sisa(frm);
 })
+
+//test ubah currency
+cur_frm.cscript.onload = function(doc, cdt, cdn) {
+	cur_frm.fields_dict.deposite_amount.set_label('Deposite Amount ('+doc.currency+')');
+	cur_frm.fields_dict.difference.set_label('Difference (' + doc.currency + ')');
+	cur_frm.fields_dict.total_claim.set_label('Total Claim (' + doc.currency + ')');
+}
+frappe.ui.form.on("Deposite Note", "currency", function(frm) {
+	frappe.call({
+		"method": "frappe.client.get",
+		args: {
+			doctype: "Currency",
+			name: cur_frm.doc.currency
+		},
+		callback: function (data) {
+			cur_frm.fields_dict.deposite_amount.set_label('Deposite Amount ('+data.message.name+')');
+			cur_frm.fields_dict.difference.set_label('Difference ('+data.message.name+')');
+			cur_frm.fields_dict.total_claim.set_label('Total Claim ('+data.message.name+')');
+		}
+	})
+})
+/*
+frappe.ui.form.on("Deposite Note", "currency", function(frm, cdt, cdn) {
+	frappe.call({
+		"method": "frappe.client.get",
+		args: {
+			doctype: "Currency Exchange",
+			filters:{
+				from_currency: cur_frm.doc.currency
+			}
+		},
+		callback: function (data) {
+			if(data.message){
+				frappe.model.set_value(cdt, cdn, "conversion_rate", data.message.exchange_rate);
+			}else {
+				frappe.model.set_value(cdt, cdn, "conversion_rate", '1');
+			}
+		}
+	})
+})
+*/
