@@ -1,13 +1,11 @@
 // Copyright (c) 2016, Abcgroups and contributors
 // For license information, please see license.txt
-// Pake bahasa indonesia saja jika mau komentar
 
 frappe.ui.form.on('Deposite Note', {
 	refresh: function(frm) {
 		var me = this;
 		calculate_total_claim(frm);
 		/*
-
 		if(frm.doc.docstatus==1) {
 			cur_frm.add_custom_button(__('Make Purchase Invoice'), cur_frm.cscript['Purchase Invoice'], "icon-exclamation", "btn-default");
 		};
@@ -17,6 +15,15 @@ frappe.ui.form.on('Deposite Note', {
 			cur_frm.add_custom_button(__('Journal Voucher'), cur_frm.cscript['Journal Voucher'], __("Make"));
 			cur_frm.page.set_inner_btn_group_as_primary(__("Make"));
 		}
+	},
+	get_items_from_template: function(frm) {
+		return frappe.call({
+			method: "get_template_item",
+			doc: frm.doc,
+			callback: function(r, rt) {
+				frm.refresh()
+			}
+		});
 	},
 });
 cur_frm.cscript['Purchase Invoice'] = function() {
@@ -163,6 +170,11 @@ frappe.ui.form.on("Deposite Note", "currency", function(frm) {
 		}
 	})
 })
+/*
+frappe.ui.form.on("Deposite Note", "onload", function(frm) {
+	$('input[data-fieldtype="Currency"]').css("text-align","right")
+});
+*/
 /*
 frappe.ui.form.on("Deposite Note", "currency", function(frm, cdt, cdn) {
 	frappe.call({

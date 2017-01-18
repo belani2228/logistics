@@ -12,6 +12,27 @@ from frappe.model.mapper import get_mapped_doc
 class DepositeNote(Document):
 	pass
 
+	def get_template_item(self):
+		komponen = frappe.db.sql("""SELECT b1.item_code, b1.item_name, b1.qty, b1.uom,
+			b1.buying_rate, b1.buying_amount,
+			b1.expense_account, b1.cost_center
+			FROM `tabTemplate Biaya Item` b1, `tabTemplate Biaya` b2
+			WHERE b1.parent = b2.name AND b1.parent = %s
+			ORDER by b1.idx ASC""", self.template_biaya, as_dict=1)
+
+		self.set('items', [])
+
+		for d in komponen:
+			nl = self.append('items', {})
+			nl.item_code = d.item_code
+			nl.item_name = d.item_name
+			nl.qty = d.qty
+			nl.uom = d.uom
+			nl.rate = d.buying_rate
+			nl.amount = d.buying_amount
+			nl.expense_account = d.expense_account
+			nl.cost_center = d.cost_center
+
 @frappe.whitelist()
 def make_purchase_invoice(source_name, target_doc=None):
 	def set_missing_values(source, target):
@@ -42,3 +63,28 @@ def make_purchase_invoice(source_name, target_doc=None):
 	}, target_doc, set_missing_values)
 
 	return doc
+
+@frappe.whitelist()
+def get_template_item2(source_name, target_doc=None):
+	tb = get_mapped_doc("Template Biaya", source_name, {
+			"Template Biaya": {
+				"doctype": "Sales Invoice",
+				"validation": {
+					"docstatus": ["!=", 2]
+				},
+				"field_map": {
+					#"transaction_date": "posting_date"
+				},
+			},
+			"Template Biaya Item": {
+				"doctype": "Sales Invoice Item",
+				"field_map": {
+					"parent": "prevdoc_docname",
+					"item_name": "description",
+					"selling_rate": "rate",
+					"selling_amount": "amount"
+				},
+			},
+		}, target_doc)
+
+	return tb
