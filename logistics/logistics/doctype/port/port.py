@@ -7,4 +7,6 @@ import frappe
 from frappe.model.document import Document
 
 class Port(Document):
-	pass
+	def autoname(self):
+		#self.name = make_autoname("EST-"+ym+".###")
+		self.name = self.port_name+", "+self.country

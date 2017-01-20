@@ -63,7 +63,7 @@ frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
     frappe.call({
         method: "frappe.client.get",
         args: {
-            doctype: "Rekap Import",
+            doctype: cur_frm.doc.jenis_rekap,
 						name: cur_frm.doc.no_job
         },
         callback: function (data) {
@@ -78,13 +78,19 @@ frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
     frappe.call({
         method: "frappe.client.get",
         args: {
-            doctype: "Rekap Import",
+            doctype: cur_frm.doc.jenis_rekap,
 						name: cur_frm.doc.no_job
         },
         callback: function (data) {
+					if(cur_frm.doc.jenis_rekap == "Rekap Import"){
 						frappe.model.set_value(cdt, cdn, "customer", data.message.customer);
 						frappe.model.set_value(cdt, cdn, "nama_pelayaran", data.message.shipper);
 						frappe.model.set_value(cdt, cdn, "size_cont", data.message.size_cont);
+					}else{
+						frappe.model.set_value(cdt, cdn, "customer", data.message.customer_name);
+						frappe.model.set_value(cdt, cdn, "nama_pelayaran", data.message.shipper);
+						frappe.model.set_value(cdt, cdn, "size_cont", data.message.size_cont);
+					}
 				}
     })
 });
