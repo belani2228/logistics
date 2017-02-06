@@ -21,6 +21,11 @@ def get_data():
 					"name": "Deposite Note",
 					"description": _("Deposite Note")
 				},
+				{
+					"type": "doctype",
+					"name": "Template Biaya",
+					"description": _("Template Biaya")
+				},
 			]
 		},
 		{
