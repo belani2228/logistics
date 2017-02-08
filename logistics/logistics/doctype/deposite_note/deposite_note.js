@@ -156,11 +156,24 @@ frappe.ui.form.on("Deposite Note", "total_claim", function(frm) {
 	calculate_sisa(frm);
 })
 
+var kembalian = function(frm) {
+	var sisa_kembalian = flt(frm.doc.difference) - flt(frm.doc.pengembalian_kasbon);
+	frm.set_value("sisa", sisa_kembalian);
+}
+frappe.ui.form.on("Deposite Note", "difference", function(frm) {
+	kembalian(frm);
+})
+frappe.ui.form.on("Deposite Note", "pengembalian_kasbon", function(frm) {
+	kembalian(frm);
+})
+
 //test ubah currency
 cur_frm.cscript.onload = function(doc, cdt, cdn) {
 	cur_frm.fields_dict.deposite_amount.set_label('Deposite Amount ('+doc.currency+')');
 	cur_frm.fields_dict.difference.set_label('Difference (' + doc.currency + ')');
 	cur_frm.fields_dict.total_claim.set_label('Total Claim (' + doc.currency + ')');
+	cur_frm.fields_dict.pengembalian_kasbon.set_label('Pengembalian Kasbon (' + doc.currency + ')');
+	cur_frm.fields_dict.sisa.set_label('Sisa (' + doc.currency + ')');
 }
 frappe.ui.form.on("Deposite Note", "currency", function(frm) {
 	frappe.call({
