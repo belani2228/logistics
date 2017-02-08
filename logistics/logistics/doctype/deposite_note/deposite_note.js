@@ -113,7 +113,7 @@ cur_frm.set_query("expense_account", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
         filters: {
-            'root_type': 'Expense',
+            //'root_type': 'Expense',
 						'is_group': 0
         }
 	}
