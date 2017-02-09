@@ -84,11 +84,11 @@ frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
         callback: function (data) {
 					if(cur_frm.doc.jenis_rekap == "Rekap Import"){
 						frappe.model.set_value(cdt, cdn, "customer", data.message.customer);
-						frappe.model.set_value(cdt, cdn, "nama_pelayaran", data.message.shipper);
+						frappe.model.set_value(cdt, cdn, "carrier", data.message.carrier);
 						frappe.model.set_value(cdt, cdn, "size_cont", data.message.size_cont);
 					}else{
 						frappe.model.set_value(cdt, cdn, "customer", data.message.customer_name);
-						frappe.model.set_value(cdt, cdn, "nama_pelayaran", data.message.shipper);
+						frappe.model.set_value(cdt, cdn, "carrier", data.message.carrier);
 						frappe.model.set_value(cdt, cdn, "size_cont", data.message.size_cont);
 					}
 				}
@@ -112,10 +112,10 @@ frappe.ui.form.on("Deposite Note Item", "item_code", function(frm, cdt, cdn) {
 cur_frm.set_query("expense_account", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
-        filters: {
-            //'root_type': 'Expense',
-						'is_group': 0
-        }
+			filters: [
+					['account_type', 'in', 'Expense Account, Fixed Asset, Temporary'],
+					['is_group', '=', 0]
+			]
 	}
 });
 
