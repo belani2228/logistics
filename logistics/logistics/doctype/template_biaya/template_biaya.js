@@ -121,10 +121,13 @@ frappe.ui.form.on("Template Biaya Item", "selling_rate", function(frm, cdt, cdn)
     calculate_total_selling(frm, cdt, cdn);
 })
 //validate
-frappe.ui.form.on("Template Biaya", "before_save", function(frm) {
-	if (frm.doc.jenis == "Trucking") {
-		if(frm.doc.supplier == "" || frm.doc.dari == "" || frm.doc.tujuan == ""){
-			msgprint(__("Vendor, Dari dan tujuan wajib diisi"));
+frappe.ui.form.on("Template Biaya", "validate", function(frm) {
+	if (frm.doc.jenis == "Trucking" && (!frm.doc.supplier || !frm.doc.dari || !frm.doc.tujuan)) {
+		msgprint(__("Vendor, Dari dan Tujuan wajib diisi"));
+		validated = false;
+	}else{
+		if(frm.doc.jenis != "Trucking" && !frm.doc.customer_name){
+			msgprint(__("Customer wajib diisi"));
 			validated = false;
 		}
 	}
