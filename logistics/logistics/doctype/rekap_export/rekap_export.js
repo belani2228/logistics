@@ -6,6 +6,20 @@ frappe.ui.form.on('Rekap Export', {
 
 	}
 });
+cur_frm.set_query("carrier",  function (frm) {
+		return {
+        filters: {
+					'supplier_type': 'Carrier'
+        }
+		}
+});
+cur_frm.set_query("shipper",  function (frm) {
+		return {
+        filters: {
+					'supplier_type': 'shipper'
+        }
+		}
+});
 cur_frm.set_query("vendor_trucking", "container_list",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {

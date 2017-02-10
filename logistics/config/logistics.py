@@ -33,11 +33,6 @@ def get_data():
 			"items": [
 				{
 					"type": "doctype",
-					"name": "Carrier",
-					"description": _("Carrier")
-				},
-				{
-					"type": "doctype",
 					"name": "Commodity",
 					"description": _("Commodity")
 				},
@@ -45,16 +40,6 @@ def get_data():
 					"type": "doctype",
 					"name": "Port",
 					"description": _("Port")
-				},
-				{
-					"type": "doctype",
-					"name": "Shipper",
-					"description": _("Shipper")
-				},
-				{
-					"type": "doctype",
-					"name": "Trucking",
-					"description": _("Trucking")
 				},
 			]
 		},
