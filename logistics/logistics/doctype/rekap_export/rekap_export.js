@@ -6,3 +6,20 @@ frappe.ui.form.on('Rekap Export', {
 
 	}
 });
+cur_frm.set_query("vendor_trucking", "container_list",  function (doc, cdt, cdn) {
+	var c_doc= locals[cdt][cdn];
+    return {
+        filters: {
+            'supplier_type': 'Trucking'
+        }
+    }
+});
+cur_frm.set_query("template_trucking", "container_list",  function (doc, cdt, cdn) {
+	var c_doc= locals[cdt][cdn];
+    return {
+        filters: {
+            'supplier': c_doc.vendor_trucking,
+						'jenis': 'Trucking'
+        }
+    }
+});
