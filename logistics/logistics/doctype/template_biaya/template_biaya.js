@@ -33,7 +33,7 @@ cur_frm.set_query("expense", "item_biaya",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
 			filters: [
-					['account_type', '=', 'Expense Account'],
+					['account_type', 'in', 'Expense Account, Cost of Goods Sold'],
 					['is_group', '=', 0]
 			]
 	}
