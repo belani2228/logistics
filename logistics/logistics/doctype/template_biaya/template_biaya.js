@@ -33,7 +33,7 @@ cur_frm.set_query("expense", "item_biaya",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
 			filters: [
-					['account_type', 'in', 'Expense Account, Fixed Asset, Temporary'],
+					['account_type', '=', 'Expense Account'],
 					['is_group', '=', 0]
 			]
 	}
@@ -41,10 +41,10 @@ cur_frm.set_query("expense", "item_biaya",  function (doc, cdt, cdn) {
 cur_frm.set_query("income", "item_biaya",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
-        filters: {
-            'root_type': 'Income',
-						'is_group': 0
-        }
+			filters: [
+					['account_type', '=', 'Income Account'],
+					['is_group', '=', 0]
+			]
 	}
 });
 frappe.ui.form.on("Template Biaya", "jenis", function(frm, cdt, cdn) {
