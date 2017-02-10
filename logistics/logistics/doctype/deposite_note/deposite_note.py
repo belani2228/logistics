@@ -95,3 +95,33 @@ def get_template_item2(source_name, target_doc=None):
 		}, target_doc, set_missing_values)
 
 	return tb
+
+@frappe.whitelist()
+def get_items_dn(source_name, target_doc=None):
+	if target_doc:
+		if isinstance(target_doc, basestring):
+			import json
+			target_doc = frappe.get_doc(json.loads(target_doc))
+
+	def set_missing_values(source, target):
+		#target.expense_account = ""
+		#target.credit_to = "Cash"
+		target.run_method("set_missing_values")
+
+	query = frappe.db.sql_list("""SELECT dn.`name`
+		FROM `tabDeposite Note` dn
+		WHERE dn.no_job = %s ORDER BY dn.`name` ASC""", source_name)
+
+	for q in query:
+		dn = get_mapped_doc("Deposite Note", q, {
+				"Deposite Note": {
+					"doctype": "Sales Invoice",
+				},
+				"Deposite Note Item": {
+					"doctype": "Sales Invoice Item",
+					"field_map": {
+					},
+				},
+			}, target_doc, set_missing_values)
+
+	return dn

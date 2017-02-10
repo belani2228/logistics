@@ -12,7 +12,7 @@ frappe.ui.form.on('Deposite Note', {
 		*/
 		if(frm.doc.docstatus==1) {
 			cur_frm.add_custom_button(__('Purchase Invoice'), cur_frm.cscript['Purchase Invoice'], __("Make"));
-			cur_frm.add_custom_button(__('Journal Voucher'), cur_frm.cscript['Journal Voucher'], __("Make"));
+			//cur_frm.add_custom_button(__('Journal Voucher'), cur_frm.cscript['Journal Voucher'], __("Make"));
 			cur_frm.page.set_inner_btn_group_as_primary(__("Make"));
 		}
 	},
