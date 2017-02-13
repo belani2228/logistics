@@ -69,7 +69,7 @@ frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
         callback: function (data) {
 						frappe.model.set_value(cdt, cdn, "aju", data.message.aju);
 						frappe.model.set_value(cdt, cdn, "no_bl", data.message.bl_number);
-            frappe.model.set_value(cdt, cdn, "qty", data.message.size_qty);
+            frappe.model.set_value(cdt, cdn, "qty", data.message.qty);
 
 				}
     })
