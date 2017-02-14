@@ -113,7 +113,7 @@ cur_frm.set_query("expense_account", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
 			filters: [
-					['account_type', 'in', 'Expense Account, Fixed Asset, Temporary'],
+					['account_type', 'in', 'Expense Account, Cost of Goods Sold'],
 					['is_group', '=', 0]
 			]
 	}

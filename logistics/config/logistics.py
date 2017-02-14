@@ -41,6 +41,11 @@ def get_data():
 					"name": "Port",
 					"description": _("Port")
 				},
+				{
+					"type": "doctype",
+					"name": "Shipper",
+					"description": _("Shipper")
+				},
 			]
 		},
 		{

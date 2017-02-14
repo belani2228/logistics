@@ -13,6 +13,7 @@ cur_frm.set_query("carrier",  function (frm) {
         }
 		}
 });
+/*
 cur_frm.set_query("shipper",  function (frm) {
 		return {
         filters: {
@@ -20,6 +21,7 @@ cur_frm.set_query("shipper",  function (frm) {
         }
 		}
 });
+*/
 cur_frm.set_query("vendor_trucking", "container_list",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
