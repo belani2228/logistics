@@ -520,7 +520,7 @@
    "read_only": 0, 
    "remember_last_selected_value": 0, 
    "report_hide": 0, 
-   "reqd": 0, 
+   "reqd": 1, 
    "search_index": 0, 
    "set_only_once": 0, 
    "unique": 0
@@ -2697,7 +2697,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-02-14 17:05:08.355484", 
+ "modified": "2017-02-16 11:07:02.095936", 
  "modified_by": "Administrator", 
  "module": "Logistics", 
  "name": "Rekap Import", 

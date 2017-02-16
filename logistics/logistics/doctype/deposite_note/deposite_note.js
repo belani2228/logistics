@@ -33,6 +33,13 @@ cur_frm.cscript['Purchase Invoice'] = function() {
 	})
 }
 
+cur_frm.set_query("no_job",  function (frm) {
+		return {
+        filters: [
+            ['docstatus', '=', 0]
+        ]
+		}
+});
 cur_frm.set_query("account_paid_to",  function (frm) {
 		return {
         filters: [
@@ -64,7 +71,10 @@ frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
         method: "frappe.client.get",
         args: {
             doctype: cur_frm.doc.jenis_rekap,
-						name: cur_frm.doc.no_job
+						filters:{
+							name: cur_frm.doc.no_job,
+							docstatus: 0
+						}
         },
         callback: function (data) {
 						frappe.model.set_value(cdt, cdn, "aju", data.message.aju);
@@ -79,7 +89,10 @@ frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
         method: "frappe.client.get",
         args: {
             doctype: cur_frm.doc.jenis_rekap,
-						name: cur_frm.doc.no_job
+						filters:{
+							name: cur_frm.doc.no_job,
+							docstatus: 0
+						}
         },
         callback: function (data) {
 					if(cur_frm.doc.jenis_rekap == "Rekap Import"){
