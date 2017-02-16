@@ -39,3 +39,22 @@ cur_frm.set_query("template_trucking", "container_list",  function (doc, cdt, cd
         }
     }
 });
+/*
+frappe.ui.form.on("Rekap Import", "validate", function(frm) {
+	if(cur_frm.doc.aju == '1'){
+		cur_frm.doc.naming_series = 'IMP/PTI-.###./.MM./.YY'
+	}else{
+		cur_frm.doc.naming_series = 'IMP-PTI-.###./.MM./.YY'
+	}
+})
+
+frappe.ui.form.on("Rekap Import", "validate", function(frm) {
+	if(cur_frm.doc.aju == '1' && cur_frm.doc.naming_series != 'IMP/PTI-.###./.MM./.YY'){
+		msgprint("Series not match bro");
+		validated = false;
+	}else if(cur_frm.doc.aju != '1' && cur_frm.doc.naming_series != 'IMP-PTI-.###./.MM./.YY'){
+		msgprint("Series not match coy");
+		validated = false;
+	}
+})
+*/

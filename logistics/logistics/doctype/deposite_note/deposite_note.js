@@ -189,6 +189,12 @@ frappe.ui.form.on("Deposite Note", "currency", function(frm) {
 		}
 	})
 })
+frappe.ui.form.on("Deposite Note", "before_submit", function(frm) {
+    if (frm.doc.sisa != 0) {
+        msgprint("<b>Sisa uang</b> harus nol (0)");
+        validated = false;
+    }
+});
 /*
 frappe.ui.form.on("Deposite Note", "onload", function(frm) {
 	$('input[data-fieldtype="Currency"]').css("text-align","right")
