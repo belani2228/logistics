@@ -49,6 +49,23 @@ cur_frm.set_query("account_paid_to",  function (frm) {
         ]
 		}
 });
+cur_frm.set_query("template_biaya",  function (frm) {
+	if(cur_frm.doc.jenis_rekap == 'Rekap Import'){
+		return {
+        filters: [
+					['jenis', '=', 'Import'],
+					['docstatus', '=', 0]
+        ]
+		}
+	}else{
+		return {
+        filters: [
+					['jenis', '=', 'Export'],
+					['docstatus', '=', 0]
+        ]
+		}
+	}
+});
 cur_frm.add_fetch("deposite_amount", "difference")
 cur_frm.set_query("item_code", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
