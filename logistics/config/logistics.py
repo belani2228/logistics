@@ -49,6 +49,17 @@ def get_data():
 			]
 		},
 		{
+			"label": _("General Reports"),
+			"items": [
+				{
+					"type": "report",
+					"name": "Rekap Import Report",
+					"doctype": "Rekap Import",
+					"is_query_report": True
+				}
+			]
+		},
+		{
 			"label": _("Setup"),
 			"items": [
 				{

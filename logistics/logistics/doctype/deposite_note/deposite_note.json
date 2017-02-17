@@ -1125,7 +1125,7 @@
   }
  ], 
  "hide_heading": 0, 
- "hide_toolbar": 1, 
+ "hide_toolbar": 0, 
  "idx": 0, 
  "image_view": 0, 
  "in_create": 0, 
@@ -1134,7 +1134,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-02-13 10:26:26.578690", 
+ "modified": "2017-02-17 13:21:36.176272", 
  "modified_by": "Administrator", 
  "module": "Logistics", 
  "name": "Deposite Note", 

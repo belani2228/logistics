@@ -16,4 +16,4 @@ class RekapExport(Document):
 		for d in self.get('container_list'):
 			if d.container_no not in against_acc:
 				against_acc.append(d.container_no)
-		self.daftar_container = ','.join(against_acc)
+		self.daftar_container = ', '.join(against_acc)

@@ -36,7 +36,7 @@ class DepositeNote(Document):
 @frappe.whitelist()
 def make_purchase_invoice(source_name, target_doc=None):
 	def set_missing_values(source, target):
-		#target.is_paid = 1
+		target.is_paid = 1
 		#target.credit_to = "Cash"
 		target.run_method("set_missing_values")
 
