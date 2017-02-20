@@ -123,12 +123,14 @@ frappe.ui.form.on("Template Biaya Item", "selling_rate", function(frm, cdt, cdn)
 //validate
 frappe.ui.form.on("Template Biaya", "validate", function(frm) {
 	if (frm.doc.jenis == "Trucking" && (!frm.doc.supplier || !frm.doc.dari || !frm.doc.tujuan)) {
-		msgprint(__("Vendor, Dari dan Tujuan wajib diisi"));
+		msgprint(__("<b>Vendor</b>, <b>Dari</b> dan <b>Tujuan</b> wajib diisi"));
 		validated = false;
+		/*
 	}else{
 		if(frm.doc.jenis != "Trucking" && !frm.doc.customer_name){
 			msgprint(__("Customer wajib diisi"));
 			validated = false;
 		}
+		*/
 	}
 });

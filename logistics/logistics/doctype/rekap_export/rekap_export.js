@@ -39,3 +39,20 @@ cur_frm.set_query("template_trucking", "container_list",  function (doc, cdt, cd
         }
     }
 });
+//hitung selisih hari
+frappe.ui.form.on("Container List", "gate_in", function(frm, cdt, cdn) {
+	var z = locals[cdt][cdn];
+
+	if(z.gate_in && z.gate_out) {
+		total_time = frappe.datetime.get_day_diff(z.gate_out, z.gate_in);
+		frappe.model.set_value(cdt, cdn, "within_days", total_time);
+	}
+});
+frappe.ui.form.on("Container List", "gate_out", function(frm, cdt, cdn) {
+	var z = locals[cdt][cdn];
+
+	if(z.gate_in && z.gate_out) {
+		total_time = frappe.datetime.get_day_diff(z.gate_out, z.gate_in);
+		frappe.model.set_value(cdt, cdn, "within_days", total_time);
+	}
+});
