@@ -1,3 +1,4 @@
+/*
 frappe.listview_settings['Template Biaya'] = {
   add_fields: ["jenis"],
 	get_indicator: function(doc) {
@@ -10,3 +11,4 @@ frappe.listview_settings['Template Biaya'] = {
 		}
 	}
 };
+*/

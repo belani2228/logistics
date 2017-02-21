@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from frappe import _
 from . import __version__ as app_version
 
 app_name = "logistics"
@@ -81,23 +82,23 @@ app_include_css = "assets/css/custom.css"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
+scheduler_events = {
 # 	"all": [
 # 		"logistics.tasks.all"
 # 	],
 # 	"daily": [
 # 		"logistics.tasks.daily"
 # 	],
-# 	"hourly": [
-# 		"logistics.tasks.hourly"
-# 	],
+ 	"hourly": [
+        "logistics.logistics.lemparan.reset_series"
+ 	],
 # 	"weekly": [
 # 		"logistics.tasks.weekly"
 # 	]
 # 	"monthly": [
 # 		"logistics.tasks.monthly"
 # 	]
-# }
+}
 
 # Testing
 # -------
