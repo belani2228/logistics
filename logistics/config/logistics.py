@@ -65,14 +65,4 @@ def get_data():
 				},
 			]
 		},
-		{
-			"label": _("Setup"),
-			"items": [
-				{
-					"type": "doctype",
-					"name": "Rekam Jejak",
-					"description": _("Rekam Jejak")
-				},
-			]
-		}
 	]

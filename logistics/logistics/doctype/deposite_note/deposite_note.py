@@ -96,6 +96,7 @@ def get_template_item2(source_name, target_doc=None):
 
 	return tb
 
+# sudah tidak dipakai, krn sekarang tarik items dari Purchase Invoice
 @frappe.whitelist()
 def get_items_dn(source_name, target_doc=None):
 	if target_doc:

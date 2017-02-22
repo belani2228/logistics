@@ -89,9 +89,9 @@ scheduler_events = {
 # 	"daily": [
 # 		"logistics.tasks.daily"
 # 	],
- 	"hourly": [
-        "logistics.logistics.lemparan.reset_series"
- 	],
+# 	"hourly": [
+#        "logistics.logistics.lemparan.reset_series"
+# 	],
 # 	"weekly": [
 # 		"logistics.tasks.weekly"
 # 	]

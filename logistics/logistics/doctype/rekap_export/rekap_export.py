@@ -6,6 +6,7 @@ from __future__ import unicode_literals
 import frappe
 from frappe import _
 from frappe.model.document import Document
+from frappe.model.mapper import get_mapped_doc
 
 class RekapExport(Document):
 	def validate(self):
@@ -17,3 +18,23 @@ class RekapExport(Document):
 			if d.container_no not in against_acc:
 				against_acc.append(d.container_no)
 		self.daftar_container = ', '.join(against_acc)
+
+@frappe.whitelist()
+def make_sales_invoice(source_name, target_doc=None):
+	def set_missing_values(source, target):
+		target.jenis_rekap = "Rekap Export"
+		target.update_stock = 1
+		target.run_method("set_missing_values")
+
+	si = get_mapped_doc("Rekap Export", source_name, {
+		"Rekap Export": {
+			"doctype": "Sales Invoice",
+			"field_map": {
+				"name":"no_job"
+			},
+			"field_no_map": [
+				"due_date"
+			],
+		},
+	}, target_doc, set_missing_values)
+	return si

@@ -3,9 +3,19 @@
 
 frappe.ui.form.on('Rekap Import', {
 	refresh: function(frm) {
-
-	}
+		var me = this;
+		if(frm.doc.docstatus==0 && !frm.doc.__islocal) {
+			cur_frm.add_custom_button(__('Sales Invoice'), cur_frm.cscript['Sales Invoice'], __("Make"));
+			cur_frm.page.set_inner_btn_group_as_primary(__("Make"));
+		}
+	},
 });
+cur_frm.cscript['Sales Invoice'] = function() {
+	frappe.model.open_mapped_doc({
+		method: "logistics.logistics.doctype.rekap_import.rekap_import.make_sales_invoice",
+		frm: cur_frm
+	})
+}
 cur_frm.set_query("carrier",  function (frm) {
 		return {
         filters: {
