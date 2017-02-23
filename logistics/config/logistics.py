@@ -59,6 +59,12 @@ def get_data():
 				},
 				{
 					"type": "report",
+					"name": "Rekap Export Report",
+					"doctype": "Rekap Export",
+					"is_query_report": True
+				},
+				{
+					"type": "report",
 					"name": "Penitipan Container",
 					"doctype": "Rekap Export",
 					"is_query_report": True

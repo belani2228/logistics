@@ -22,7 +22,7 @@ def get_items_from_pi(source_name, target_doc=None):
 
 	query = frappe.db.sql_list("""SELECT dn.`name`
 		FROM `tabPurchase Invoice` dn
-		WHERE dn.no_job = %s AND dn.docstatus = '1' ORDER BY dn.`name` ASC""", no_job)
+		WHERE dn.no_job = %s AND dn.docstatus != '2' ORDER BY dn.`name` ASC""", no_job)
 
 	si = get_mapped_doc(rekap, no_job, {
 		rekap: {
@@ -34,7 +34,8 @@ def get_items_from_pi(source_name, target_doc=None):
 				"Purchase Invoice": {
 					"doctype": "Sales Invoice",
 					"field_no_map": [
-						"net_total", "total", "grand_total"
+						"base_total", "base_net_total", "net_total", "total",
+						"base_grand_total", "grand_total"
 					],
 				},
 				"Purchase Invoice Item": {
