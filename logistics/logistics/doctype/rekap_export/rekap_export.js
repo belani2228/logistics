@@ -4,12 +4,45 @@
 frappe.ui.form.on('Rekap Export', {
 	refresh: function(frm) {
 		var me = this;
-		if(!frm.doc.__islocal) {
+		if (frm.doc.docstatus == '1' && frm.doc.status != "Closed") {
+			// close
+			//cur_frm.add_custom_button(__('Close'), this.close_rekap_import, __("Status"))
+			cur_frm.add_custom_button(__('Close'), cur_frm.cscript['Close'], __("Status"));
+			cur_frm.page.set_inner_btn_group_as_primary(__("Status"));
+		}
+		if (frm.doc.docstatus == '1' && frm.doc.status == "Closed") {
+			cur_frm.add_custom_button(__('Re-Open'), cur_frm.cscript['Open Rekap Export'], __("Status"));
+			cur_frm.page.set_inner_btn_group_as_primary(__("Status"));
+		}
+		if(!frm.doc.__islocal && frm.doc.status != "Closed") {
 			cur_frm.add_custom_button(__('Sales Invoice'), cur_frm.cscript['Sales Invoice'], __("Make"));
 			cur_frm.page.set_inner_btn_group_as_primary(__("Make"));
 		}
 	}
 });
+cur_frm.cscript['Close'] = function() {
+	var doc = cur_frm.doc;
+	frappe.ui.form.is_saving = true;
+	frappe.call({
+		method: "logistics.logistics.doctype.rekap_export.rekap_export.close_rekap_export",
+		args: {status: status, name: doc.name},
+		callback: function(r){
+			cur_frm.reload_doc();
+		},
+	})
+}
+cur_frm.cscript['Open Rekap Export'] = function() {
+	var doc = cur_frm.doc;
+	frappe.ui.form.is_saving = true;
+	frappe.call({
+		method: "logistics.logistics.doctype.rekap_export.rekap_export.open_rekap_export",
+		args: {status: status, name: doc.name},
+		callback: function(r){
+			cur_frm.reload_doc();
+		},
+	})
+}
+
 cur_frm.cscript['Sales Invoice'] = function() {
 	frappe.model.open_mapped_doc({
 		method: "logistics.logistics.doctype.rekap_export.rekap_export.make_sales_invoice",

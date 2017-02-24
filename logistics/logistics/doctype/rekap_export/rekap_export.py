@@ -25,6 +25,14 @@ class RekapExport(Document):
 			d.size = self.size_cont
 
 @frappe.whitelist()
+def close_rekap_export(status, name):
+	frappe.db.sql("""UPDATE `tabRekap Export` SET status = 'Closed' WHERE `name` = %s""", name)
+
+@frappe.whitelist()
+def open_rekap_export(status, name):
+	frappe.db.sql("""UPDATE `tabRekap Export` SET status = 'Open' WHERE `name` = %s""", name)
+
+@frappe.whitelist()
 def make_sales_invoice(source_name, target_doc=None):
 	def set_missing_values(source, target):
 		target.jenis_rekap = "Rekap Export"
