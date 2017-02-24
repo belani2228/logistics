@@ -10,7 +10,7 @@ frappe.ui.form.on('Deposite Note', {
 			cur_frm.add_custom_button(__('Make Purchase Invoice'), cur_frm.cscript['Purchase Invoice'], "icon-exclamation", "btn-default");
 		};
 		*/
-		if(frm.doc.docstatus==1) {
+		if(frm.doc.docstatus==1 && frm.doc.terpakai<frm.doc.count_item) {
 			cur_frm.add_custom_button(__('Purchase Invoice'), cur_frm.cscript['Purchase Invoice'], __("Make"));
 			//cur_frm.add_custom_button(__('Journal Voucher'), cur_frm.cscript['Journal Voucher'], __("Make"));
 			cur_frm.page.set_inner_btn_group_as_primary(__("Make"));

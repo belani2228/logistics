@@ -10,7 +10,14 @@ from frappe.model.document import Document
 from frappe.model.mapper import get_mapped_doc
 
 class DepositeNote(Document):
-	pass
+	def validate(self):
+		self.set_count_item()
+
+	def set_count_item(self):
+		count1 = 0;
+		for d in self.get('items'):
+			count1 = count1+1
+		self.count_item = count1
 
 	def get_template_item(self):
 		komponen = frappe.db.sql("""SELECT b1.item_code, b1.item_name, b1.qty, b1.uom,
@@ -57,8 +64,10 @@ def make_purchase_invoice(source_name, target_doc=None):
 		"Deposite Note Item": {
 			"doctype": "Purchase Invoice Item",
 			"field_map": {
-				"rate": "rate"
-			}
+				"rate": "rate",
+				"name": "deposite_note_detail"
+			},
+			"condition":lambda doc: doc.pi_no is None
 		},
 	}, target_doc, set_missing_values)
 

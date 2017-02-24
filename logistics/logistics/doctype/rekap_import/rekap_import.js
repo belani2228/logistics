@@ -4,12 +4,24 @@
 frappe.ui.form.on('Rekap Import', {
 	refresh: function(frm) {
 		var me = this;
+		if (frm.doc.docstatus == '1') {
+			// close
+			//cur_frm.add_custom_button(__('Close'), this.close_rekap_import, __("Status"))
+			cur_frm.add_custom_button(__('Close'), cur_frm.cscript['Close'], __("Status"));
+			cur_frm.page.set_inner_btn_group_as_primary(__("Status"));
+		}
 		if(!frm.doc.__islocal) {
 			cur_frm.add_custom_button(__('Sales Invoice'), cur_frm.cscript['Sales Invoice'], __("Make"));
 			cur_frm.page.set_inner_btn_group_as_primary(__("Make"));
 		}
 	},
 });
+cur_frm.cscript['Close'] = function() {
+	frappe.call({
+		method: "logistics.logistics.doctype.rekap_import.rekap_import.close_rekap_import",
+		frm: cur_frm
+	})
+}
 cur_frm.cscript['Sales Invoice'] = function() {
 	frappe.model.open_mapped_doc({
 		method: "logistics.logistics.doctype.rekap_import.rekap_import.make_sales_invoice",
@@ -32,7 +44,7 @@ cur_frm.set_query("shipper",  function (frm) {
 		}
 });
 */
-cur_frm.set_query("vendor_trucking", "container_list",  function (doc, cdt, cdn) {
+cur_frm.set_query("vendor_trucking", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
         filters: {
@@ -40,7 +52,7 @@ cur_frm.set_query("vendor_trucking", "container_list",  function (doc, cdt, cdn)
         }
     }
 });
-cur_frm.set_query("template_trucking", "container_list",  function (doc, cdt, cdn) {
+cur_frm.set_query("template_trucking", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
         filters: {
@@ -48,6 +60,10 @@ cur_frm.set_query("template_trucking", "container_list",  function (doc, cdt, cd
 						'jenis': 'Trucking'
         }
     }
+});
+frappe.ui.form.on("Rekap Import Item", "container_no", function(frm, cdt, cdn) {
+	child = locals[cdt][cdn];
+	child.size = cur_frm.doc.size_cont;
 });
 /*
 frappe.ui.form.on("Rekap Import", "validate", function(frm) {

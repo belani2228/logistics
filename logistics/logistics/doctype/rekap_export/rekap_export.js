@@ -33,7 +33,7 @@ cur_frm.set_query("shipper",  function (frm) {
 		}
 });
 */
-cur_frm.set_query("vendor_trucking", "container_list",  function (doc, cdt, cdn) {
+cur_frm.set_query("vendor_trucking", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
         filters: {
@@ -41,7 +41,7 @@ cur_frm.set_query("vendor_trucking", "container_list",  function (doc, cdt, cdn)
         }
     }
 });
-cur_frm.set_query("template_trucking", "container_list",  function (doc, cdt, cdn) {
+cur_frm.set_query("template_trucking", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
         filters: {
@@ -50,7 +50,13 @@ cur_frm.set_query("template_trucking", "container_list",  function (doc, cdt, cd
         }
     }
 });
+frappe.ui.form.on("Rekap Export Item", "container_no", function(frm, cdt, cdn) {
+	child = locals[cdt][cdn];
+	child.size = cur_frm.doc.size_cont;
+});
+
 //hitung selisih hari
+/*
 frappe.ui.form.on("Container List", "gate_in", function(frm, cdt, cdn) {
 	var z = locals[cdt][cdn];
 
@@ -67,3 +73,4 @@ frappe.ui.form.on("Container List", "gate_out", function(frm, cdt, cdn) {
 		frappe.model.set_value(cdt, cdn, "within_days", total_time);
 	}
 });
+*/

@@ -11,13 +11,18 @@ from frappe.model.mapper import get_mapped_doc
 class RekapImport(Document):
 	def validate(self):
 		self.set_daftar_container()
+		self.size_in_items()
 
 	def set_daftar_container(self):
 		against_acc = []
-		for d in self.get('container_list'):
+		for d in self.get('items'):
 			if d.container_no not in against_acc:
 				against_acc.append(d.container_no)
 		self.daftar_container = ', '.join(against_acc)
+
+	def size_in_items(self):
+		for d in self.get('items'):
+			d.size = self.size_cont
 
 @frappe.whitelist()
 def make_sales_invoice(source_name, target_doc=None):
