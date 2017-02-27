@@ -24,6 +24,12 @@ class RekapImport(Document):
 		for d in self.get('items'):
 			d.size = self.size_cont
 
+	def on_submit(self):
+		frappe.db.set(self, 'status', 'Submitted')
+
+	def on_cancel(self):
+		frappe.db.set(self, 'status', 'Cancelled')
+
 @frappe.whitelist()
 def close_rekap_import(status, name):
 	frappe.db.sql("""UPDATE `tabRekap Import` SET status = 'Closed' WHERE `name` = %s""", name)

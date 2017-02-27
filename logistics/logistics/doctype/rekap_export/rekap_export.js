@@ -5,14 +5,10 @@ frappe.ui.form.on('Rekap Export', {
 	refresh: function(frm) {
 		var me = this;
 		if (frm.doc.docstatus == '1' && frm.doc.status != "Closed") {
-			// close
-			//cur_frm.add_custom_button(__('Close'), this.close_rekap_import, __("Status"))
-			cur_frm.add_custom_button(__('Close'), cur_frm.cscript['Close'], __("Status"));
-			cur_frm.page.set_inner_btn_group_as_primary(__("Status"));
+			cur_frm.add_custom_button(__('Close'), this.close_rekap_export, __("Status"))
 		}
 		if (frm.doc.docstatus == '1' && frm.doc.status == "Closed") {
-			cur_frm.add_custom_button(__('Re-Open'), cur_frm.cscript['Open Rekap Export'], __("Status"));
-			cur_frm.page.set_inner_btn_group_as_primary(__("Status"));
+			cur_frm.add_custom_button(__('Re-Open'), this.open_rekap_export, __("Status"))
 		}
 		if(!frm.doc.__islocal && frm.doc.status != "Closed") {
 			cur_frm.add_custom_button(__('Sales Invoice'), cur_frm.cscript['Sales Invoice'], __("Make"));
@@ -20,7 +16,7 @@ frappe.ui.form.on('Rekap Export', {
 		}
 	}
 });
-cur_frm.cscript['Close'] = function() {
+close_rekap_export = function() {
 	var doc = cur_frm.doc;
 	frappe.ui.form.is_saving = true;
 	frappe.call({
@@ -31,7 +27,7 @@ cur_frm.cscript['Close'] = function() {
 		},
 	})
 }
-cur_frm.cscript['Open Rekap Export'] = function() {
+open_rekap_export = function() {
 	var doc = cur_frm.doc;
 	frappe.ui.form.is_saving = true;
 	frappe.call({
