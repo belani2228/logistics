@@ -5,14 +5,9 @@ frappe.ui.form.on('Deposite Note', {
 	refresh: function(frm) {
 		var me = this;
 		calculate_total_claim(frm);
-		/*
-		if(frm.doc.docstatus==1) {
-			cur_frm.add_custom_button(__('Make Purchase Invoice'), cur_frm.cscript['Purchase Invoice'], "icon-exclamation", "btn-default");
-		};
-		*/
+
 		if(frm.doc.docstatus==1 && frm.doc.terpakai<frm.doc.count_item) {
 			cur_frm.add_custom_button(__('Purchase Invoice'), cur_frm.cscript['Purchase Invoice'], __("Make"));
-			//cur_frm.add_custom_button(__('Journal Voucher'), cur_frm.cscript['Journal Voucher'], __("Make"));
 			cur_frm.page.set_inner_btn_group_as_primary(__("Make"));
 		}
 	},
@@ -26,6 +21,7 @@ frappe.ui.form.on('Deposite Note', {
 		});
 	},
 });
+
 cur_frm.cscript['Purchase Invoice'] = function() {
 	frappe.model.open_mapped_doc({
 		method: "logistics.logistics.doctype.deposite_note.deposite_note.make_purchase_invoice",
@@ -36,7 +32,8 @@ cur_frm.cscript['Purchase Invoice'] = function() {
 cur_frm.set_query("no_job",  function (frm) {
 		return {
         filters: [
-            ['docstatus', '=', 0]
+            ['docstatus', '!=', '2'],
+						['status', 'in', 'Draft, Submitted']
         ]
 		}
 });
@@ -83,41 +80,40 @@ cur_frm.set_query("cost_center", "items",  function (doc, cdt, cdn) {
 				]
     }
 });
-frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
-    frappe.call({
-        method: "frappe.client.get",
-        args: {
-            doctype: cur_frm.doc.jenis_rekap,
-						filters:{
-							name: cur_frm.doc.no_job,
-							docstatus: 0
-						}
-        },
-        callback: function (data) {
-						frappe.model.set_value(cdt, cdn, "aju", data.message.aju);
-						frappe.model.set_value(cdt, cdn, "no_bl", data.message.bl_number);
-            frappe.model.set_value(cdt, cdn, "qty", data.message.qty);
-
-				}
-    })
-});
-frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
-    frappe.call({
-        method: "frappe.client.get",
-        args: {
-            doctype: cur_frm.doc.jenis_rekap,
-						filters:{
-							name: cur_frm.doc.no_job,
-							docstatus: 0
-						}
-        },
-        callback: function (data) {
-						frappe.model.set_value(cdt, cdn, "customer", data.message.customer);
-						frappe.model.set_value(cdt, cdn, "carrier", data.message.carrier);
-						frappe.model.set_value(cdt, cdn, "size_cont", data.message.size_cont);
-				}
-    })
-});
+if(cur_frm.doc.no_job){
+	frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
+	    frappe.call({
+	        method: "frappe.client.get",
+	        args: {
+	            doctype: cur_frm.doc.jenis_rekap,
+							filters:{
+								name: cur_frm.doc.no_job
+							}
+	        },
+	        callback: function (data) {
+							frappe.model.set_value(cdt, cdn, "aju", data.message.aju);
+							frappe.model.set_value(cdt, cdn, "no_bl", data.message.bl_number);
+	            frappe.model.set_value(cdt, cdn, "qty", data.message.qty);
+					}
+	    })
+	});
+	frappe.ui.form.on("Deposite Note", "no_job", function(frm) {
+	    frappe.call({
+	        method: "frappe.client.get",
+	        args: {
+	            doctype: cur_frm.doc.jenis_rekap,
+							filters:{
+								name: cur_frm.doc.no_job
+							}
+	        },
+	        callback: function (data) {
+							frappe.model.set_value(cdt, cdn, "customer", data.message.customer);
+							frappe.model.set_value(cdt, cdn, "carrier", data.message.carrier);
+							frappe.model.set_value(cdt, cdn, "size_cont", data.message.size_cont);
+					}
+	    })
+	});
+}
 frappe.ui.form.on("Deposite Note Item", "item_code", function(frm, cdt, cdn) {
     row = locals[cdt][cdn];
     frappe.call({
@@ -133,6 +129,7 @@ frappe.ui.form.on("Deposite Note Item", "item_code", function(frm, cdt, cdn) {
 				}
     })
 });
+
 cur_frm.set_query("expense_account", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
