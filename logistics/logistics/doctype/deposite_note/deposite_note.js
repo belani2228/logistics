@@ -97,7 +97,7 @@ if(cur_frm.doc.no_job){
 					}
 	    })
 	});
-	frappe.ui.form.on("Deposite Note", "no_job", function(frm) {
+	frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
 	    frappe.call({
 	        method: "frappe.client.get",
 	        args: {

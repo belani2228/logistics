@@ -15,7 +15,7 @@ class RekapExport(Document):
 
 	def set_daftar_container(self):
 		against_acc = []
-		for d in self.get('container_list'):
+		for d in self.get('items'):
 			if d.container_no not in against_acc:
 				against_acc.append(d.container_no)
 		self.daftar_container = ', '.join(against_acc)
