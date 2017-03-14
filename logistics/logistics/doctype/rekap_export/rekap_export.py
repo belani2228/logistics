@@ -31,10 +31,6 @@ class RekapExport(Document):
 			masukin.append(str(p.jmlh)+"X"+p.party)
 		self.party = ', '.join(masukin)
 
-	#def size_in_items(self):
-	#	for d in self.get('items'):
-	#		d.size = self.size_cont
-
 	def on_submit(self):
 		frappe.db.set(self, 'status', 'Submitted')
 		self.update_party()
