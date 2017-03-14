@@ -80,8 +80,8 @@ cur_frm.set_query("cost_center", "items",  function (doc, cdt, cdn) {
 				]
     }
 });
-if(cur_frm.doc.no_job){
-	frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
+frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
+	if(cur_frm.doc.no_job){
 	    frappe.call({
 	        method: "frappe.client.get",
 	        args: {
@@ -92,28 +92,14 @@ if(cur_frm.doc.no_job){
 	        },
 	        callback: function (data) {
 							frappe.model.set_value(cdt, cdn, "aju", data.message.aju);
-							frappe.model.set_value(cdt, cdn, "no_bl", data.message.bl_number);
-	            frappe.model.set_value(cdt, cdn, "qty", data.message.qty);
-					}
-	    })
-	});
-	frappe.ui.form.on("Deposite Note", "no_job", function(frm, cdt, cdn) {
-	    frappe.call({
-	        method: "frappe.client.get",
-	        args: {
-	            doctype: cur_frm.doc.jenis_rekap,
-							filters:{
-								name: cur_frm.doc.no_job
-							}
-	        },
-	        callback: function (data) {
 							frappe.model.set_value(cdt, cdn, "customer", data.message.customer);
 							frappe.model.set_value(cdt, cdn, "carrier", data.message.carrier);
-							frappe.model.set_value(cdt, cdn, "size_cont", data.message.size_cont);
+							frappe.model.set_value(cdt, cdn, "no_bl", data.message.bl_number);
+							frappe.model.set_value(cdt, cdn, "party", data.message.party);
 					}
 	    })
-	});
-}
+		}
+});
 frappe.ui.form.on("Deposite Note Item", "item_code", function(frm, cdt, cdn) {
     row = locals[cdt][cdn];
     frappe.call({

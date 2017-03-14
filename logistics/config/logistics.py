@@ -26,6 +26,11 @@ def get_data():
 					"name": "Template Biaya",
 					"description": _("Template Biaya")
 				},
+				{
+					"type": "doctype",
+					"name": "Penitipan Container",
+					"description": _("Penitipan Container")
+				},
 			]
 		},
 		{
@@ -65,8 +70,8 @@ def get_data():
 				},
 				{
 					"type": "report",
-					"name": "Penitipan Container",
-					"doctype": "Rekap Export",
+					"name": "Laporan Penitipan Container",
+					"doctype": "Penitipan Container",
 					"is_query_report": True
 				},
 			]

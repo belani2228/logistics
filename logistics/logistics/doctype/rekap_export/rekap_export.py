@@ -11,7 +11,8 @@ from frappe.model.mapper import get_mapped_doc
 class RekapExport(Document):
 	def validate(self):
 		self.set_daftar_container()
-		self.size_in_items()
+		#self.size_in_items()
+		self.update_party()
 
 	def set_daftar_container(self):
 		against_acc = []
@@ -20,15 +21,27 @@ class RekapExport(Document):
 				against_acc.append(d.container_no)
 		self.daftar_container = ', '.join(against_acc)
 
-	def size_in_items(self):
-		for d in self.get('items'):
-			d.size = self.size_cont
+	def update_party(self):
+		masukin = []
+		komponen = frappe.db.sql("""SELECT DISTINCT(r1.party) AS party,
+		(SELECT COUNT(`name`) FROM `tabRekap Export Item` r2 WHERE r2.parent = %(nama)s AND r2.party = r1.party) AS jmlh
+		FROM `tabRekap Export Item` r1
+		WHERE r1.parent = %(nama)s""", {"nama":self.name}, as_dict=1)
+		for p in komponen:
+			masukin.append(str(p.jmlh)+"X"+p.party)
+		self.party = ', '.join(masukin)
+
+	#def size_in_items(self):
+	#	for d in self.get('items'):
+	#		d.size = self.size_cont
 
 	def on_submit(self):
 		frappe.db.set(self, 'status', 'Submitted')
+		self.update_party()
 
 	def on_cancel(self):
 		frappe.db.set(self, 'status', 'Cancelled')
+
 
 @frappe.whitelist()
 def close_rekap_export(status, name):
@@ -36,7 +49,7 @@ def close_rekap_export(status, name):
 
 @frappe.whitelist()
 def open_rekap_export(status, name):
-	frappe.db.sql("""UPDATE `tabRekap Export` SET status = 'Open' WHERE `name` = %s""", name)
+	frappe.db.sql("""UPDATE `tabRekap Export` SET status = 'Submitted' WHERE `name` = %s""", name)
 
 @frappe.whitelist()
 def make_sales_invoice(source_name, target_doc=None):

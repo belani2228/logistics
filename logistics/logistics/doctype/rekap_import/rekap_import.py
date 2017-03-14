@@ -36,7 +36,7 @@ def close_rekap_import(status, name):
 
 @frappe.whitelist()
 def open_rekap_import(status, name):
-	frappe.db.sql("""UPDATE `tabRekap Import` SET status = 'Open' WHERE `name` = %s""", name)
+	frappe.db.sql("""UPDATE `tabRekap Import` SET status = 'Submitted' WHERE `name` = %s""", name)
 
 @frappe.whitelist()
 def make_sales_invoice(source_name, target_doc=None):

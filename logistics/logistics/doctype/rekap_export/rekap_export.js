@@ -79,11 +79,13 @@ cur_frm.set_query("template_trucking", "items",  function (doc, cdt, cdn) {
         }
     }
 });
-frappe.ui.form.on("Rekap Export Item", "container_no", function(frm, cdt, cdn) {
-	child = locals[cdt][cdn];
-	child.size = cur_frm.doc.size_cont;
-});
+cur_frm.cscript.size_cont = function(doc, cdt, cdn) {
+	var d = locals[cdt][cdn];
+		d.party = d.size_cont+""+d.type;
 
+		refresh_field('party', d.name, 'items');
+}
+cur_frm.cscript.type = cur_frm.cscript.size_cont;
 //hitung selisih hari
 /*
 frappe.ui.form.on("Container List", "gate_in", function(frm, cdt, cdn) {
