@@ -70,14 +70,20 @@ def get_data():
 				},
 				{
 					"type": "report",
+					"name": "Report Export Operational",
+					"doctype": "Rekap Export",
+					"is_query_report": True
+				},
+				{
+					"type": "report",
 					"name": "Laporan Penitipan Container",
 					"doctype": "Penitipan Container",
 					"is_query_report": True
 				},
 				{
 					"type": "report",
-					"name": "Report Export Operational",
-					"doctype": "Rekap Export",
+					"name": "Laporan Harian Per Customer",
+					"doctype": "Rekap Import",
 					"is_query_report": True
 				},
 			]
