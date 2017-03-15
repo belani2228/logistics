@@ -14,7 +14,7 @@ def execute(filters=None):
 	for ri in sl_entries:
 		data.append([ri.name, ri.po_no, ri.aju, ri.commodity, ri.party, ri.eta,
 		ri.validity_do, ri.create_draft_pib, ri.payment_pib, ri.bpom_available,
-		ri.spjk, ri.spjm, ri.bahandle])
+		ri.spjk, ri.spjm, ri.bahandle, ri.sppb, ri.delivery, ri.kpi, ri.remark])
 
 	return columns, data
 
@@ -35,6 +35,10 @@ def get_columns():
 		_("SPJK")+":Date:100",
 		_("SPJM")+":Date:100",
 		_("BAHANDLE")+":Date:100",
+		_("SPPB")+":Date:100",
+		_("DELIVERY")+":Date:100",
+		_("KPI (day(s))")+":Float:80",
+		_("REMARKS")+"::150",
 	]
 
 	return columns
@@ -53,7 +57,7 @@ def get_entries(filters):
 	conditions = get_conditions(filters)
 	return frappe.db.sql("""SELECT name, po_no, aju, commodity, party, eta,
 	validity_do, create_draft_pib, payment_pib, bpom_available, spjk, spjm,
-	bahandle
+	bahandle, sppb, delivery, (delivery - eta) as kpi, remark
 	FROM `tabRekap Import`
 	WHERE docstatus != '2' %s
 	ORDER BY `name` ASC""" %
