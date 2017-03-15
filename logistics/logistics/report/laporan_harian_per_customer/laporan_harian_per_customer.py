@@ -37,7 +37,7 @@ def get_columns():
 		_("BAHANDLE")+":Date:100",
 		_("SPPB")+":Date:100",
 		_("DELIVERY")+":Date:100",
-		_("KPI (day(s))")+":Float:80",
+		_("KPI")+"::80",
 		_("REMARKS")+"::150",
 	]
 
@@ -57,7 +57,9 @@ def get_entries(filters):
 	conditions = get_conditions(filters)
 	return frappe.db.sql("""SELECT name, po_no, aju, commodity, party, eta,
 	validity_do, create_draft_pib, payment_pib, bpom_available, spjk, spjm,
-	bahandle, sppb, delivery, (delivery - eta) as kpi, remark
+	bahandle, sppb, delivery,
+	if(delivery - eta = 1, CONCAT(delivery - eta, " day"), CONCAT(delivery - eta, " days")) as kpi,
+	remark
 	FROM `tabRekap Import`
 	WHERE docstatus != '2' %s
 	ORDER BY `name` ASC""" %
