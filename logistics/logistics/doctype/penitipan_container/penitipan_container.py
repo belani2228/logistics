@@ -20,9 +20,13 @@ def get_container(source_name, target_doc=None):
 	si = get_mapped_doc("Rekap Export", source_name, {
 		"Rekap Export": {
 			"doctype": "Penitipan Container",
+			"field_no_map": [
+				"name", "title"
+			],
 		},
 		"Rekap Export Item": {
 			"doctype": "Penitipan Container Item",
+			"condition":lambda doc: doc.status_container=="Storage",
 			"field_map": {
 				"name":"no_job"
 			},

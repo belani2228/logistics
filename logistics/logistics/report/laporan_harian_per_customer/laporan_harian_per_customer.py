@@ -13,8 +13,8 @@ def execute(filters=None):
 
 	for ri in sl_entries:
 		data.append([ri.name, ri.po_no, ri.aju, ri.commodity, ri.party, ri.eta,
-		ri.validity_do, ri.create_draft_pib, ri.payment_pib, ri.bpom_available,
-		ri.spjk, ri.spjm, ri.bahandle, ri.sppb, ri.delivery, ri.kpi, ri.remark])
+		ri.validity_do, ri.receive_copy_document, ri.create_draft_pib, ri.payment_pib, ri.bpom_available,
+		ri.response_qua, ri.spjk, ri.spjm, ri.bahandle, ri.sppb, ri.delivery, ri.kpi, ri.remark])
 
 	return columns, data
 
@@ -29,9 +29,11 @@ def get_columns():
 		_("SIZE")+"::150",
 		_("ETA")+":Date:100",
 		_("DO VALID UNTIL")+":Date:100",
+		_("HANDOVER DOC TO PATRINDO")+":Date:100",
 		_("DRAFT PIB")+":Date:100",
 		_("PAYMENT PIB")+":Date:100",
 		_("BPOM AVAILABLE")+":Date:100",
+		_("QUARANTINE")+":Date:100",
 		_("SPJK")+":Date:100",
 		_("SPJM")+":Date:100",
 		_("BAHANDLE")+":Date:100",
@@ -56,8 +58,8 @@ def get_conditions(filters):
 def get_entries(filters):
 	conditions = get_conditions(filters)
 	return frappe.db.sql("""SELECT name, po_no, aju, commodity, party, eta,
-	validity_do, create_draft_pib, payment_pib, bpom_available, spjk, spjm,
-	bahandle, sppb, delivery,
+	validity_do, receive_copy_document, create_draft_pib, payment_pib, bpom_available,
+	response_qua, spjk, spjm,	bahandle, sppb, delivery,
 	if(delivery - eta = 1, CONCAT(delivery - eta, " day"), CONCAT(delivery - eta, " days")) as kpi,
 	remark
 	FROM `tabRekap Import`

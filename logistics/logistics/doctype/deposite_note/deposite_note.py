@@ -56,6 +56,7 @@ def make_purchase_invoice(source_name, target_doc=None):
 				"total_claim": "paid_amount",
 				"vendor": "supplier",
 				"name": "remarks",
+				"account_paid_to": "credit_to",
 			},
 			"validation": {
 				"docstatus": ["=", 1],
