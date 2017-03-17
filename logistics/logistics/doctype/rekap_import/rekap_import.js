@@ -52,15 +52,6 @@ cur_frm.set_query("carrier",  function (frm) {
         }
 		}
 });
-/*
-cur_frm.set_query("shipper",  function (frm) {
-		return {
-        filters: {
-					'supplier_type': 'shipper'
-        }
-		}
-});
-*/
 cur_frm.set_query("vendor_trucking", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
@@ -80,7 +71,11 @@ cur_frm.set_query("template_trucking", "items",  function (doc, cdt, cdn) {
 });
 cur_frm.cscript.size_cont = function(doc, cdt, cdn) {
 	var d = locals[cdt][cdn];
-		d.party = d.size_cont+""+d.type;
+		if (d.size_cont == "-"){
+			d.party = " "+d.type;
+		}else{
+			d.party = d.size_cont+""+d.type;
+		}
 
 		refresh_field('party', d.name, 'items');
 }

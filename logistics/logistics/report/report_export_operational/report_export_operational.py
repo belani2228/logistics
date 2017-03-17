@@ -16,8 +16,8 @@ def execute(filters=None):
 		ri.container_no, ri.no_seal, ri.lisence_plate, ri.weight, ri.vendor_trucking,
 		ri.received_do, ri.date, ri.tebus_bon_muat, ri.pic_tebus_bon, ri.pick_up_start,
 		ri.pick_up_done, ri.pic_pick_up, ri.cetak_kartu_kuning, ri.pic_cetak_kartu,
-		ri.gate_in, ri.pic_gate_in
-])
+		ri.gate_in, ri.pic_gate_in, ri.status_container
+	])
 
 	return columns, data
 
@@ -32,19 +32,20 @@ def get_columns():
 		_("No Container")+"::100",
 		_("No Seal")+"::100",
 		_("No Mobil")+"::100",
-		_("Tare")+":Float:100",
+		_("Weight")+":Float:100",
 		_("Trucking")+"::100",
 		_("Tgl Terima DO")+":Datetime:120",
 		_("Tgl Stuffing")+":Datetime:120",
 		_("Tebus Bon Muat")+"::100",
 		_("PIC")+":Link/Employee:120",
-		_("Pick Up Start")+"::100",
-		_("Pick Up Done")+"::100",
+		_("Tgl Pick Up Start")+":Datetime:120",
+		_("Tgl Pick Up Done")+":Datetime:120",
 		_("PIC")+":Link/Employee:120",
-		_("Cetak Kartu Kuning")+"::100",
+		_("Tgl Cetak Kartu Kuning")+":Datetime:120",
 		_("PIC")+":Link/Employee:120",
-		_("Tgl Gate In")+"::100",
+		_("Tgl Gate In Pelabuhan")+":Datetime:120",
 		_("PIC")+":Link/Employee:120",
+		_("Status Container")+"::100",
 	]
 
 	return columns
@@ -62,7 +63,7 @@ def get_entries(filters):
 	p1.no_do, p2.container_no, p2.no_seal, p2.license_plate, p2.weight,
 	p2.vendor_trucking, p1.received_do, p2.date, p2.tebus_bon_muat, p2.pic_tebus_bon,
 	p2.pick_up_start, p2.pick_up_done, p2.pic_pick_up, p2.cetak_kartu_kuning,
-	p2.pic_cetak_kartu, p2.gate_in, p2.pic_gate_in
+	p2.pic_cetak_kartu, p2.gate_in, p2.pic_gate_in, p2.status_container
 	FROM `tabRekap Export` p1
 	INNER JOIN `tabRekap Export Item` p2 ON p1.name = p2.parent
 	WHERE p1.docstatus != '2' %s

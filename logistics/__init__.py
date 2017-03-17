@@ -1,8 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.17'
+__version__ = '1.0.18'
 
+#v1.0.18:
+#       - Update doctype Rekap Import
+#       - Update rekap_import.py
+#       - Update rekap_import.js
+#       - Add doctype: Rekap Export Document
+#       - Add Report: Performance Import
+#       - Update doctype Rekap Export
+#       - Update rekap_export.py
+#       - Update rekap_export.js
 #v1.0.17:
 #       - Add Status Container in Rekap Export Item
 #       - Penambahan filter di Penitipan Container

@@ -11,8 +11,8 @@ from frappe.model.mapper import get_mapped_doc
 class RekapExport(Document):
 	def validate(self):
 		self.set_daftar_container()
-		#self.size_in_items()
 		self.update_party()
+		self.update_tgl_kite()
 
 	def set_daftar_container(self):
 		against_acc = []
@@ -23,13 +23,23 @@ class RekapExport(Document):
 
 	def update_party(self):
 		masukin = []
-		komponen = frappe.db.sql("""SELECT DISTINCT(r1.party) AS party,
+		komponen = frappe.db.sql("""SELECT DISTINCT(r1.party) AS party, r1.size_cont,
 		(SELECT COUNT(`name`) FROM `tabRekap Export Item` r2 WHERE r2.parent = %(nama)s AND r2.party = r1.party) AS jmlh
 		FROM `tabRekap Export Item` r1
 		WHERE r1.parent = %(nama)s""", {"nama":self.name}, as_dict=1)
 		for p in komponen:
-			masukin.append(str(p.jmlh)+"X"+p.party)
+			if p.size_cont == "-":
+				masukin.append(str(p.jmlh)+""+p.party)
+			else:
+				masukin.append(str(p.jmlh)+"X"+p.party)
 		self.party = ', '.join(masukin)
+
+	def update_tgl_kite(self):
+		tgl_awal = ""
+		for t in self.get("kite_document"):
+			if t.document_date > tgl_awal:
+				tgl_awal = t.document_date
+		self.tgl_akhir_date = tgl_awal
 
 	def on_submit(self):
 		frappe.db.set(self, 'status', 'Submitted')
