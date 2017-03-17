@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.18'
+__version__ = '1.0.19'
 
+#v1.0.19:
+#       - Update doctype: Rekap Import & Rekap Import Item
 #v1.0.18:
 #       - Update doctype Rekap Import
 #       - Update rekap_import.py
