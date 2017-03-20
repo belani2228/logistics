@@ -15,7 +15,8 @@ def execute(filters=None):
 		data.append([ri.name, ri.customer, ri.aju, ri.commodity, ri.eta,
 		ri.receive_copy_document, ri.receive_ori_document, ri.pick_up_do,
 		ri.tt_do, ri.bpom_available, ri.tt_ski, ri.response_qua, ri.tt_quarantine,
-		ri.payment_pib, ri.response, ri.doc_complete
+		ri.payment_pib, ri.response, ri.doc_complete, ri.submit_pendok,
+		ri.bahandle, ri.tt_bahandle, ri.sppb, ri.response_vs_sppb
 	])
 
 	return columns, data
@@ -40,6 +41,11 @@ def get_columns():
 		_("Tgl Payment PIB")+":Date:100",
 		_("Tgl Response")+":Date:100",
 		_("Doc Complete")+":Float:100",
+		_("Submit Doc to Pendok")+":Date:100",
+		_("Bahandle")+":Date:100",
+		_("TT Bahandle")+":Float:90",
+		_("SPPB")+":Date:100",
+		_("Response vs SPPB")+":Float:100",
 	]
 
 	return columns
@@ -71,7 +77,10 @@ def get_entries(filters):
 			THEN response - eta
 		WHEN(payment_pib >= bpom_available or payment_pib >= receive_ori_document or payment_pib >= eta or payment_pib >= response_qua)
 			THEN response - payment_pib
-	END AS doc_complete
+	END AS doc_complete,
+	if(response < sppb, response, sppb) as submit_pendok,
+	bahandle, (bahandle - response) as tt_bahandle, sppb,
+	(sppb - response) as response_vs_sppb
 	FROM `tabRekap Import`
 	WHERE docstatus != '2' %s
 	ORDER BY `name` ASC""" %
