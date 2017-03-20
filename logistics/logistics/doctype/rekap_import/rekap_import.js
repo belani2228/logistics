@@ -76,14 +76,9 @@ cur_frm.cscript.size_cont = function(doc, cdt, cdn) {
 		}else{
 			d.party = d.size_cont+""+d.type;
 		}
-
 		refresh_field('party', d.name, 'items');
 }
 cur_frm.cscript.type = cur_frm.cscript.size_cont;
-frappe.ui.form.on("Rekap Import Item", "size_cont", function(frm, cdt, cdn) {
-	row = locals[cdt][cdn];
-
-});
 /*
 frappe.ui.form.on("Rekap Import", "validate", function(frm) {
 	if(cur_frm.doc.aju == '1'){

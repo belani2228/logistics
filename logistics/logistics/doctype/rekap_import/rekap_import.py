@@ -14,6 +14,7 @@ class RekapImport(Document):
 		self.update_party()
 		self.update_tgl_receive_copy_doc()
 		self.update_tgl_receive_ori_doc()
+		self.update_response()
 
 	def set_daftar_container(self):
 		against_acc = []
@@ -48,6 +49,13 @@ class RekapImport(Document):
 			if t.document_date > tgl_awal:
 				tgl_awal = t.document_date
 		self.receive_ori_document = tgl_awal
+
+	def update_response(self):
+		if self.spjk >= self.spjm:
+			response = self.spjk
+		else:
+			response = self.spjm
+		self.response = response
 
 	def on_submit(self):
 		frappe.db.set(self, 'status', 'Submitted')
