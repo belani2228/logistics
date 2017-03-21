@@ -15,6 +15,7 @@ class RekapImport(Document):
 		self.update_tgl_receive_copy_doc()
 		self.update_tgl_receive_ori_doc()
 		self.update_response()
+#		self.komuniasi()
 
 	def set_daftar_container(self):
 		against_acc = []
@@ -56,6 +57,17 @@ class RekapImport(Document):
 		else:
 			response = self.spjm
 		self.response = response
+
+#	def komuniasi(self):
+#		kom = frappe.get_doc({
+#			"doctype": "Communication",
+#			"subject": "Rekap Import",
+#			"reference_doctype": "Rekap Import",
+#			"reference_name": self.name,
+#			"comment_type": "Updated",
+#			"communication_type": "Comment"
+#		})
+#		kom.insert()
 
 	def on_submit(self):
 		frappe.db.set(self, 'status', 'Submitted')
