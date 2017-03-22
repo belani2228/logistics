@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.24'
+__version__ = '1.0.25'
 
+#v1.0.25:
+#       - Update doctype: Rekap Export
+#       - Update penitipan_container.py: add on_update to update in activity
 #v1.0.24:
 #       - Update rekap_export.py: perbaikan di on_update
 #v1.0.23:

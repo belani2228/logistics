@@ -12,6 +12,17 @@ from frappe.model.mapper import get_mapped_doc
 class PenitipanContainer(Document):
 	pass
 
+	def on_update(self):
+		frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", self.name)
+		kom = frappe.get_doc({
+			"doctype": "Communication",
+			"subject": "No Job "+self.no_job+" | No SI "+self.shipping_instriction,
+			"reference_doctype": "Penitipan Container",
+			"reference_name": self.name,
+			"comment_type": "Updated",
+			"communication_type": "Comment"
+		}).insert()
+
 @frappe.whitelist()
 def get_container(source_name, target_doc=None):
 	def set_missing_values(source, target):
