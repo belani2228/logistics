@@ -19,6 +19,17 @@ class DepositeNote(Document):
 			count1 = count1+1
 		self.count_item = count1
 
+	def on_update(self):
+		frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", self.name)
+		kom = frappe.get_doc({
+			"doctype": "Communication",
+			"subject": "No Job "+self.no_job+" | "+self.customer,
+			"reference_doctype": "Deposite Note",
+			"reference_name": self.name,
+			"comment_type": "Updated",
+			"communication_type": "Comment"
+		}).insert()
+
 	def get_template_item(self):
 		komponen = frappe.db.sql("""SELECT b1.item_code, b1.item_name, b1.qty, b1.uom,
 			b1.buying_rate, b1.buying_amount,

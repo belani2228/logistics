@@ -77,7 +77,7 @@ website_context = {
 doc_events = {
 	"Purchase Invoice": {
 		"on_submit": "logistics.logistics.lemparan.update_deposite_note_detail",
-		"before_cancel": "logistics.logistics.lemparan.update_deposite_note_cancel",
+		"before_cancel": "logistics.logistics.lemparan.update_deposite_note_cancel"
 	},
 # 	"*": {
 # 		"on_update": "method",

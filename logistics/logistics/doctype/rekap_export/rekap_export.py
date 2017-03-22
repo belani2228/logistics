@@ -41,6 +41,17 @@ class RekapExport(Document):
 				tgl_awal = t.document_date
 		self.tgl_akhir_date = tgl_awal
 
+	def on_update(self):
+		frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", self.name)
+		kom = frappe.get_doc({
+			"doctype": "Communication",
+			"subject": "From "+self.customer_name,
+			"reference_doctype": "Rekap Export,
+			"reference_name": self.name,
+			"comment_type": "Updated",
+			"communication_type": "Comment"
+		}).insert()
+
 	def on_submit(self):
 		frappe.db.set(self, 'status', 'Submitted')
 		self.update_party()

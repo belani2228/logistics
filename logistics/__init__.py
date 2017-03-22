@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.22'
+__version__ = '1.0.23'
 
+#v1.0.23:
+#       - Update rekap_import.py: add on_update to update in activity
+#       - Update rekap_export.py: add on_update to update in activity
+#       - Update deposite_note.py: add on_update to update in activity
+#       - Update doctype: Deposite Note & Deposite Note Item (no copy in certain fields)
 #v1.0.22:
 #       - Update doctype: Rekap Import
 #v1.0.21:

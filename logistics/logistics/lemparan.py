@@ -32,6 +32,22 @@ def update_deposite_note(args):
 
 	frappe.db.sql("""UPDATE `tabDeposite Note` SET terpakai = %s WHERE `name` = %s""", (a2, args))
 
+def update_komunikasi(doc, method):
+#	nama = doc.name
+#	customer = doc.custoer_name
+	frappe.db.sql("""UPDATE `tabRekap Import` SET no_referensi = 'terpakai' WHERE `name` = 'CHBM/PTI/2017/0003'""")
+#	frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", nama)
+#	kom = frappe.get_doc({
+#		"doctype": "Communication",
+#		"subject": "From "+customer,
+#		"reference_doctype": "Rekap Import",
+#		"reference_name": nama,
+#		"comment_type": "Updated",
+#		"communication_type": "Comment"
+#	})
+#	kom.ignore_permissions = True
+#	kom.insert()
+
 @frappe.whitelist()
 def get_items_from_pi(source_name, target_doc=None):
 	no_job,rekap = source_name.split("|")
