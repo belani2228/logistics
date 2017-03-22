@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.23'
+__version__ = '1.0.24'
 
+#v1.0.24:
+#       - Update rekap_export.py: perbaikan di on_update
 #v1.0.23:
 #       - Update rekap_import.py: add on_update to update in activity
 #       - Update rekap_export.py: add on_update to update in activity

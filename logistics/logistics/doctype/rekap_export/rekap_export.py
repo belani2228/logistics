@@ -46,7 +46,7 @@ class RekapExport(Document):
 		kom = frappe.get_doc({
 			"doctype": "Communication",
 			"subject": "From "+self.customer_name,
-			"reference_doctype": "Rekap Export,
+			"reference_doctype": "Rekap Export",
 			"reference_name": self.name,
 			"comment_type": "Updated",
 			"communication_type": "Comment"
