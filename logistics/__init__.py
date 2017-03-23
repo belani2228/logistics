@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.25'
+__version__ = '1.0.26'
 
+#v1.0.26:
+#       - Update Deposite Note
+#       - Add custom_size di Rekap Import Item dan Rekap Export Item
+#       - Update rekap_import.js dan rekap_export.js
 #v1.0.25:
 #       - Update doctype: Rekap Export
 #       - Update penitipan_container.py: add on_update to update in activity

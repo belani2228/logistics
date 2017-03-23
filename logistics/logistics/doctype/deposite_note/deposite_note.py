@@ -55,7 +55,10 @@ class DepositeNote(Document):
 def make_purchase_invoice(source_name, target_doc=None):
 	def set_missing_values(source, target):
 		target.is_paid = 1
-		#target.credit_to = "Cash"
+		if str(source.difference) <= 0:
+			target.write_off_amount = source.difference
+		else:
+			target.write_off_amount = source.difference * -1
 		target.run_method("set_missing_values")
 
 	doc = get_mapped_doc("Deposite Note", source_name, {
@@ -67,7 +70,8 @@ def make_purchase_invoice(source_name, target_doc=None):
 				"total_claim": "paid_amount",
 				"vendor": "supplier",
 				"name": "remarks",
-				"account_paid_to": "credit_to",
+				"account_paid_to": "cash_bank_account",
+				"deposite_amount": "paid_amount"
 			},
 			"validation": {
 				"docstatus": ["=", 1],
