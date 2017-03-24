@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.27'
+__version__ = '1.0.28'
 
+#v1.0.28:
+#       - Fix lemparan.py
 #v1.0.27:
 #       - Update hooks.py
 #       - update lemparan.py

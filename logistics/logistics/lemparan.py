@@ -36,13 +36,13 @@ def update_purchase_invoice_detail(doc, method):
 	for row in doc.items:
 		if row.purchase_invoice:
 			doc = frappe.db.sql("""UPDATE `tabPurchase Invoice Item` SET sales_invoice = %s
-			WHERE item_code = %s""", (row.parent, row.item_code))
+			WHERE `name` = %s""", (row.parent, row.purchase_invoice_item))
 
 def update_purchase_invoice_cancel(doc, method):
 	for row in doc.items:
 		if row.purchase_invoice:
 			doc = frappe.db.sql("""UPDATE `tabPurchase Invoice Item` SET sales_invoice = NULL
-			WHERE sales_invoice = %s""", row.parent)
+			WHERE `name` = %s""", row.purchase_invoice_item)
 
 @frappe.whitelist()
 def get_items_from_pi(source_name, target_doc=None):
@@ -78,7 +78,8 @@ def get_items_from_pi(source_name, target_doc=None):
 				"Purchase Invoice Item": {
 					"doctype": "Sales Invoice Item",
 					"field_map": {
-						"parent": "purchase_invoice"
+						"parent": "purchase_invoice",
+						"name":"purchase_invoice_item"
 					},
 					"condition":lambda doc: doc.sales_invoice is None
 				},
