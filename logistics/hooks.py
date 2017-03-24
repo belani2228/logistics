@@ -79,6 +79,10 @@ doc_events = {
 		"on_submit": "logistics.logistics.lemparan.update_deposite_note_detail",
 		"before_cancel": "logistics.logistics.lemparan.update_deposite_note_cancel"
 	},
+	"Sales Invoice": {
+		"on_submit": "logistics.logistics.lemparan.update_purchase_invoice_detail",
+		"before_cancel": "logistics.logistics.lemparan.update_purchase_invoice_cancel"
+	},
 # 	"*": {
 # 		"on_update": "method",
 # 		"on_cancel": "method",

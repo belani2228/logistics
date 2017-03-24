@@ -32,21 +32,17 @@ def update_deposite_note(args):
 
 	frappe.db.sql("""UPDATE `tabDeposite Note` SET terpakai = %s WHERE `name` = %s""", (a2, args))
 
-def update_komunikasi(doc, method):
-#	nama = doc.name
-#	customer = doc.custoer_name
-	frappe.db.sql("""UPDATE `tabRekap Import` SET no_referensi = 'terpakai' WHERE `name` = 'CHBM/PTI/2017/0003'""")
-#	frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", nama)
-#	kom = frappe.get_doc({
-#		"doctype": "Communication",
-#		"subject": "From "+customer,
-#		"reference_doctype": "Rekap Import",
-#		"reference_name": nama,
-#		"comment_type": "Updated",
-#		"communication_type": "Comment"
-#	})
-#	kom.ignore_permissions = True
-#	kom.insert()
+def update_purchase_invoice_detail(doc, method):
+	for row in doc.items:
+		if row.purchase_invoice:
+			doc = frappe.db.sql("""UPDATE `tabPurchase Invoice Item` SET sales_invoice = %s
+			WHERE item_code = %s""", (row.parent, row.item_code))
+
+def update_purchase_invoice_cancel(doc, method):
+	for row in doc.items:
+		if row.purchase_invoice:
+			doc = frappe.db.sql("""UPDATE `tabPurchase Invoice Item` SET sales_invoice = NULL
+			WHERE sales_invoice = %s""", row.parent)
 
 @frappe.whitelist()
 def get_items_from_pi(source_name, target_doc=None):
@@ -82,7 +78,9 @@ def get_items_from_pi(source_name, target_doc=None):
 				"Purchase Invoice Item": {
 					"doctype": "Sales Invoice Item",
 					"field_map": {
+						"parent": "purchase_invoice"
 					},
+					"condition":lambda doc: doc.sales_invoice is None
 				},
 			}, target_doc, set_missing_values)
 

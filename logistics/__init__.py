@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.26'
+__version__ = '1.0.27'
 
+#v1.0.27:
+#       - Update hooks.py
+#       - update lemparan.py
 #v1.0.26:
 #       - Update Deposite Note
 #       - Add custom_size di Rekap Import Item dan Rekap Export Item
