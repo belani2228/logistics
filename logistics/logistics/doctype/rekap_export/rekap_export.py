@@ -11,7 +11,7 @@ from frappe.model.mapper import get_mapped_doc
 class RekapExport(Document):
 	def validate(self):
 		self.set_daftar_container()
-		self.update_party()
+#		self.update_party()
 		self.update_tgl_kite()
 
 	def set_daftar_container(self):

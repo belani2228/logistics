@@ -202,6 +202,7 @@ frappe.ui.form.on("Deposite Note", "before_submit", function(frm) {
         validated = false;
     }
 });
+
 /*
 frappe.ui.form.on("Deposite Note", "onload", function(frm) {
 	$('input[data-fieldtype="Currency"]').css("text-align","right")
