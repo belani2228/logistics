@@ -11,7 +11,7 @@ from frappe.model.mapper import get_mapped_doc
 class RekapImport(Document):
 	def validate(self):
 		self.set_daftar_container()
-		self.update_party()
+#		self.update_party()
 		self.update_tgl_receive_copy_doc()
 		self.update_tgl_receive_ori_doc()
 		self.update_response()
@@ -30,7 +30,7 @@ class RekapImport(Document):
 		FROM `tabRekap Import Item` r1
 		WHERE r1.parent = %(nama)s""", {"nama":self.name}, as_dict=1)
 		for p in komponen:
-			if p.size_cont == "-" and str(p.jmlh) == 1:
+			if (p.size_cont == '-' and p.jmlh == 1):
 				masukin.append(p.party)
 			else:
 				masukin.append(str(p.jmlh)+"X"+p.party)
