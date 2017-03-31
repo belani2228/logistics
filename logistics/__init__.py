@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.29'
+__version__ = '1.0.30'
 
+#v1.0.30:
+#       - Fix rekap import party
 #v1.0.29:
 #       - Fix sementara bux di rekap export
 #v1.0.28:

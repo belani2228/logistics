@@ -30,8 +30,8 @@ class RekapImport(Document):
 		FROM `tabRekap Import Item` r1
 		WHERE r1.parent = %(nama)s""", {"nama":self.name}, as_dict=1)
 		for p in komponen:
-			if p.size_cont == "-":
-				masukin.append(str(p.jmlh)+""+p.party)
+			if p.size_cont == "-" and p.jmlh == '1':
+				masukin.append(p.party)
 			else:
 				masukin.append(str(p.jmlh)+"X"+p.party)
 		self.party = ', '.join(masukin)
