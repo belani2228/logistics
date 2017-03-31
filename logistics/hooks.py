@@ -86,6 +86,9 @@ doc_events = {
 	"Rekap Import": {
 		"on_update": "logistics.logistics.lemparan.update_party_import"
 	},
+	"Rekap Export": {
+		"on_update": "logistics.logistics.lemparan.update_party_export"
+	},
 # 	"*": {
 # 		"on_update": "method",
 # 		"on_cancel": "method",

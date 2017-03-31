@@ -57,8 +57,22 @@ def update_party_import(doc, method):
 		else:
 			masukin.append(str(p.jmlh)+"X"+p.party)
 	party = ', '.join(masukin)
-
 	doc = frappe.db.sql("""UPDATE `tabRekap Import` SET party = %s WHERE `name` = %s""", (party,name))
+
+def update_party_export(doc, method):
+	name = doc.name
+	masukin = []
+	komponen = frappe.db.sql("""SELECT DISTINCT(r1.party) AS party, r1.size_cont,
+	(SELECT COUNT(`name`) FROM `tabRekap Export Item` r2 WHERE r2.parent = %(nama)s AND r2.party = r1.party) AS jmlh
+	FROM `tabRekap Export Item` r1
+	WHERE r1.parent = %(nama)s""", {"nama":name}, as_dict=1)
+	for p in komponen:
+		if (p.size_cont == '-' and p.jmlh == 1):
+			masukin.append(p.party)
+		else:
+			masukin.append(str(p.jmlh)+"X"+p.party)
+	party = ', '.join(masukin)
+	doc = frappe.db.sql("""UPDATE `tabRekap Export` SET party = %s WHERE `name` = %s""", (party,name))
 
 @frappe.whitelist()
 def get_items_from_pi(source_name, target_doc=None):
