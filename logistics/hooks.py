@@ -26,6 +26,7 @@ app_include_css = "assets/css/custom.css"
 # Home Pages
 # ----------
 website_context = {
+	"favicon": 	"/files/logo.jpg",
 	"splash_image": "/files/splash-rss.png"
 }
 

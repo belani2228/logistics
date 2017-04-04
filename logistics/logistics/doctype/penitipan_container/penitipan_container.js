@@ -18,7 +18,7 @@ frappe.ui.form.on("Penitipan Container", "no_job", function(frm, cdt, cdn) {
 							}
 	        },
 	        callback: function (data) {
-							frappe.model.set_value(cdt, cdn, "shipping_insturction", data.message.shipping_instruction);
+							frappe.model.set_value(cdt, cdn, "shipping_instruction", data.message.shipping_instruction);
 							frappe.model.set_value(cdt, cdn, "do", data.message.no_do);
 	            frappe.model.set_value(cdt, cdn, "carrier", data.message.carrier);
 							frappe.model.set_value(cdt, cdn, "vessel", data.message.vessel);

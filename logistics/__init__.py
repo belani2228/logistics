@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.31'
+__version__ = '1.0.32'
 
+#v1.0.32:
+#       - Fix penitipan container
 #v1.0.31:
 #       - Fix rekap export party
 #v1.0.30:
