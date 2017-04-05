@@ -32,7 +32,7 @@ def get_container(source_name, target_doc=None):
 		"Rekap Export": {
 			"doctype": "Penitipan Container",
 			"field_no_map": [
-				"name", "title"
+				"name", "title", "naming_series"
 			],
 		},
 		"Rekap Export Item": {

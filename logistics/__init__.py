@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.33'
+__version__ = '1.0.34'
 
+#v1.0.34:
+#       - Update rekap export item: copy tgl & PIC
+#       - Fix rekap export
 #v1.0.33:
 #       - Fix series in penitipan container
 #v1.0.32:
