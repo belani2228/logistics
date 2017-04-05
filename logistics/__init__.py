@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.34'
+__version__ = '1.0.35'
 
+#v1.0.35:
+#       - Update rekap export: daily report
 #v1.0.34:
 #       - Update rekap export item: copy tgl & PIC
 #       - Fix rekap export
