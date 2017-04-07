@@ -13,6 +13,7 @@ class RekapExport(Document):
 		self.set_daftar_container()
 		self.update_tgl_kite()
 		self.container_party()
+		self.pic_container()
 
 	def set_daftar_container(self):
 		against_acc = []
@@ -27,7 +28,7 @@ class RekapExport(Document):
 			if t.document_date > tgl_awal:
 				tgl_awal = t.document_date
 		self.tgl_akhir_date = tgl_awal
-		
+
 	def container_party(self):
 		qty_group = []
 		qg = []
@@ -43,6 +44,59 @@ class RekapExport(Document):
 				else:
 					qg.append(str(qq)+'X'+p.party)
 		self.party = ', '.join(qg)
+
+	def pic_container(self):
+		tbm = ""
+		tbm_pic = ""
+		pu1 = ""
+		pu2 = ""
+		pu3 = ""
+		ckk1 = ""
+		ckk2 = ""
+		g1 = ""
+		g2 = ""
+		g3 = ""
+		for c in self.get("items"):
+			if c.tebus_bon_muat:
+				tbm = c.tebus_bon_muat
+			else:
+				c.tebus_bon_muat = tbm
+			if c.pic_tebus_bon:
+				tbm_pic = c.pic_tebus_bon
+			else:
+				c.pic_tebus_bon = tbm_pic
+			if c.pick_up_start:
+				pu1 = c.pick_up_start
+			else:
+				c.pick_up_start = pu1
+			if c.pick_up_done:
+				pu2 = c.pick_up_done
+			else:
+				c.pick_up_done = pu2
+			if c.pic_pick_up:
+				pu3 = c.pic_pick_up
+			else:
+				c.pic_pick_up = pu3
+			if c.cetak_kartu_kuning:
+				ckk1 = c.cetak_kartu_kuning
+			else:
+				c.cetak_kartu_kuning = ckk1
+			if c.pic_cetak_kartu:
+				ckk2 = c.pic_cetak_kartu
+			else:
+				c.pic_cetak_kartu = ckk2
+			if c.gate_in:
+				g1 = c.gate_in
+			else:
+				c.gate_in = g1
+			if c.status_container:
+				g2 = c.status_container
+			else:
+				c.status_container = g2
+			if c.pic_gate_in:
+				g3 = c.pic_gate_in
+			else:
+				c.pic_gate_in = g3
 
 	def on_update(self):
 		frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", self.name)

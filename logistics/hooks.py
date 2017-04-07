@@ -84,9 +84,9 @@ doc_events = {
 		"on_submit": "logistics.logistics.lemparan.update_purchase_invoice_detail",
 		"before_cancel": "logistics.logistics.lemparan.update_purchase_invoice_cancel"
 	},
-	"Rekap Export": {
-		"on_update": "logistics.logistics.lemparan.update_pic"
-	},
+#	"Rekap Export": {
+#		"on_update": "logistics.logistics.lemparan.update_pic"
+#	},
 # 	"*": {
 # 		"on_update": "method",
 # 		"on_cancel": "method",
