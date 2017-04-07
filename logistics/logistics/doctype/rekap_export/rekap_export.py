@@ -12,6 +12,7 @@ class RekapExport(Document):
 	def validate(self):
 		self.set_daftar_container()
 		self.update_tgl_kite()
+		self.container_party()
 
 	def set_daftar_container(self):
 		against_acc = []
@@ -26,6 +27,22 @@ class RekapExport(Document):
 			if t.document_date > tgl_awal:
 				tgl_awal = t.document_date
 		self.tgl_akhir_date = tgl_awal
+		
+	def container_party(self):
+		qty_group = []
+		qg = []
+		for p in self.get('items'):
+			if p.party not in qty_group:
+				qty_group.append(p.party)
+				qq = 0
+				for q in self.get('items'):
+					if q.party == p.party:
+						qq = qq+1
+				if p.size_cont == '-' and qq == 1:
+					qg.append(p.party)
+				else:
+					qg.append(str(qq)+'X'+p.party)
+		self.party = ', '.join(qg)
 
 	def on_update(self):
 		frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", self.name)
@@ -40,11 +57,9 @@ class RekapExport(Document):
 
 	def on_submit(self):
 		frappe.db.set(self, 'status', 'Submitted')
-		self.update_party()
 
 	def on_cancel(self):
 		frappe.db.set(self, 'status', 'Cancelled')
-
 
 @frappe.whitelist()
 def close_rekap_export(status, name):

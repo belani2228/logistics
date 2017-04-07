@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.35'
+__version__ = '1.0.36'
 
+#v1.0.36:
+#       - Fix Rekap Import party
+#       - Fix Rekap Export party
+#       - Update lemparan.py
 #v1.0.35:
 #       - Update rekap export: daily report
 #v1.0.34:

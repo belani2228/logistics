@@ -44,39 +44,38 @@ def update_purchase_invoice_cancel(doc, method):
 			doc = frappe.db.sql("""UPDATE `tabPurchase Invoice Item` SET sales_invoice = NULL
 			WHERE `name` = %s""", row.purchase_invoice_item)
 
-def update_party_import(doc, method):
+#def update_party_import(doc, method):
+#	name = doc.name
+#	masukin = []
+#	komponen = frappe.db.sql("""SELECT DISTINCT(r1.party) AS party, r1.size_cont,
+#	(SELECT COUNT(`name`) FROM `tabRekap Import Item` r2 WHERE r2.parent = %(nama)s AND r2.party = r1.party) AS jmlh
+#	FROM `tabRekap Import Item` r1
+#	WHERE r1.parent = %(nama)s""", {"nama":name}, as_dict=1)
+#	for p in komponen:
+#		if (p.size_cont == '-' and p.jmlh == 1):
+#			masukin.append(p.party)
+#		else:
+#			masukin.append(str(p.jmlh)+"X"+p.party)
+#	party = ', '.join(masukin)
+#	doc = frappe.db.sql("""UPDATE `tabRekap Import` SET party = %s WHERE `name` = %s""", (party,name))
+
+#def update_party_export(doc, method):
+#	name = doc.name
+#	masukin = []
+#	komponen = frappe.db.sql("""SELECT DISTINCT(r1.party) AS party, r1.size_cont,
+#	(SELECT COUNT(`name`) FROM `tabRekap Export Item` r2 WHERE r2.parent = %(nama)s AND r2.party = r1.party) AS jmlh
+#	FROM `tabRekap Export Item` r1
+#	WHERE r1.parent = %(nama)s""", {"nama":name}, as_dict=1)
+#	for p in komponen:
+#		if (p.size_cont == '-' and p.jmlh == 1):
+#			masukin.append(p.party)
+#		else:
+#			masukin.append(str(p.jmlh)+"X"+p.party)
+#	party = ', '.join(masukin)
+#	doc = frappe.db.sql("""UPDATE `tabRekap Export` SET party = %s WHERE `name` = %s""", (party,name))
+
+def update_pic(doc, method):
 	name = doc.name
-	masukin = []
-	komponen = frappe.db.sql("""SELECT DISTINCT(r1.party) AS party, r1.size_cont,
-	(SELECT COUNT(`name`) FROM `tabRekap Import Item` r2 WHERE r2.parent = %(nama)s AND r2.party = r1.party) AS jmlh
-	FROM `tabRekap Import Item` r1
-	WHERE r1.parent = %(nama)s""", {"nama":name}, as_dict=1)
-	for p in komponen:
-		if (p.size_cont == '-' and p.jmlh == 1):
-			masukin.append(p.party)
-		else:
-			masukin.append(str(p.jmlh)+"X"+p.party)
-	party = ', '.join(masukin)
-	doc = frappe.db.sql("""UPDATE `tabRekap Import` SET party = %s WHERE `name` = %s""", (party,name))
-
-def update_party_export(doc, method):
-	name = doc.name
-	masukin = []
-	komponen = frappe.db.sql("""SELECT DISTINCT(r1.party) AS party, r1.size_cont,
-	(SELECT COUNT(`name`) FROM `tabRekap Export Item` r2 WHERE r2.parent = %(nama)s AND r2.party = r1.party) AS jmlh
-	FROM `tabRekap Export Item` r1
-	WHERE r1.parent = %(nama)s""", {"nama":name}, as_dict=1)
-	for p in komponen:
-		if (p.size_cont == '-' and p.jmlh == 1):
-			masukin.append(p.party)
-		else:
-			masukin.append(str(p.jmlh)+"X"+p.party)
-	party = ', '.join(masukin)
-	doc = frappe.db.sql("""UPDATE `tabRekap Export` SET party = %s WHERE `name` = %s""", (party,name))
-
-	return update_pic(name)
-
-def update_pic(name):
 	item = frappe.db.sql("""SELECT `name`, tebus_bon_muat, parent, idx FROM `tabRekap Export Item`
 	WHERE parent = %s ORDER BY idx ASC""", name, as_dict=1)
 	for i in item:
