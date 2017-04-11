@@ -53,6 +53,9 @@ cur_frm.set_query("carrier",  function (frm) {
         }
 		}
 });
+cur_frm.set_query("daily_report",  function (frm) {
+		cur_frm.refresh_fields();
+});
 cur_frm.set_query("vendor_trucking", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {
@@ -81,6 +84,29 @@ cur_frm.cscript.size_cont = function(doc, cdt, cdn) {
 	refresh_field('party', d.name, 'items');
 }
 cur_frm.cscript.custom_size = cur_frm.cscript.type = cur_frm.cscript.size_cont;
+//MULIA
+cur_frm.cscript.size_cont_empty = function(doc, cdt, cdn) {
+	var e = locals[cdt][cdn];
+	if (e.size_cont_empty == "-"){
+		e.party_empty = flt(e.custom_size)+" "+e.type_empty;
+	}else{
+		e.party_empty = e.size_cont_empty+""+e.type_empty;
+	}
+	refresh_field('party_empty', e.name, 'empty_items');
+}
+cur_frm.cscript.custom_size = cur_frm.cscript.type_empty = cur_frm.cscript.size_cont_empty;
+
+
+	frappe.ui.form.on("Rekap Export", "get_items_from_empty_container", function(frm) {
+		if(!cur_frm.doc.__islocal){
+			erpnext.utils.map_current_doc({
+				method: "logistics.logistics.doctype.rekap_export.rekap_export.get_items_from_empty_container",
+				source_name: cur_frm.doc.name,
+			});
+	}else{
+		msgprint("You must save this document")
+	}
+	})
 
 //hitung selisih hari
 /*

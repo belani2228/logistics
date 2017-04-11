@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.37'
+__version__ = '1.0.38'
 
+#v1.0.38:
+#       - Add Rekap Export Mulia Empty
+#       - Add Rekap Export Mulia Full
+#       - Update Rekap Export 
+#       - Update lemparan.py
 #v1.0.37:
 #       - Update Rekap Export Item
 #       - Update lemparan.py

@@ -17,10 +17,16 @@ class RekapExport(Document):
 
 	def set_daftar_container(self):
 		against_acc = []
-		for d in self.get('items'):
-			if d.container_no not in against_acc:
-				against_acc.append(d.container_no)
-		self.daftar_container = ', '.join(against_acc)
+		if self.daily_report != 'MULIA':
+			for d in self.get('items'):
+				if d.container_no not in against_acc:
+					against_acc.append(d.container_no)
+			self.daftar_container = ', '.join(against_acc)
+		else:
+			for d in self.get('empty_items'):
+				if d.container_no not in against_acc:
+					against_acc.append(d.container_no)
+			self.daftar_container = ', '.join(against_acc)
 
 	def update_tgl_kite(self):
 		tgl_awal = ""
@@ -32,18 +38,32 @@ class RekapExport(Document):
 	def container_party(self):
 		qty_group = []
 		qg = []
-		for p in self.get('items'):
-			if p.party not in qty_group:
-				qty_group.append(p.party)
-				qq = 0
-				for q in self.get('items'):
-					if q.party == p.party:
-						qq = qq+1
-				if p.size_cont == '-' and qq == 1:
-					qg.append(p.party)
-				else:
-					qg.append(str(qq)+'X'+p.party)
-		self.party = ', '.join(qg)
+		if self.daily_report != 'MULIA':
+			for p in self.get('items'):
+				if p.party not in qty_group:
+					qty_group.append(p.party)
+					qq = 0
+					for q in self.get('items'):
+						if q.party == p.party:
+							qq = qq+1
+					if p.size_cont == '-' and qq == 1:
+						qg.append(p.party)
+					else:
+						qg.append(str(qq)+'X'+p.party)
+			self.party = ', '.join(qg)
+		else:
+			for p in self.get('empty_items'):
+				if p.party_empty not in qty_group:
+					qty_group.append(p.party_empty)
+					qq = 0
+					for q in self.get('empty_items'):
+						if q.party_empty == p.party_empty:
+							qq = qq+1
+					if p.size_cont_empty == '-' and qq == 1:
+						qg.append(p.party_empty)
+					else:
+						qg.append(str(qq)+'X'+p.party_empty)
+			self.party = ', '.join(qg)
 
 	def pic_container(self):
 		tbm = ""
@@ -56,7 +76,11 @@ class RekapExport(Document):
 		g1 = ""
 		g2 = ""
 		g3 = ""
-		for c in self.get("items"):
+		if self.daily_report != "MULIA":
+			paket = self.get("items")
+		else:
+			paket = self.get("empty_items")
+		for c in paket:
 			if c.tebus_bon_muat:
 				tbm = c.tebus_bon_muat
 			else:
@@ -142,3 +166,20 @@ def make_sales_invoice(source_name, target_doc=None):
 		},
 	}, target_doc, set_missing_values)
 	return si
+
+@frappe.whitelist()
+def get_items_from_empty_container(source_name, target_doc=None):
+	ec = get_mapped_doc("Rekap Export", source_name, {
+		"Rekap Export": {
+			"doctype": "Rekap Export",
+		},
+		"Rekap Export Mulia Empty": {
+			"doctype": "Rekap Export Mulia Full",
+			"field_map": {
+				"type_empty":"type",
+				"size_cont_empty": "size_cont",
+				"party_empty": "party"
+			},
+		},
+	}, target_doc)
+	return ec
