@@ -53,9 +53,6 @@ cur_frm.set_query("carrier",  function (frm) {
         }
 		}
 });
-cur_frm.set_query("daily_report",  function (frm) {
-		cur_frm.refresh_fields();
-});
 cur_frm.set_query("vendor_trucking", "items",  function (doc, cdt, cdn) {
 	var c_doc= locals[cdt][cdn];
     return {

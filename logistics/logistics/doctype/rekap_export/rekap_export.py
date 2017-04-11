@@ -123,6 +123,7 @@ class RekapExport(Document):
 				c.pic_gate_in = g3
 
 	def on_update(self):
+		self.update_item_mulia()
 		frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", self.name)
 		kom = frappe.get_doc({
 			"doctype": "Communication",
@@ -132,6 +133,39 @@ class RekapExport(Document):
 			"comment_type": "Updated",
 			"communication_type": "Comment"
 		}).insert()
+
+	def update_item_mulia(self):
+		if self.daily_report == "MULIA":
+			frappe.db.sql("""DELETE FROM `tabRekap Export Item` WHERE parent = %s""", self.name)
+			for m in self.get("empty_items"):
+				ins = frappe.get_doc({
+					"doctype": "Rekap Export Item",
+					"container_no": m.container_no,
+					"parent": self.name,
+					"parentfield": "items",
+					"parenttype": "Rekap Export",
+					"idx": m.idx,
+					"no_seal": m.no_seal,
+					"license_plate": m.license_plate,
+					"weight": m.weight,
+					"type": m.type_empty,
+					"size_cont": m.size_cont_empty,
+					"custom_size": m.custom_size,
+					"party": m.party_empty,
+					"vendor_trucking": m.vendor_trucking,
+					"tebus_bon_muat": m.tebus_bon_muat,
+					"pic_tebus_bon": m.pic_tebus_bon,
+					"pick_up_start": m.pick_up_start,
+					"pick_up_done": m.pick_up_done,
+					"pic_pick_up": m.pic_pick_up,
+					"cetak_kartu_kuning": m.cetak_kartu_kuning,
+					"pic_cetak_kartu": m.pic_cetak_kartu,
+					"gate_in": m.gate_in,
+					"status_container": m.status_container,
+					"pic_gate_in": m.pic_gate_in
+				}).insert()
+		else:
+			pass
 
 	def on_submit(self):
 		frappe.db.set(self, 'status', 'Submitted')
