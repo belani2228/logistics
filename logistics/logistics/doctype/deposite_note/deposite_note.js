@@ -37,7 +37,10 @@ cur_frm.set_query("no_job",  function (frm) {
         ]
 		}
 });
+
+
 cur_frm.set_query("account_paid_to",  function (frm) {
+	if(cur_frm.doc.rekap_date.substring(0,7) == cur_frm.doc.posting_date.substring(0,7)){
 		return {
         filters: [
             ['root_type', '=', 'Asset'],
@@ -45,6 +48,15 @@ cur_frm.set_query("account_paid_to",  function (frm) {
 						['is_group', '=', 0]
         ]
 		}
+	}else{
+		return {
+        filters: [
+            ['root_type', '=', 'Liability'],
+						['account_type', 'in', 'Bank, Cash'],
+						['is_group', '=', 0]
+        ]
+		}
+	}
 });
 cur_frm.set_query("template_biaya",  function (frm) {
 	if(cur_frm.doc.jenis_rekap == 'Rekap Import'){
@@ -196,6 +208,7 @@ frappe.ui.form.on("Deposite Note", "currency", function(frm) {
 		}
 	})
 })
+
 frappe.ui.form.on("Deposite Note", "before_submit", function(frm) {
     if (frm.doc.sisa != 0) {
         msgprint("<b>Sisa uang</b> harus nol (0)");

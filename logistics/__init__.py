@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.39'
+__version__ = '1.0.40'
 
+#v1.0.40:
+#       - Update Deposite Note
 #v1.0.39:
 #       - Update Rekap Export for daily_report: Mulia
 #v1.0.38:
