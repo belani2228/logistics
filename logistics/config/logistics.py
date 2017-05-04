@@ -31,6 +31,11 @@ def get_data():
 					"name": "Penitipan Container",
 					"description": _("Penitipan Container")
 				},
+#				{
+#					"type": "doctype",
+#					"name": "Job Cost",
+#					"description": _("Job Cost")
+#				},
 			]
 		},
 		{

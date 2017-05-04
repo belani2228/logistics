@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.40'
+__version__ = '1.0.41'
 
+#v1.0.41:
+#       - Update Deposite Note & Rekap Export
 #v1.0.40:
 #       - Update Deposite Note
 #v1.0.39:

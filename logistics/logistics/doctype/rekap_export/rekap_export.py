@@ -4,7 +4,7 @@
 
 from __future__ import unicode_literals
 import frappe
-from frappe import _
+from frappe import msgprint, _
 from frappe.model.document import Document
 from frappe.model.mapper import get_mapped_doc
 
@@ -124,6 +124,7 @@ class RekapExport(Document):
 
 	def on_update(self):
 		self.update_item_mulia()
+#		self.update_job_cost()
 		frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", self.name)
 		kom = frappe.get_doc({
 			"doctype": "Communication",
@@ -166,6 +167,27 @@ class RekapExport(Document):
 				}).insert()
 		else:
 			pass
+
+	def update_job_cost(self):
+		cek = frappe.db.get_value("Job Cost", {"no_job": self.name}, "name")
+		if cek:
+			job_cost = frappe.get_doc("Job Cost", cek)
+			job_cost.customer = self.customer
+			job_cost.date = self.date
+			job_cost.party = self.party
+			job_cost.no_bl = self.bl_number
+			job_cost.save()
+		else:
+			job_cost = frappe.get_doc({
+				"doctype": "Job Cost",
+				"no_job": self.name,
+				"jenis_rekap": "Rekap Export",
+				"customer": self.customer,
+				"date": self.date,
+				"no_bl": self.bl_number,
+				"party": self.party
+			})
+			job_cost.insert()
 
 	def on_submit(self):
 		frappe.db.set(self, 'status', 'Submitted')

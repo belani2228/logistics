@@ -214,6 +214,10 @@ frappe.ui.form.on("Deposite Note", "before_submit", function(frm) {
         msgprint("<b>Sisa uang</b> harus nol (0)");
         validated = false;
     }
+		if(!frm.doc.account_paid_to){
+			msgprint("<b>Account Paid to</b> is required");
+			validated = false;
+		}
 });
 
 /*
