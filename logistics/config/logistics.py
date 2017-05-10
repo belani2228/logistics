@@ -31,11 +31,26 @@ def get_data():
 					"name": "Penitipan Container",
 					"description": _("Penitipan Container")
 				},
-#				{
-#					"type": "doctype",
-#					"name": "Job Cost",
-#					"description": _("Job Cost")
-#				},
+				{
+					"type": "doctype",
+					"name": "Trucking Price List",
+					"description": _("Daftar harga vendor trucking")
+				},
+			]
+		},
+		{
+			"label": _("Integration"),
+			"items": [
+				{
+					"type": "doctype",
+					"name": "Job Cost",
+					"description": _("Job Cost")
+				},
+				{
+					"type": "doctype",
+					"name": "Vendor Trucking",
+					"description": _("Vendor Trucking")
+				},
 			]
 		},
 		{
@@ -55,6 +70,11 @@ def get_data():
 					"type": "doctype",
 					"name": "Shipper",
 					"description": _("Shipper")
+				},
+				{
+					"type": "doctype",
+					"name": "Region",
+					"description": _("Wilayah")
 				},
 			]
 		},

@@ -79,6 +79,14 @@ cur_frm.cscript.size_cont = function(doc, cdt, cdn) {
 		refresh_field('party', d.name, 'items');
 }
 cur_frm.cscript.custom_size = cur_frm.cscript.type = cur_frm.cscript.size_cont;
+var date_for_series = function(frm){
+    var tgl = frm.doc.date;
+    var thn = tgl.substring(0,4);
+    frm.set_value("period", thn);
+}
+frappe.ui.form.on("Rekap Import", "validate", function(frm) {
+	date_for_series(frm);
+})
 /*
 frappe.ui.form.on("Rekap Import", "validate", function(frm) {
 	if(cur_frm.doc.aju == '1'){

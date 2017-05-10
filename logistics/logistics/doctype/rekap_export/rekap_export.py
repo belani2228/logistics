@@ -14,6 +14,7 @@ class RekapExport(Document):
 		self.update_tgl_kite()
 		self.container_party()
 		self.pic_container()
+		self.trucking_price()
 
 	def set_daftar_container(self):
 		against_acc = []
@@ -122,9 +123,84 @@ class RekapExport(Document):
 			else:
 				c.pic_gate_in = g3
 
+	def trucking_price(self):
+		tp = 0
+		if self.daily_report == 'MULIA':
+			paket = self.get("empty_items")
+		else:
+			paket = self.get("items")
+		for t in paket:
+			if self.daily_report == 'MULIA':
+				if t.type_empty and t.size_cont_empty and t.vendor_trucking and t.region:
+					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer}, "name")
+					if cek_price_list:
+						cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list, "size_cont":t.size_cont_empty, "type":t.type_empty}, ["name", "buying"], as_dict=1)
+						if cpd:
+							t.trucking_price_list = cek_price_list
+							t.trucking_price_list_item = cpd.name
+							t.trucking_price_list_item_buying = cpd.buying
+						else:
+							t.trucking_price_list = None
+							t.trucking_price_list_item = None
+							t.trucking_price_list_item_buying = None
+					else:
+						cek_price_list_all = frappe.db.sql("""select name from `tabTrucking Price List` where wilayah = %s and vendor = %s and customer is null""", (t.region, t.vendor_trucking))
+						if cek_price_list_all:
+							cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list_all[0][0], "size_cont":t.size_cont_empty, "type":t.type_empty}, ["name", "buying"], as_dict=1)
+							if cpd:
+								t.trucking_price_list = cek_price_list_all[0][0]
+								t.trucking_price_list_item = cpd.name
+								t.trucking_price_list_item_buying = cpd.buying
+							else:
+								t.trucking_price_list = None
+								t.trucking_price_list_item = None
+								t.trucking_price_list_item_buying = None
+						else:
+							t.trucking_price_list = None
+							t.trucking_price_list_item = None
+							t.trucking_price_list_item_buying = None
+				else:
+					t.trucking_price_list = None
+					t.trucking_price_list_item = None
+					t.trucking_price_list_item_buying = None
+			else:
+				if t.type and t.size_cont and t.vendor_trucking and t.region:
+					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer}, "name")
+					if cek_price_list:
+						cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list, "size_cont":t.size_cont, "type":t.type}, ["name", "buying"], as_dict=1)
+						if cpd:
+							t.trucking_price_list = cek_price_list
+							t.trucking_price_list_item = cpd.name
+							t.trucking_price_list_item_buying = cpd.buying
+						else:
+							t.trucking_price_list = None
+							t.trucking_price_list_item = None
+							t.trucking_price_list_item_buying = None
+					else:
+						cek_price_list_all = frappe.db.sql("""select name from `tabTrucking Price List` where wilayah = %s and vendor = %s and customer is null""", (t.region, t.vendor_trucking))
+						if cek_price_list_all:
+							cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list_all[0][0], "size_cont":t.size_cont, "type":t.type}, ["name", "buying"], as_dict=1)
+							if cpd:
+								t.trucking_price_list = cek_price_list_all[0][0]
+								t.trucking_price_list_item = cpd.name
+								t.trucking_price_list_item_buying = cpd.buying
+							else:
+								t.trucking_price_list = None
+								t.trucking_price_list_item = None
+								t.trucking_price_list_item_buying = None
+						else:
+							t.trucking_price_list = None
+							t.trucking_price_list_item = None
+							t.trucking_price_list_item_buying = None
+				else:
+					t.trucking_price_list = None
+					t.trucking_price_list_item = None
+					t.trucking_price_list_item_buying = None
+
 	def on_update(self):
+		self.update_job_cost()
 		self.update_item_mulia()
-#		self.update_job_cost()
+		self.update_vendor_trucking()
 		frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", self.name)
 		kom = frappe.get_doc({
 			"doctype": "Communication",
@@ -154,6 +230,11 @@ class RekapExport(Document):
 					"custom_size": m.custom_size,
 					"party": m.party_empty,
 					"vendor_trucking": m.vendor_trucking,
+					"region": m.region,
+					"trucking_price_list": m.trucking_price_list,
+					"trucking_price_list_item": m.trucking_price_list_item,
+					"trucking_price_list_item_buying": m.trucking_price_list_item_buying,
+					"remarks": m.remarks,
 					"tebus_bon_muat": m.tebus_bon_muat,
 					"pic_tebus_bon": m.pic_tebus_bon,
 					"pick_up_start": m.pick_up_start,
@@ -164,30 +245,83 @@ class RekapExport(Document):
 					"gate_in": m.gate_in,
 					"status_container": m.status_container,
 					"pic_gate_in": m.pic_gate_in
-				}).insert()
+				})
+				ins.insert()
 		else:
 			pass
 
 	def update_job_cost(self):
-		cek = frappe.db.get_value("Job Cost", {"no_job": self.name}, "name")
-		if cek:
-			job_cost = frappe.get_doc("Job Cost", cek)
-			job_cost.customer = self.customer
-			job_cost.date = self.date
-			job_cost.party = self.party
-			job_cost.no_bl = self.bl_number
-			job_cost.save()
+		if self.party:
+			cek = frappe.db.get_value("Job Cost", {"no_job": self.name}, "name")
+			if cek:
+				job_cost = frappe.get_doc("Job Cost", cek)
+				job_cost.customer = self.customer
+				job_cost.date = self.date
+				job_cost.party = self.party
+				job_cost.no_bl = self.bl_number
+				job_cost.save()
+			else:
+				job_cost = frappe.get_doc({
+					"doctype": "Job Cost",
+					"no_job": self.name,
+					"jenis_rekap": "Rekap Export",
+					"customer": self.customer,
+					"date": self.date,
+					"no_bl": self.bl_number,
+					"party": self.party
+				})
+				job_cost.insert()
+
+	def update_vendor_trucking(self):
+		period = self.period
+		against_acc = []
+		delete = frappe.db.sql("""DELETE FROM `tabVendor Trucking Item` WHERE no_job = %s AND purchase_invoice IS NULL""", self.name)
+		if self.daily_report == 'MULIA':
+			paket = self.get("empty_items")
 		else:
-			job_cost = frappe.get_doc({
-				"doctype": "Job Cost",
-				"no_job": self.name,
-				"jenis_rekap": "Rekap Export",
-				"customer": self.customer,
-				"date": self.date,
-				"no_bl": self.bl_number,
-				"party": self.party
-			})
-			job_cost.insert()
+			paket = self.get("items")
+		for v1 in paket:
+			if v1.trucking_price_list and v1.trucking_price_list_item and v1.vendor_trucking not in against_acc:
+				cek_vendor = frappe.db.get_value("Vendor Trucking", {"period": period, "vendor": v1.vendor_trucking}, "name")
+				if not cek_vendor:
+					cari_supp = frappe.db.get_value("Supplier", v1.vendor_trucking, "supplier_name")
+					vt = frappe.get_doc({
+						"doctype": "Vendor Trucking",
+						"vendor": v1.vendor_trucking,
+						"vendor_name": cari_supp,
+						"period": period
+					})
+					vt.insert()
+					against_acc.append(v1.vendor_trucking)
+		for v in paket:
+			if v.trucking_price_list and v.trucking_price_list_item:
+				cek_vendor = frappe.db.get_value("Vendor Trucking", {"period":period, "vendor":v.vendor_trucking}, "name")
+				cek_vendor_det = frappe.db.get_value("Vendor Trucking Item", {"parent":cek_vendor, "rekap_item": v.name}, "name")
+				if cek_vendor_det:
+					vti = frappe.get_doc("Vendor Trucking Item", cek_vendor_det)
+					vti.jenis_rekap = "Rekap Export"
+					vti.no_job = self.name
+					vti.container_no = v.container_no
+					vti.job_date = self.date
+					vti.region = v.region
+					vti.rekap_item = v.name
+					vti.buying_amount = v.trucking_price_list_item_buying
+					vti.save()
+				else:
+					vti = frappe.get_doc({
+						"doctype": "Vendor Trucking Item",
+						"parent": cek_vendor,
+						"parentfield": "items",
+						"parenttype": "Vendor Trucking",
+						"jenis_rekap": "Rekap Export",
+						"no_job": self.name,
+						"container_no": v.container_no,
+						"job_date": self.date,
+						"region": v.region,
+						"rekap_item": v.name,
+						"buying_amount": v.trucking_price_list_item_buying
+					})
+					vti.insert()
 
 	def on_submit(self):
 		frappe.db.set(self, 'status', 'Submitted')

@@ -187,6 +187,18 @@ def update_job_cost(args):
 #	msgprint("total cost: "+str(jmlh_cost))
 	frappe.db.sql("""UPDATE `tabJob Cost` SET total_cost = %s, total_selling = %s, profit_loss = %s WHERE `name` = %s""", (sum_cost, sum_sell, profit, args))
 
+def update_vendor_trucking_detail(doc, method):
+	name = doc.name
+	for row in doc.items:
+		if row.vendor_trucking_item:
+			doc = frappe.db.sql("""UPDATE `tabVendor Trucking Item` SET purchase_invoice = %s, for_print = '0' WHERE `name` = %s""", (name, row.vendor_trucking_item))
+
+def cancel_vendor_trucking_detail(doc, method):
+	name = doc.name
+	for row in doc.items:
+		if row.vendor_trucking_item:
+			doc = frappe.db.sql("""UPDATE `tabVendor Trucking Item` SET purchase_invoice = null, for_print = '1' WHERE `name` = %s""", row.vendor_trucking_item)
+
 @frappe.whitelist()
 def get_items_from_pi(source_name, target_doc=None):
 	no_job,rekap = source_name.split("|")

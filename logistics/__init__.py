@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.0.41'
+__version__ = '1.1.01'
 
+#v1.1.01:
+#       - Add Vendor Trucking
+#       - Add Trucking Price List
+#       - Add Job Cost
 #v1.0.41:
 #       - Update Deposite Note & Rekap Export
 #v1.0.40:
