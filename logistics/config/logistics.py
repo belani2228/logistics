@@ -117,6 +117,12 @@ def get_data():
 					"doctype": "Rekap Import",
 					"is_query_report": True
 				},
+				{
+					"type": "report",
+					"name": "Purchase Invoice Monthly",
+					"doctype": "Purchase Invoice",
+					"is_query_report": True
+				},
 			]
 		},
 	]

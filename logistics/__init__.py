@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.01'
+__version__ = '1.1.02'
 
+#v1.1.02:
+#       - Update Trucking Price List
+#       - Add Laporan Purchase Invoice Monthly
+#       - Update Rekap Export & Import Item u/ menampung harga trucking
+#       - Update Region/Wilayah
 #v1.1.01:
 #       - Add Vendor Trucking
 #       - Add Trucking Price List

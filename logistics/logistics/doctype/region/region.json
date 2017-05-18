@@ -1,8 +1,8 @@
 {
  "allow_copy": 0, 
  "allow_import": 0, 
- "allow_rename": 0, 
- "autoname": "naming_series:", 
+ "allow_rename": 1, 
+ "autoname": "field:region_name", 
  "beta": 0, 
  "creation": "2017-05-04 13:35:04.027726", 
  "custom": 0, 
@@ -19,7 +19,7 @@
    "columns": 0, 
    "fieldname": "naming_series", 
    "fieldtype": "Select", 
-   "hidden": 0, 
+   "hidden": 1, 
    "ignore_user_permissions": 0, 
    "ignore_xss_filter": 0, 
    "in_filter": 0, 
@@ -36,7 +36,7 @@
    "read_only": 0, 
    "remember_last_selected_value": 0, 
    "report_hide": 0, 
-   "reqd": 1, 
+   "reqd": 0, 
    "search_index": 0, 
    "set_only_once": 0, 
    "unique": 0
@@ -81,7 +81,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-05-04 13:37:52.932944", 
+ "modified": "2017-05-18 09:07:07.422026", 
  "modified_by": "Administrator", 
  "module": "Logistics", 
  "name": "Region", 
@@ -110,7 +110,7 @@
    "write": 1
   }
  ], 
- "quick_entry": 0, 
+ "quick_entry": 1, 
  "read_only": 0, 
  "read_only_onload": 0, 
  "sort_field": "modified", 

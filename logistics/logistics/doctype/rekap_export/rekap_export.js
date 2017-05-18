@@ -70,17 +70,17 @@ cur_frm.set_query("template_trucking", "items",  function (doc, cdt, cdn) {
         }
     }
 });
-
-cur_frm.cscript.size_cont = function(doc, cdt, cdn) {
+cur_frm.cscript.type = function(doc, cdt, cdn) {
 	var d = locals[cdt][cdn];
-	if (d.size_cont == "-"){
+	if (d.type == "CBM" || d.type == "KGS"){
 		d.party = flt(d.custom_size)+" "+d.type;
 	}else{
 		d.party = d.size_cont+""+d.type;
 	}
 	refresh_field('party', d.name, 'items');
 }
-cur_frm.cscript.custom_size = cur_frm.cscript.type = cur_frm.cscript.size_cont;
+cur_frm.cscript.custom_size = cur_frm.cscript.size_cont = cur_frm.cscript.type;
+
 var date_for_series = function(frm){
     var tgl = frm.doc.date;
     var thn = tgl.substring(0,4);
@@ -103,8 +103,8 @@ cur_frm.cscript.size_cont_empty = function(doc, cdt, cdn) {
 cur_frm.cscript.custom_size = cur_frm.cscript.type_empty = cur_frm.cscript.size_cont_empty;
 
 
-	frappe.ui.form.on("Rekap Export", "get_items_from_empty_container", function(frm) {
-		if(!cur_frm.doc.__islocal){
+frappe.ui.form.on("Rekap Export", "get_items_from_empty_container", function(frm) {
+	if(!cur_frm.doc.__islocal){
 			erpnext.utils.map_current_doc({
 				method: "logistics.logistics.doctype.rekap_export.rekap_export.get_items_from_empty_container",
 				source_name: cur_frm.doc.name,

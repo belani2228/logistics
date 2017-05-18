@@ -134,27 +134,73 @@ class RekapExport(Document):
 				if t.type_empty and t.size_cont_empty and t.vendor_trucking and t.region:
 					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer}, "name")
 					if cek_price_list:
-						cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list, "size_cont":t.size_cont_empty, "type":t.type_empty}, ["name", "buying"], as_dict=1)
-						if cpd:
-							t.trucking_price_list = cek_price_list
-							t.trucking_price_list_item = cpd.name
-							t.trucking_price_list_item_buying = cpd.buying
-						else:
-							t.trucking_price_list = None
-							t.trucking_price_list_item = None
-							t.trucking_price_list_item_buying = None
-					else:
-						cek_price_list_all = frappe.db.sql("""select name from `tabTrucking Price List` where wilayah = %s and vendor = %s and customer is null""", (t.region, t.vendor_trucking))
-						if cek_price_list_all:
-							cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list_all[0][0], "size_cont":t.size_cont_empty, "type":t.type_empty}, ["name", "buying"], as_dict=1)
+						if t.type == 'CBM' or t.type == 'KGS':
+							cpd = frappe.db.sql("""select `name`, `to`, `buying` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list, t.type), as_dict=1)
 							if cpd:
-								t.trucking_price_list = cek_price_list_all[0][0]
+								qty = t.custom_size
+								price = 0
+								for c1 in cpd:
+									if qty >= 1:
+										if qty >= c1.to:
+											price1 = c1.to * c1.buying
+											price = price + price1
+											qty = qty - c1.to
+										else:
+											price1 = qty * c1.buying
+											price = price + price1
+											qty = 0
+								t.trucking_price_list = cek_price_list
+								t.trucking_price_list_item = "--"
+								t.trucking_price_list_item_buying = price
+							else:
+								t.trucking_price_list = None
+								t.trucking_price_list_item = None
+								t.trucking_price_list_item_buying = None
+						else:
+							cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list, "size_cont":t.size_cont_empty, "type":t.type_empty}, ["name", "buying"], as_dict=1)
+							if cpd:
+								t.trucking_price_list = cek_price_list
 								t.trucking_price_list_item = cpd.name
 								t.trucking_price_list_item_buying = cpd.buying
 							else:
 								t.trucking_price_list = None
 								t.trucking_price_list_item = None
 								t.trucking_price_list_item_buying = None
+					else:
+						cek_price_list_all = frappe.db.sql("""select name from `tabTrucking Price List` where wilayah = %s and vendor = %s and customer is null""", (t.region, t.vendor_trucking))
+						if cek_price_list_all:
+							if t.type == 'CBM' or t.type == 'KGS':
+								cpd = frappe.db.sql("""select `name`, `to`, `buying` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list_all[0][0], t.type), as_dict=1)
+								if cpd:
+									qty = t.custom_size
+									price = 0
+									for c1 in cpd:
+										if qty >= 1:
+											if qty >= c1.to:
+												price1 = c1.to * c1.buying
+												price = price + price1
+												qty = qty - c1.to
+											else:
+												price1 = qty * c1.buying
+												price = price + price1
+												qty = 0
+									t.trucking_price_list = cek_price_list_all[0][0]
+									t.trucking_price_list_item = "--"
+									t.trucking_price_list_item_buying = price
+								else:
+									t.trucking_price_list = None
+									t.trucking_price_list_item = None
+									t.trucking_price_list_item_buying = None
+							else:
+								cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list_all[0][0], "size_cont":t.size_cont_empty, "type":t.type_empty}, ["name", "buying"], as_dict=1)
+								if cpd:
+									t.trucking_price_list = cek_price_list_all[0][0]
+									t.trucking_price_list_item = cpd.name
+									t.trucking_price_list_item_buying = cpd.buying
+								else:
+									t.trucking_price_list = None
+									t.trucking_price_list_item = None
+									t.trucking_price_list_item_buying = None
 						else:
 							t.trucking_price_list = None
 							t.trucking_price_list_item = None
@@ -167,27 +213,73 @@ class RekapExport(Document):
 				if t.type and t.size_cont and t.vendor_trucking and t.region:
 					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer}, "name")
 					if cek_price_list:
-						cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list, "size_cont":t.size_cont, "type":t.type}, ["name", "buying"], as_dict=1)
-						if cpd:
-							t.trucking_price_list = cek_price_list
-							t.trucking_price_list_item = cpd.name
-							t.trucking_price_list_item_buying = cpd.buying
-						else:
-							t.trucking_price_list = None
-							t.trucking_price_list_item = None
-							t.trucking_price_list_item_buying = None
-					else:
-						cek_price_list_all = frappe.db.sql("""select name from `tabTrucking Price List` where wilayah = %s and vendor = %s and customer is null""", (t.region, t.vendor_trucking))
-						if cek_price_list_all:
-							cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list_all[0][0], "size_cont":t.size_cont, "type":t.type}, ["name", "buying"], as_dict=1)
+						if t.type == 'CBM' or t.type == 'KGS':
+							cpd = frappe.db.sql("""select `name`, `to`, `buying` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list, t.type), as_dict=1)
 							if cpd:
-								t.trucking_price_list = cek_price_list_all[0][0]
+								qty = t.custom_size
+								price = 0
+								for c1 in cpd:
+									if qty >= 1:
+										if qty >= c1.to:
+											price1 = c1.to * c1.buying
+											price = price + price1
+											qty = qty - c1.to
+										else:
+											price1 = qty * c1.buying
+											price = price + price1
+											qty = 0
+								t.trucking_price_list = cek_price_list
+								t.trucking_price_list_item = "--"
+								t.trucking_price_list_item_buying = price
+							else:
+								t.trucking_price_list = None
+								t.trucking_price_list_item = None
+								t.trucking_price_list_item_buying = None
+						else:
+							cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list, "size_cont":t.size_cont, "type":t.type}, ["name", "buying"], as_dict=1)
+							if cpd:
+								t.trucking_price_list = cek_price_list
 								t.trucking_price_list_item = cpd.name
 								t.trucking_price_list_item_buying = cpd.buying
 							else:
 								t.trucking_price_list = None
 								t.trucking_price_list_item = None
 								t.trucking_price_list_item_buying = None
+					else:
+						cek_price_list_all = frappe.db.sql("""select name from `tabTrucking Price List` where wilayah = %s and vendor = %s and customer is null""", (t.region, t.vendor_trucking))
+						if cek_price_list_all:
+							if t.type == 'CBM' or t.type == 'KGS':
+								cpd = frappe.db.sql("""select `name`, `to`, `buying` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list_all[0][0], t.type), as_dict=1)
+								if cpd:
+									qty = t.custom_size
+									price = 0
+									for c1 in cpd:
+										if qty >= 1:
+											if qty >= c1.to:
+												price1 = c1.to * c1.buying
+												price = price + price1
+												qty = qty - c1.to
+											else:
+												price1 = qty * c1.buying
+												price = price + price1
+												qty = 0
+									t.trucking_price_list = cek_price_list_all[0][0]
+									t.trucking_price_list_item = "--"
+									t.trucking_price_list_item_buying = price
+								else:
+									t.trucking_price_list = None
+									t.trucking_price_list_item = None
+									t.trucking_price_list_item_buying = None
+							else:
+								cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list_all[0][0], "size_cont":t.size_cont, "type":t.type}, ["name", "buying"], as_dict=1)
+								if cpd:
+									t.trucking_price_list = cek_price_list_all[0][0]
+									t.trucking_price_list_item = cpd.name
+									t.trucking_price_list_item_buying = cpd.buying
+								else:
+									t.trucking_price_list = None
+									t.trucking_price_list_item = None
+									t.trucking_price_list_item_buying = None
 						else:
 							t.trucking_price_list = None
 							t.trucking_price_list_item = None

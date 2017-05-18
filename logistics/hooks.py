@@ -90,6 +90,10 @@ doc_events = {
 		"before_cancel": "logistics.logistics.lemparan.update_purchase_invoice_cancel",
 		"before_cancel": "logistics.logistics.lemparan.cancel_job_cost_detail"
 	},
+	"Journal Entry": {
+		"on_submit": "logistics.logistics.lemparan.update_pi_to_jv",
+		"before_cancel": "logistics.logistics.lemparan.cancel_pi_to_jv"
+	},
 #	"Rekap Export": {
 #		"on_update": "logistics.logistics.lemparan.update_pic"
 #	},

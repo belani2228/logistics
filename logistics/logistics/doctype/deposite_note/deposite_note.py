@@ -12,12 +12,24 @@ from frappe.model.mapper import get_mapped_doc
 class DepositeNote(Document):
 	def validate(self):
 		self.set_count_item()
+		self.check_double_item()
 
 	def set_count_item(self):
 		count1 = 0;
 		for d in self.get('items'):
 			count1 = count1+1
 		self.count_item = count1
+
+	def check_double_item(self):
+		error = []
+		for d in self.get('items'):
+			check_item = frappe.db.sql("""select a.`name` from `tabDeposite Note Item` a
+			inner join `tabDeposite Note` b on b.`name` = a.parent
+			where a.docstatus != '2' and b.no_job = %s and b.posting_date = %s and a.item_code = %s""", (self.no_job, self.posting_date, d.item_code))
+			if check_item:
+				error.append(d.item_code)
+		if len(error) != 0:
+			frappe.throw("Item "+', '.join(error)+" double input")
 
 	def on_update(self):
 		frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", self.name)

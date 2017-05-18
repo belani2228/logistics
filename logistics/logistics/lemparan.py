@@ -199,6 +199,31 @@ def cancel_vendor_trucking_detail(doc, method):
 		if row.vendor_trucking_item:
 			doc = frappe.db.sql("""UPDATE `tabVendor Trucking Item` SET purchase_invoice = null, for_print = '1' WHERE `name` = %s""", row.vendor_trucking_item)
 
+def update_pi_to_jv(doc, method):
+	detail = doc.name
+	if not doc.against_jv and doc.purchase_invoice:
+		for row in doc.accounts:
+			if row.purchase_invoice_item:
+				doc = frappe.db.sql("""update `tabPurchase Invoice Item` set journal_entry = %s where `name` = %s""", (detail, row.purchase_invoice_item))
+# 	reversing_entry
+	elif doc.against_jv and doc.purchase_invoice:
+		for row in doc.accounts:
+			if row.purchase_invoice_item:
+				doc = frappe.db.sql("""update `tabPurchase Invoice Item` set reversing_entry = %s where `name` = %s""", (detail, row.purchase_invoice_item))
+				dod = frappe.db.sql("""update `tabJournal Entry Account` set reversing_entry_account = %s where `name` = %s""", (row.name, row.jv_account))
+
+def cancel_pi_to_jv(doc, method):
+	if not doc.against_jv and doc.purchase_invoice:
+		for row in doc.accounts:
+			if row.purchase_invoice_item:
+				doc = frappe.db.sql("""update `tabPurchase Invoice Item` set journal_entry = NULL where `name` = %s""", row.purchase_invoice_item)
+# 	reversing_entry
+	elif doc.against_jv and doc.purchase_invoice:
+		for row in doc.accounts:
+			if row.purchase_invoice_item:
+				doc = frappe.db.sql("""update `tabPurchase Invoice Item` set reversing_entry = NULL where `name` = %s""", row.purchase_invoice_item)
+				dod = frappe.db.sql("""update `tabJournal Entry Account` set reversing_entry_account = NULL where `name` = %s""", row.jv_account)
+
 @frappe.whitelist()
 def get_items_from_pi(source_name, target_doc=None):
 	no_job,rekap = source_name.split("|")
@@ -241,6 +266,63 @@ def get_items_from_pi(source_name, target_doc=None):
 			}, target_doc, set_missing_values)
 
 	return si
+
+@frappe.whitelist()
+def make_journal_entry(source_name, target_doc=None):
+	def set_missing_values(source, target):
+#		pi = frappe.db.get_value("Purchase Invoice", {"for_print":1, "parent":no_doc}, ["jenis_rekap", "no_job"], as_dict=1)
+		target.purchase_invoice = source_name
+		target.run_method("set_missing_values")
+
+	def update_item(source, target, source_parent):
+		target.purchase_invoice = source_name
+
+	doc = get_mapped_doc("Purchase Invoice", source_name, {
+		"Purchase Invoice": {
+			"doctype": "Journal Entry",
+			"validation": {
+				"docstatus": ["=", 1],
+			},
+		},
+		"Purchase Invoice Item": {
+			"doctype": "Journal Entry Account",
+			"field_map": {
+				"expense_account": "account",
+				"net_amount": "credit_in_account_currency",
+				"name": "purchase_invoice_item"
+			},
+			"postprocess": update_item,
+			"condition":lambda doc: doc.journal_entry is None
+		},
+	}, target_doc, set_missing_values)
+	return doc
+
+@frappe.whitelist()
+def make_reversing_entry(source_name, target_doc=None):
+	def set_missing_values(source, target):
+		target.run_method("set_missing_values")
+
+	doc = get_mapped_doc("Journal Entry", source_name, {
+		"Journal Entry": {
+			"doctype": "Journal Entry",
+			"field_map":{
+				"name": "against_jv",
+			},
+			"validation": {
+				"docstatus": ["=", 1],
+			},
+		},
+		"Journal Entry Account": {
+			"doctype": "Journal Entry Account",
+			"field_map": {
+				"credit_in_account_currency": "debit_in_account_currency",
+				"debit_in_account_currency": "credit_in_account_currency",
+				"name": "jv_account"
+			},
+			"condition":lambda doc: doc.reversing_entry_account is None
+		},
+	}, target_doc, set_missing_values)
+	return doc
 
 def coba_doang():
 	tampung = []
