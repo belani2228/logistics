@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.03'
+__version__ = '1.1.04'
 
+#v1.1.04:
+#       - Minor update di rekap export dan import
 #v1.1.03:
 #       - Update macem2, lupa isi :D
 #v1.1.02:

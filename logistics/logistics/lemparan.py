@@ -155,9 +155,23 @@ def make_reversing_entry(source_name, target_doc=None):
 	return doc
 
 @frappe.whitelist()
-#def get_items_si_qoute(name):
-#	quote = frappe.db.sql("""select * from `tabSales Invoice Quotation` where parent = %s and `check` = '1'""", name, as_dict=1)
-#	name.clear_table("items")
+def get_items_from_quotation(source_name, target_doc=None):
+	if target_doc:
+		if isinstance(target_doc, basestring):
+			import json
+			target_doc = frappe.get_doc(json.loads(target_doc))
+		target_doc.set("quotation_items", [])
+	doclist = get_mapped_doc("Quotation", source_name, {
+		"Quotation": {
+			"doctype": "Sales Invoice",
+			"field_no_map":["customer", "posting_date", "due_date", "items"]
+		},
+		"Quotation Item": {
+			"doctype": "Sales Invoice Quotation",
+		},
+	}, target_doc)
+	return doclist
+
 @frappe.whitelist()
 def get_items_si_qoute(source_name, target_doc=None):
 	if target_doc:
