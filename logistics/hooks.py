@@ -77,18 +77,12 @@ website_context = {
 
 doc_events = {
 	"Purchase Invoice": {
-		"on_submit": "logistics.logistics.lemparan.update_deposite_note_detail",
-		"on_submit": "logistics.logistics.lemparan.update_job_cost_detail",
-		"on_submit": "logistics.logistics.lemparan.update_vendor_trucking_detail",
-		"before_cancel": "logistics.logistics.lemparan.update_deposite_note_cancel",
-		"before_cancel": "logistics.logistics.lemparan.cancel_job_cost_detail",
-		"before_cancel": "logistics.logistics.lemparan.cancel_vendor_trucking_detail"
+		"on_submit": "logistics.logistics.operan.update_doctype_related_with_pinv",
+		"before_cancel": "logistics.logistics.operan.cancel_doctype_related_with_pinv"
 	},
 	"Sales Invoice": {
-		"on_submit": "logistics.logistics.lemparan.update_purchase_invoice_detail",
-		"on_submit": "logistics.logistics.lemparan.update_job_cost_detail",
-		"before_cancel": "logistics.logistics.lemparan.update_purchase_invoice_cancel",
-		"before_cancel": "logistics.logistics.lemparan.cancel_job_cost_detail"
+		"on_submit": "logistics.logistics.operan.update_doctype_related_with_sinv",
+		"before_cancel": "logistics.logistics.operan.cancel_doctype_related_with_sinv"
 	},
 	"Journal Entry": {
 		"on_submit": "logistics.logistics.lemparan.update_pi_to_jv",

@@ -6,7 +6,5 @@ from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
 
-class Region(Document):
-	def validate(self):
-		r = self.region_name
-		self.region_name = r.upper()
+class SalesInvoiceQuotation(Document):
+	pass

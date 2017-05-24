@@ -24,8 +24,9 @@ class DepositeNote(Document):
 		error = []
 		for d in self.get('items'):
 			check_item = frappe.db.sql("""select a.`name` from `tabDeposite Note Item` a
-			inner join `tabDeposite Note` b on b.`name` = a.parent
-			where a.docstatus != '2' and b.no_job = %s and b.posting_date = %s and a.item_code = %s""", (self.no_job, self.posting_date, d.item_code))
+				inner join `tabDeposite Note` b on b.`name` = a.parent
+				where a.docstatus != '2' and b.no_job = %s and b.posting_date = %s and a.item_code = %s and b.`name` != %s""",
+				(self.no_job, self.posting_date, d.item_code, self.name))
 			if check_item:
 				error.append(d.item_code)
 		if len(error) != 0:

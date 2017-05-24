@@ -923,7 +923,7 @@
    "unique": 0
   }, 
   {
-   "allow_on_submit": 0, 
+   "allow_on_submit": 1, 
    "bold": 0, 
    "collapsible": 0, 
    "columns": 0, 
@@ -1163,7 +1163,7 @@
  "issingle": 0, 
  "istable": 0, 
  "max_attachments": 0, 
- "modified": "2017-05-04 08:59:41.265072", 
+ "modified": "2017-05-19 18:12:57.134735", 
  "modified_by": "Administrator", 
  "module": "Logistics", 
  "name": "Deposite Note", 

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.02'
+__version__ = '1.1.03'
 
+#v1.1.03:
+#       - Update macem2, lupa isi :D
 #v1.1.02:
 #       - Update Trucking Price List
 #       - Add Laporan Purchase Invoice Monthly

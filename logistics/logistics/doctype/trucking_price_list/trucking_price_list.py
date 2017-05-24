@@ -9,7 +9,15 @@ from frappe.model.document import Document
 
 class TruckingPriceList(Document):
 	def validate(self):
-		self.vendor_truck()
+		if self.is_active:
+			self.update_if_active()
 
-	def vendor_truck(self):
-		pass
+	def update_if_active(self):
+		if self.customer:
+			if self.get('__islocal'):
+				cek = frappe.db.get_value("Trucking Price List", {"customer": self.customer, "vendor": self.vendor, "wilayah": self.wilayah, "docstatus": ["!=", 2]}, "name")
+				if cek:
+					for row in cek:
+						tpl = frappe.get_doc("Trucking Price List", row)
+						tpl.is_active = 0
+						tpl.save()
