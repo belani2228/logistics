@@ -132,7 +132,7 @@ class RekapExport(Document):
 		for t in paket:
 			if self.daily_report == 'MULIA':
 				if t.type_empty and t.size_cont_empty and t.vendor_trucking and t.region:
-					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer}, "name")
+					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer, "docstatus": 1}, "name")
 					if cek_price_list:
 						if t.type == 'CBM' or t.type == 'KGS':
 							cpd = frappe.db.sql("""select `name`, `to`, `buying` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list, t.type), as_dict=1)
@@ -167,7 +167,7 @@ class RekapExport(Document):
 								t.trucking_price_list_item = None
 								t.trucking_price_list_item_buying = None
 					else:
-						cek_price_list_all = frappe.db.sql("""select name from `tabTrucking Price List` where wilayah = %s and vendor = %s and customer is null""", (t.region, t.vendor_trucking))
+						cek_price_list_all = frappe.db.sql("""select name from `tabTrucking Price List` where docstatus = '1' and wilayah = %s and vendor = %s and customer is null""", (t.region, t.vendor_trucking))
 						if cek_price_list_all:
 							if t.type == 'CBM' or t.type == 'KGS':
 								cpd = frappe.db.sql("""select `name`, `to`, `buying` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list_all[0][0], t.type), as_dict=1)
@@ -211,7 +211,7 @@ class RekapExport(Document):
 					t.trucking_price_list_item_buying = None
 			else:
 				if t.type and t.size_cont and t.vendor_trucking and t.region:
-					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer}, "name")
+					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer, "docstatus":1}, "name")
 					if cek_price_list:
 						if t.type == 'CBM' or t.type == 'KGS':
 							cpd = frappe.db.sql("""select `name`, `to`, `buying` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list, t.type), as_dict=1)
@@ -246,7 +246,7 @@ class RekapExport(Document):
 								t.trucking_price_list_item = None
 								t.trucking_price_list_item_buying = None
 					else:
-						cek_price_list_all = frappe.db.sql("""select name from `tabTrucking Price List` where wilayah = %s and vendor = %s and customer is null""", (t.region, t.vendor_trucking))
+						cek_price_list_all = frappe.db.sql("""select name from `tabTrucking Price List` where docstatus = '1' and wilayah = %s and vendor = %s and customer is null""", (t.region, t.vendor_trucking))
 						if cek_price_list_all:
 							if t.type == 'CBM' or t.type == 'KGS':
 								cpd = frappe.db.sql("""select `name`, `to`, `buying` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list_all[0][0], t.type), as_dict=1)

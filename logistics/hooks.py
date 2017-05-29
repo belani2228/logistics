@@ -81,6 +81,7 @@ doc_events = {
 		"before_cancel": "logistics.logistics.operan.cancel_doctype_related_with_pinv"
 	},
 	"Sales Invoice": {
+		"on_update": "logistics.logistics.lemparan.update_si_quotation",
 		"on_submit": "logistics.logistics.operan.update_doctype_related_with_sinv",
 		"before_cancel": "logistics.logistics.operan.cancel_doctype_related_with_sinv"
 	},

@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.04'
+__version__ = '1.1.05'
 
+#v1.1.05:
+#       - Minor update di rekap export dan import
 #v1.1.04:
 #       - Minor update di rekap export dan import
 #v1.1.03:

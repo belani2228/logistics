@@ -160,11 +160,12 @@ def update_dni_from_pinv(pinv):
 
 def update_dn_from_pinv(pinv):
 	dn = frappe.db.get_value("Purchase Invoice", pinv, "deposite_note")
-	count = frappe.db.sql("""select count(*) from `tabDeposite Note Item` where parent = %s and pi_no is not null""", dn)[0][0]
-	if cstr(count) != 0:
-		deposite_note = frappe.get_doc("Deposite Note", dn)
-		deposite_note.terpakai = count
-		deposite_note.save()
+	if dn:
+		count = frappe.db.sql("""select count(*) from `tabDeposite Note Item` where parent = %s and pi_no is not null""", dn)[0][0]
+		if cstr(count) != 0:
+			deposite_note = frappe.get_doc("Deposite Note", dn)
+			deposite_note.terpakai = count
+			deposite_note.save()
 
 def update_jc_item_from_pinv(pinv, jc):
 	pinv_items = frappe.db.sql("""select * from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
@@ -256,11 +257,12 @@ def cancel_dni_from_pinv(pinv):
 
 def cancel_dn_from_pinv(pinv):
 	dn = frappe.db.get_value("Purchase Invoice", pinv, "deposite_note")
-	count = frappe.db.sql("""select count(*) from `tabDeposite Note Item` where parent = %s and pi_no is not null""", dn)[0][0]
-	if cstr(count) != 0:
-		deposite_note = frappe.get_doc("Deposite Note", dn)
-		deposite_note.terpakai = count
-		deposite_note.save()
+	if dn:
+		count = frappe.db.sql("""select count(*) from `tabDeposite Note Item` where parent = %s and pi_no is not null""", dn)[0][0]
+		if cstr(count) != 0:
+			deposite_note = frappe.get_doc("Deposite Note", dn)
+			deposite_note.terpakai = count
+			deposite_note.save()
 
 def cancel_jc_item_from_pinv(pinv, jc):
 	pinv_items = frappe.db.sql("""select * from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)

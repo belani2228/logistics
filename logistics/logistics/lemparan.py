@@ -55,6 +55,14 @@ def cancel_pi_to_jv(doc, method):
 				doc = frappe.db.sql("""update `tabPurchase Invoice Item` set reversing_entry = NULL where `name` = %s""", row.purchase_invoice_item)
 				dod = frappe.db.sql("""update `tabJournal Entry Account` set reversing_entry_account = NULL where `name` = %s""", row.jv_account)
 
+def update_si_quotation(doc, method):
+	for q in doc.quotation_items:
+		account = frappe.db.get_value("Item", q.item_code, ["income_account", "description"], as_dict=1)
+		siq = frappe.get_doc("Sales Invoice Quotation", q.name)
+		siq.income_account = account.income_account
+		siq.note = account.description
+		siq.save()
+
 @frappe.whitelist()
 def get_items_from_pi(source_name, target_doc=None):
 	no_job,rekap = source_name.split("|")
@@ -161,6 +169,7 @@ def get_items_from_quotation(source_name, target_doc=None):
 			import json
 			target_doc = frappe.get_doc(json.loads(target_doc))
 		target_doc.set("quotation_items", [])
+
 	doclist = get_mapped_doc("Quotation", source_name, {
 		"Quotation": {
 			"doctype": "Sales Invoice",
@@ -168,6 +177,9 @@ def get_items_from_quotation(source_name, target_doc=None):
 		},
 		"Quotation Item": {
 			"doctype": "Sales Invoice Quotation",
+			"field_map":{
+				"amount": "amount_siq"
+			}
 		},
 	}, target_doc)
 	return doclist
@@ -187,6 +199,10 @@ def get_items_si_qoute(source_name, target_doc=None):
 		},
 		"Sales Invoice Quotation": {
 			"doctype": "Sales Invoice Item",
+			"field_map":{
+				"amount_siq": "amount",
+				"note": "description"
+			},
 			"condition":lambda doc: doc.check == 1
 		},
 	}, target_doc)
