@@ -71,10 +71,16 @@ def get_items_from_pi(source_name, target_doc=None):
 		if isinstance(target_doc, basestring):
 			import json
 			target_doc = frappe.get_doc(json.loads(target_doc))
+		target_doc.set("items", [])
 
 	def set_missing_values(source, target):
 		target.update_stock = 1
 		target.run_method("set_missing_values")
+
+	def update_item(source, target, source_parent):
+		if source.selling_rate != 0:
+			target.rate = source.selling_rate
+			target.amount = source.qty * source.selling_rate
 
 	query = frappe.db.sql_list("""SELECT dn.`name`
 		FROM `tabPurchase Invoice` dn
@@ -98,8 +104,9 @@ def get_items_from_pi(source_name, target_doc=None):
 					"doctype": "Sales Invoice Item",
 					"field_map": {
 						"parent": "purchase_invoice",
-						"name":"purchase_invoice_item"
+						"name":"purchase_invoice_item",
 					},
+					"postprocess": update_item,
 					"condition":lambda doc: doc.sales_invoice is None
 				},
 			}, target_doc, set_missing_values)

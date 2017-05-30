@@ -82,7 +82,8 @@ def make_purchase_invoice(source_name, target_doc=None):
 				"doctype": "Purchase Invoice Item",
 				"field_map": {
 					"buying_amount": "rate",
-					"name": "vendor_trucking_item"
+					"name": "vendor_trucking_item",
+                    "selling_amount": "selling_rate"
 				},
 				"postprocess": update_item,
 				"condition":lambda doc: doc.purchase_invoice is None and doc.for_print == 1

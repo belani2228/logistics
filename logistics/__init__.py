@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.05'
+__version__ = '1.1.06'
 
+#v1.1.06:
+#       - Add selling rate in purchase invoice
+#       - Trucking Price Sell selling_price sudah masuk ke purchase invoice & sales invoice
 #v1.1.05:
 #       - Minor update di rekap export dan import
 #v1.1.04:

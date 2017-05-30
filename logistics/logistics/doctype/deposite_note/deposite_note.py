@@ -94,7 +94,8 @@ def make_purchase_invoice(source_name, target_doc=None):
 			"doctype": "Purchase Invoice Item",
 			"field_map": {
 				"rate": "rate",
-				"name": "deposite_note_detail"
+				"name": "deposite_note_detail",
+				"rate": "selling_rate"
 			},
 			"condition":lambda doc: doc.pi_no is None
 		},
