@@ -56,12 +56,39 @@ def cancel_pi_to_jv(doc, method):
 				dod = frappe.db.sql("""update `tabJournal Entry Account` set reversing_entry_account = NULL where `name` = %s""", row.jv_account)
 
 def update_si_quotation(doc, method):
+	sinv = doc.name
 	for q in doc.quotation_items:
 		account = frappe.db.get_value("Item", q.item_code, ["income_account", "description"], as_dict=1)
 		siq = frappe.get_doc("Sales Invoice Quotation", q.name)
 		siq.income_account = account.income_account
 		siq.note = account.description
 		siq.save()
+	update_sales_invoice_item_print(sinv)
+
+def update_sales_invoice_item_print(sinv):
+	sip = frappe.db.sql("""delete from `tabSales Invoice Item Print` where parent = %s""", sinv)
+	sii = frappe.db.sql("""select distinct(item_code), item_name, description, item_tax_rate, income_account from `tabSales Invoice Item` where parent = %s order by idx asc""", sinv, as_dict=1)
+	for u in sii:
+		qty = frappe.db.sql("""select sum(qty) from `tabSales Invoice Item` where parent = %s and item_code = %s""", (sinv, u.item_code))[0][0]
+		amount = frappe.db.sql("""select sum(amount) from `tabSales Invoice Item` where parent = %s and item_code = %s""", (sinv, u.item_code))[0][0]
+		rate = amount / qty
+		siip = frappe.get_doc({
+			"doctype": "Sales Invoice Item Print",
+			"parent": sinv,
+			"parentfield": "print_items",
+			"parenttype": "Sales Invoice",
+			"item_code": u.item_code,
+			"item_name": u.item_name,
+			"description": u.description,
+			"item_tax_rate": u.item_tax_rate,
+			"qty": qty,
+			"rate": rate,
+			"amount": amount,
+			"base_rate": 0,
+			"base_amount": 0,
+			"income_account": u.income_account
+		})
+		siip.insert()
 
 @frappe.whitelist()
 def get_items_from_pi(source_name, target_doc=None):
