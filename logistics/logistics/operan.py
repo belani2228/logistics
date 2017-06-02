@@ -32,10 +32,10 @@ def update_jc_item_from_sinv(sinv, jc):
 		if jci:
 			sell = frappe.db.get_value("Job Cost Item", jci, "selling")
 			sell = sell + row.amount
-			frappe.db.sql("""update `tabJob Cost Item` set selling = %s where `name` = %s""", (sell, jci))
-#			job_cost_item = frappe.get_doc("Job Cost Item", jci)
-#			job_cost_item.selling = sell
-#			job_cost_item.save()
+#			frappe.db.sql("""update `tabJob Cost Item` set selling = %s where `name` = %s""", (sell, jci))
+			job_cost_item = frappe.get_doc("Job Cost Item", jci)
+			job_cost_item.selling = sell
+			job_cost_item.save()
 		else:
 			job_cost_item = frappe.get_doc({
 				"doctype": "Job Cost Item",
@@ -56,10 +56,10 @@ def update_jc_tax_from_sinv(sinv, jc):
 		if jct:
 			tax_sell = frappe.db.get_value("Job Cost Tax", jct, "selling_tax_amount")
 			tax_sell = tax_sell + tax.tax_amount
-			frappe.db.sql("""update `tabJob Cost Tax` set selling_tax_amount = %s where `name` = %s""", (tax_sell, jci))
-#			job_cost_tax = frappe.get_doc("Job Cost Tax", jct)
-#			job_cost_tax.selling_tax_amount = tax_sell
-#			job_cost_tax.save()
+#			frappe.db.sql("""update `tabJob Cost Tax` set selling_tax_amount = %s where `name` = %s""", (tax_sell, jci))
+			job_cost_tax = frappe.get_doc("Job Cost Tax", jct)
+			job_cost_tax.selling_tax_amount = tax_sell
+			job_cost_tax.save()
 		else:
 			job_cost_tax = frappe.get_doc({
 				"doctype": "Job Cost Tax",
@@ -80,11 +80,11 @@ def update_jc_from_sinv(sinv, jc):
 	total_selling = flt(sum_sell_item) + flt(sum_sell_tax)
 	total_buying = flt(sum_buy_item) + flt(sum_buy_tax)
 	profit = flt(total_selling) - flt(total_buying)
-	frappe.db.sql("""update `tabJob Cost` set total_selling = %s, profit_loss = %s where `name` = %s""", (total_selling, profit, jci))
-#	job_cost = frappe.get_doc("Job Cost", jc)
-#	job_cost.total_selling = total_selling
-#	job_cost.profit_loss = profit
-#	job_cost.save()
+#	frappe.db.sql("""update `tabJob Cost` set total_selling = %s, profit_loss = %s where `name` = %s""", (total_selling, profit, jci))
+	job_cost = frappe.get_doc("Job Cost", jc)
+	job_cost.total_selling = total_selling
+	job_cost.profit_loss = profit
+	job_cost.save()
 
 def cancel_doctype_related_with_sinv(doc, method):
 	sinv = doc.name
@@ -114,10 +114,10 @@ def cancel_jc_item_from_sinv(sinv, jc):
 		if jci:
 			sell = frappe.db.get_value("Job Cost Item", jci, "selling")
 			sell = sell - row.amount
-			frappe.db.sql("""update `tabJob Cost Item` set selling = %s where `name` = %s""", (sell, jci))
-#			job_cost_item = frappe.get_doc("Job Cost Item", jci)
-#			job_cost_item.selling = sell
-#			job_cost_item.save()
+#			frappe.db.sql("""update `tabJob Cost Item` set selling = %s where `name` = %s""", (sell, jci))
+			job_cost_item = frappe.get_doc("Job Cost Item", jci)
+			job_cost_item.selling = sell
+			job_cost_item.save()
 
 def cancel_jc_tax_from_sinv(sinv, jc):
 	sinv_taxes = frappe.db.sql("""select * from `tabSales Taxes and Charges` where parent = %s order by idx asc""", sinv, as_dict=1)
@@ -126,10 +126,10 @@ def cancel_jc_tax_from_sinv(sinv, jc):
 		if jct:
 			tax_sell = frappe.db.get_value("Job Cost Tax", jct, "selling_tax_amount")
 			tax_sell = tax_sell - tax.tax_amount
-			frappe.db.sql("""update `tabJob Cost Tax` set selling_tax_amount = %s where `name` = %s""", (tax_sell, jci))
-#			job_cost_tax = frappe.get_doc("Job Cost Tax", jct)
-#			job_cost_tax.selling_tax_amount = tax_sell
-#			job_cost_tax.save()
+#			frappe.db.sql("""update `tabJob Cost Tax` set selling_tax_amount = %s where `name` = %s""", (tax_sell, jci))
+			job_cost_tax = frappe.get_doc("Job Cost Tax", jct)
+			job_cost_tax.selling_tax_amount = tax_sell
+			job_cost_tax.save()
 
 def delete_job_cost(jc):
 	jc_items = frappe.db.sql("""select * from `tabJob Cost Item` where parent = %s order by idx asc""", jc, as_dict=1)
