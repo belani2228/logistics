@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.07'
+__version__ = '1.1.08'
 
+#v1.1.08:
+#       - Minor update
 #v1.1.07:
 #       - Add doctype Sales Invoice Item Print
 #v1.1.06:

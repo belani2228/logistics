@@ -14,9 +14,13 @@ class PenitipanContainer(Document):
 
 	def on_update(self):
 		frappe.db.sql("""DELETE FROM `tabCommunication` WHERE reference_name = %s AND comment_type = 'Updated'""", self.name)
+		if self.shipping_instruction:
+			subject = "No Job "+self.no_job+" | No SI "+self.shipping_instruction
+		else:
+			subject = "No Job "+self.no_job
 		kom = frappe.get_doc({
 			"doctype": "Communication",
-			"subject": "No Job "+self.no_job+" | No SI "+self.shipping_instruction,
+			"subject": subject,
 			"reference_doctype": "Penitipan Container",
 			"reference_name": self.name,
 			"comment_type": "Updated",
