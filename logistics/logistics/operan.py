@@ -84,15 +84,16 @@ def update_jc_from_sinv(sinv, jc):
 
 def cancel_doctype_related_with_sinv(doc, method):
 	sinv = doc.name
-	no_job = frappe.db.get_value("Sales Invoice", sinv, "no_job")
-	if no_job:
-		jc = frappe.db.get_value("Job Cost", {"no_job": no_job}, "name")
-		if jc:
+	frappe.throw(sinv+"-"+doc.no_job)
+#	no_job = frappe.db.get_value("Sales Invoice", sinv, "no_job")
+#	if no_job:
+#		jc = frappe.db.get_value("Job Cost", {"no_job": no_job}, "name")
+#		if jc:
 #			cancel_pi_from_sinv(sinv)
-			cancel_jc_item_from_sinv(sinv, jc)
-			cancel_jc_tax_from_sinv(sinv, jc)
-			update_jc_from_sinv(sinv, jc)
-			delete_job_cost(jc)
+#			cancel_jc_item_from_sinv(sinv, jc)
+#			cancel_jc_tax_from_sinv(sinv, jc)
+#			update_jc_from_sinv(sinv, jc)
+#			delete_job_cost(jc)
 
 def cancel_pi_from_sinv(sinv):
 	sii = frappe.db.sql("""select * from `tabSales Invoice Item` where parent = %s""", sinv, as_dict=1)
