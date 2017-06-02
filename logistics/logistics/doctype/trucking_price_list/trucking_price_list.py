@@ -12,6 +12,9 @@ class TruckingPriceList(Document):
 		if self.is_active:
 			self.update_if_active()
 
+		if not self.customer:
+			self.customer = None
+
 	def update_if_active(self):
 		if self.customer:
 			if self.get('__islocal'):
