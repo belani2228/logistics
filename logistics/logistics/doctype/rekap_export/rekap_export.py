@@ -49,9 +49,9 @@ class RekapExport(Document):
 						if q.party == p.party:
 							qq = qq+1
 					if p.size_cont == '-' and qq == 1:
-						qg.append(p.party)
+						qg.append(str(p.party))
 					else:
-						qg.append(str(qq)+'X'+p.party)
+						qg.append(str(qq)+'X'+str(p.party))
 			self.party = ', '.join(qg)
 		else:
 			for p in self.get('empty_items'):
