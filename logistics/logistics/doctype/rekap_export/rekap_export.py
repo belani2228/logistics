@@ -14,7 +14,8 @@ class RekapExport(Document):
 		self.update_tgl_kite()
 		self.container_party()
 		self.pic_container()
-		self.trucking_price()
+		if self.date > "2017-06-01":
+			self.trucking_price()
 
 	def set_daftar_container(self):
 		against_acc = []

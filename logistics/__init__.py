@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.10'
+__version__ = '1.1.11'
 
+#v1.1.11:
+#       - Perhitungan trucking tdk berlaku untuk rekap dibawah tgl 1 juni 2017
 #v1.1.10:
-#       - Update & fix operan.py
+#       - Update & fixcd operan.py
 #v1.1.09:
 #       - Minor update
 #v1.1.08:
