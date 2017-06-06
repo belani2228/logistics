@@ -4,6 +4,7 @@
 
 from __future__ import unicode_literals
 import frappe
+from frappe.utils import cstr, flt
 from frappe import msgprint, _
 from frappe.model.document import Document
 from frappe.model.mapper import get_mapped_doc
@@ -49,9 +50,9 @@ class RekapExport(Document):
 						if q.party == p.party:
 							qq = qq+1
 					if p.size_cont == '-' and qq == 1:
-						qg.append(str(p.party))
+						qg.append(cstr(p.party))
 					else:
-						qg.append(str(qq)+'X'+str(p.party))
+						qg.append(cstr(qq)+'X'+p.party)
 			self.party = ', '.join(qg)
 		else:
 			for p in self.get('empty_items'):
