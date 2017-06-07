@@ -67,7 +67,7 @@ def update_si_quotation(doc, method):
 
 def update_sales_invoice_item_print(sinv):
 	sip = frappe.db.sql("""delete from `tabSales Invoice Item Print` where parent = %s""", sinv)
-	sii = frappe.db.sql("""select distinct(item_code), item_name, description, item_tax_rate, income_account from `tabSales Invoice Item` where parent = %s order by idx asc""", sinv, as_dict=1)
+	sii = frappe.db.sql("""select distinct(item_code), item_name, description, item_tax_rate, income_account from `tabSales Invoice Item` where parent = %s and qty >= 1 order by idx asc""", sinv, as_dict=1)
 	for u in sii:
 		qty = frappe.db.sql("""select sum(qty) from `tabSales Invoice Item` where parent = %s and item_code = %s and qty >= 1""", (sinv, u.item_code))[0][0]
 		amount = frappe.db.sql("""select sum(amount) from `tabSales Invoice Item` where parent = %s and item_code = %s and amount >= 1""", (sinv, u.item_code))[0][0]
