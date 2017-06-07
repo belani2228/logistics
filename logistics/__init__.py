@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.13'
+__version__ = '1.1.14'
 
+#v1.1.14:
+#       - Update lemparan.py yg berhubungan dengan sales invoice
 #v1.1.13:
 #       - Update lemparan.py yg berhubungan dengan sales invoice
 #v1.1.12:
