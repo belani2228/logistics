@@ -71,7 +71,10 @@ def update_sales_invoice_item_print(sinv):
 	for u in sii:
 		qty = frappe.db.sql("""select sum(qty) from `tabSales Invoice Item` where parent = %s and item_code = %s""", (sinv, u.item_code))[0][0]
 		amount = frappe.db.sql("""select sum(amount) from `tabSales Invoice Item` where parent = %s and item_code = %s""", (sinv, u.item_code))[0][0]
-		rate = amount / qty
+		if qty == 0 or amount == 0:
+			rate = 0
+		else:
+			rate = amount / qty
 		siip = frappe.get_doc({
 			"doctype": "Sales Invoice Item Print",
 			"parent": sinv,

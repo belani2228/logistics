@@ -32,7 +32,7 @@ class RekapExport(Document):
 			self.daftar_container = ', '.join(against_acc)
 
 	def update_tgl_kite(self):
-		tgl_awal = ""
+		tgl_awal = None
 		for t in self.get("kite_document"):
 			if t.document_date > tgl_awal:
 				tgl_awal = t.document_date

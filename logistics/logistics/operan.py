@@ -97,6 +97,7 @@ def cancel_doctype_related_with_sinv(doc, method):
 			cancel_jc_tax_from_sinv(sinv, jc)
 			update_jc_from_sinv(sinv, jc)
 			delete_job_cost(jc)
+			cancel_sales_invoice_item_print(sinv)
 
 def cancel_pi_from_sinv(sinv):
 	sii = frappe.db.sql("""select * from `tabSales Invoice Item` where parent = %s""", sinv, as_dict=1)
@@ -142,6 +143,9 @@ def delete_job_cost(jc):
 		if rt.cost_tax_amount <= 0 and rt.selling_tax_amount <= 0:
 			job_cost_tax = frappe.get_doc("Job Cost Tax", rt.name)
 			job_cost_tax.delete()
+
+def cancel_sales_invoice_item_print(sinv):
+	frappe.db.sql("""delete from `tabSales Invoice Item Print` where parent = %s""", sinv)
 
 # Semua yang berhubungan dengan Purchase Invoice
 def update_doctype_related_with_pinv(doc, method):
