@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.15'
+__version__ = '1.1.16'
 
+#v1.1.16:
+#       - Update operan.py yg berhubungan dgn pinv
 #v1.1.15:
 #       - Update Job Cost
 #       - Update Rekap Import & Export yg berhubungan dengan Job Cost

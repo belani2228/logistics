@@ -150,6 +150,7 @@ def cancel_sales_invoice_item_print(sinv):
 # Semua yang berhubungan dengan Purchase Invoice
 def update_doctype_related_with_pinv(doc, method):
 	pinv = doc.name
+	update_detail_items(pinv)
 	no_job = frappe.db.get_value("Purchase Invoice", pinv, "no_job")
 	if no_job:
 		jc = frappe.db.get_value("Job Cost", {"no_job": no_job}, "name")
@@ -160,6 +161,15 @@ def update_doctype_related_with_pinv(doc, method):
 			update_jc_tax_from_pinv(pinv, jc)
 			update_jc_from_pinv(pinv, jc)
 			update_vt_from_pinv(pinv)
+
+def update_detail_items(pinv):
+	desc = []
+	pii = frappe.db.sql("""select description from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
+	for row in pii:
+		if row.description not in desc:
+			desc.append(row.description)
+	descr = ' + '.join(desc)
+	frappe.db.sql("""update `tabPurchase Invoice` set detail_items = %s where `name` = %s""", (descr, pinv))
 
 def update_dni_from_pinv(pinv):
 	pii = frappe.db.sql("""select * from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
