@@ -185,7 +185,6 @@ class RekapImport(Document):
 			if cek:
 				job_cost = frappe.get_doc("Job Cost", cek)
 				job_cost.customer = self.customer
-				job_cost.date = self.date
 				job_cost.party = self.party
 				job_cost.no_bl = self.bl_number
 				job_cost.save()

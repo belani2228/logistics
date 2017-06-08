@@ -14,6 +14,7 @@ class RekapExport(Document):
 		self.set_daftar_container()
 		self.update_tgl_kite()
 		self.container_party()
+		self.update_list_trucking()
 		self.pic_container()
 		if self.date > "2017-06-01":
 			self.trucking_price()
@@ -67,6 +68,18 @@ class RekapExport(Document):
 					else:
 						qg.append(str(qq)+'X'+p.party_empty)
 			self.party = ', '.join(qg)
+
+	def update_list_trucking(self):
+		vendor = []
+		if self.daily_report != 'MULIA':
+			for t in self.get('items'):
+				if t.vendor_trucking not in vendor:
+					vendor.append(t.vendor_trucking)
+		else:
+			for t in self.get('empty_items'):
+				if t.vendor_trucking not in vendor:
+					vendor.append(t.vendor_trucking)
+		self.vendor_trucking = ', '.join(vendor)
 
 	def pic_container(self):
 		tbm = ""
@@ -390,7 +403,6 @@ class RekapExport(Document):
 			if cek:
 				job_cost = frappe.get_doc("Job Cost", cek)
 				job_cost.customer = self.customer
-				job_cost.date = self.date
 				job_cost.party = self.party
 				job_cost.no_bl = self.bl_number
 				job_cost.save()

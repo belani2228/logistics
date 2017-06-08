@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.14'
+__version__ = '1.1.15'
 
+#v1.1.15:
+#       - Update Job Cost
+#       - Update Rekap Import & Export yg berhubungan dengan Job Cost
 #v1.1.14:
 #       - Update lemparan.py yg berhubungan dengan sales invoice
 #v1.1.13:
