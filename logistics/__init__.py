@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.17'
+__version__ = '1.1.18'
 
+#v1.1.18:
+#       - Update permission di semua doctype Logistics
 #v1.1.17:
 #       - Minor update rekap export
 #v1.1.16:
