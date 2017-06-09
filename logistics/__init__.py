@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.16'
+__version__ = '1.1.17'
 
+#v1.1.17:
+#       - Minor update rekap export
 #v1.1.16:
 #       - Update operan.py yg berhubungan dgn pinv
 #v1.1.15:

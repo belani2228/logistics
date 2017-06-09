@@ -71,15 +71,23 @@ class RekapExport(Document):
 
 	def update_list_trucking(self):
 		vendor = []
+		vt = 0
 		if self.daily_report != 'MULIA':
 			for t in self.get('items'):
-				if t.vendor_trucking not in vendor:
-					vendor.append(t.vendor_trucking)
+				if t.vendor_trucking:
+					if t.vendor_trucking not in vendor:
+						vendor.append(t.vendor_trucking)
+						vt = vt+1
 		else:
 			for t in self.get('empty_items'):
-				if t.vendor_trucking not in vendor:
-					vendor.append(t.vendor_trucking)
-		self.vendor_trucking = ', '.join(vendor)
+				if t.vendor_trucking:
+					if t.vendor_trucking not in vendor:
+						vendor.append(t.vendor_trucking)
+						vt = vt+1
+		if vt != 0:
+			self.vendor_trucking = ', '.join(vendor)
+		else:
+			self.vendor_trucking = None
 
 	def pic_container(self):
 		tbm = ""
