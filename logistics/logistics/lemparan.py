@@ -242,6 +242,121 @@ def get_items_si_qoute(source_name, target_doc=None):
 	}, target_doc)
 	return doclist
 
+# disini script yang hanya dijalankan satu kali
+def buat_job_cost():
+	insert_job_cost_import()
+	insert_job_cost_export()
+	update_job_cost_import_items_pinv()
+	update_job_cost_import_taxes_pinv()
+	update_job_cost_import_sum()
+
+def insert_job_cost_import():
+	rekap = frappe.db.sql("""select * from `tabRekap Import` where docstatus != '2'""", as_dict=1)
+	for ri in rekap:
+		cek_jc = frappe.db.get_value("Job Cost", {"no_job": ri.name}, "name")
+		if not cek_jc:
+			job_cost = frappe.get_doc({
+				"doctype": "Job Cost",
+				"no_job": ri.name,
+				"jenis_rekap": "Rekap Import",
+				"customer": ri.customer,
+				"date": ri.date,
+				"no_bl": ri.bl_number,
+				"party": ri.party
+			})
+			job_cost.insert()
+
+def insert_job_cost_export():
+	rekap = frappe.db.sql("""select * from `tabRekap Export` where docstatus != '2'""", as_dict=1)
+	for ri in rekap:
+		cek_jc = frappe.db.get_value("Job Cost", {"no_job": ri.name}, "name")
+		if not cek_jc:
+			job_cost = frappe.get_doc({
+				"doctype": "Job Cost",
+				"no_job": ri.name,
+				"jenis_rekap": "Rekap Export",
+				"customer": ri.customer,
+				"date": ri.date,
+				"no_bl": ri.bl_number,
+				"party": ri.party
+			})
+			job_cost.insert()
+
+def update_job_cost_import_items_pinv():
+	jobcost = frappe.db.sql("""select * from `tabJob Cost` where docstatus != '2'""", as_dict=1)
+	for jc in jobcost:
+		pinv = frappe.db.sql("""select distinct(b.item_code), b.item_name, b.description from `tabPurchase Invoice` a
+		inner join `tabPurchase Invoice Item` b on a.`name` = b.parent
+ 		where a.docstatus = '1' and a.no_job = %s""", jc.no_job, as_dict=1)
+		if pinv:
+			for b in pinv:
+				cek_jc = frappe.db.sql("""select item_code from `tabJob Cost Item` where docstatus != '2' and parent = %s and item_code = %s""", (jc.name, b.item_code))
+				sum_pinv_item = frappe.db.sql("""select sum(pii.amount) from `tabPurchase Invoice Item` pii
+				inner join `tabPurchase Invoice` pi on pii.parent = pi.`name`
+				where pi.docstatus = '1' and pi.no_job = %s and pii.item_code = %s""", (jc.no_job, b.item_code))[0][0]
+				if cek_jc:
+					jci = frappe.db.get_value("Job Cost Item", {"parent": jc.name, "item_code": b.item_code}, "name")
+					job_cost_item = frappe.get_doc("Job Cost Item", jci)
+					job_cost_item.cost = sum_pinv_item
+					job_cost_item.save()
+				else:
+					job_cost_item = frappe.get_doc({
+						"doctype": "Job Cost Item",
+						"parent": jc.name,
+						"parentfield": "items",
+						"parenttype": "Job Cost",
+						"item_code": b.item_code,
+						"item_name": b.item_name,
+						"description": b.description,
+						"cost": sum_pinv_item
+					})
+					job_cost_item.insert()
+
+def update_job_cost_import_taxes_pinv():
+	jobcost = frappe.db.sql("""select * from `tabJob Cost` where docstatus != '2'""", as_dict=1)
+	for jc in jobcost:
+		pinv = frappe.db.sql("""select distinct(ptc.account_head), ptc.description from `tabPurchase Taxes and Charges` ptc
+		inner join `tabPurchase Invoice` pi on ptc.parent = pi.`name`
+		where pi.no_job = %s""", jc.no_job, as_dict=1)
+		if pinv:
+			for b in pinv:
+				cek_jc = frappe.db.sql("""select account_head from `tabJob Cost Tax` where docstatus != '2' and parent = %s and account_head = %s""", (jc.name, b.account_head))
+				sum_pinv_tax = frappe.db.sql("""select sum(ptc.tax_amount) from `tabPurchase Taxes and Charges` ptc
+				inner join `tabPurchase Invoice` pi on ptc.parent = pi.`name`
+				where pi.docstatus = '1' and pi.no_job = %s and ptc.account_head = %s""", (jc.no_job, b.account_head))[0][0]
+				if cek_jc:
+					jct = frappe.db.get_value("Job Cost Tax", {"parent": jc.name, "account_head": b.account_head}, "name")
+					job_cost_tax = frappe.get_doc("Job Cost Tax", jct)
+					job_cost_tax.cost_tax_amount = sum_pinv_tax
+					job_cost_tax.save()
+				else:
+					job_cost_tax = frappe.get_doc({
+						"doctype": "Job Cost Tax",
+						"parent": jc.name,
+						"parentfield": "taxes",
+						"parenttype": "Job Cost",
+						"account_head": b.account_head,
+						"description": b.description,
+						"selling_tax_amount": sum_pinv_tax
+					})
+					job_cost_tax.insert()
+
+def update_job_cost_import_sum():
+	jobcost = frappe.db.sql("""select * from `tabJob Cost` where docstatus != '2'""", as_dict=1)
+	for jc in jobcost:
+		sum_sell_item = frappe.db.sql("""select sum(`selling`) from `tabJob Cost Item` where parent = %s""", jc.name)[0][0]
+		sum_sell_tax = frappe.db.sql("""select sum(`selling_tax_amount`) from `tabJob Cost Tax` where parent = %s""", jc.name)[0][0]
+		sum_buy_item = frappe.db.sql("""select sum(`cost`) from `tabJob Cost Item` where parent = %s""", jc.name)[0][0]
+		sum_buy_tax = frappe.db.sql("""select sum(`cost_tax_amount`) from `tabJob Cost Tax` where parent = %s""", jc.name)[0][0]
+		total_selling = flt(sum_sell_item) + flt(sum_sell_tax)
+		total_buying = flt(sum_buy_item) + flt(sum_buy_tax)
+		profit = flt(total_selling) - flt(total_buying)
+		job_cost = frappe.get_doc("Job Cost", jc.name)
+		job_cost.total_cost = total_buying
+		job_cost.profit_loss = profit
+		job_cost.save()
+
+# test
 def coba_doang():
 	tampung = []
 	query = frappe.get_all("Purchase Invoice",

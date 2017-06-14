@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.18'
+__version__ = '1.1.19'
 
+#v1.1.19:
+#       - Add trigger utk job cost
 #v1.1.18:
 #       - Update permission di semua doctype Logistics
 #v1.1.17:
