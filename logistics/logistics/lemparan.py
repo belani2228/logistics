@@ -317,7 +317,7 @@ def update_job_cost_import_items_pinv():
 def update_job_cost_import_taxes_pinv():
 	jobcost = frappe.db.sql("""select * from `tabJob Cost` where docstatus != '2'""", as_dict=1)
 	for jc in jobcost:
-		pinv = frappe.db.sql("""select distinct(ptc.account_head), ptc.note from `tabPurchase Taxes and Charges` ptc
+		pinv = frappe.db.sql("""select distinct(ptc.account_head), ptc.description from `tabPurchase Taxes and Charges` ptc
 		inner join `tabPurchase Invoice` pi on ptc.parent = pi.`name`
 		where pi.no_job = %s""", jc.no_job, as_dict=1)
 		if pinv:
@@ -338,7 +338,7 @@ def update_job_cost_import_taxes_pinv():
 						"parentfield": "taxes",
 						"parenttype": "Job Cost",
 						"account_head": b.account_head,
-						"description": b.note,
+						"description": b.description,
 						"cost_tax_amount": sum_pinv_tax
 					})
 					job_cost_tax.insert()
@@ -376,7 +376,7 @@ def update_job_cost_import_items_sinv():
 def update_job_cost_import_taxes_sinv():
 	jobcost = frappe.db.sql("""select * from `tabJob Cost` where docstatus != '2'""", as_dict=1)
 	for jc in jobcost:
-		sinv = frappe.db.sql("""select distinct(stc.account_head), stc.note from `tabSales Taxes and Charges` stc
+		sinv = frappe.db.sql("""select distinct(stc.account_head), stc.description from `tabSales Taxes and Charges` stc
 		inner join `tabSales Invoice` si on stc.parent = si.`name`
 		where si.no_job = %s""", jc.no_job, as_dict=1)
 		if sinv:
@@ -397,7 +397,7 @@ def update_job_cost_import_taxes_sinv():
 						"parentfield": "taxes",
 						"parenttype": "Job Cost",
 						"account_head": b.account_head,
-						"description": b.note,
+						"description": b.description,
 						"selling_tax_amount": sum_sinv_tax
 					})
 					job_cost_tax.insert()
