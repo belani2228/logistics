@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.19'
+__version__ = '1.1.20'
 
+#v1.1.20:
+#       - Add trigger utk job cost
 #v1.1.19:
 #       - Add trigger utk job cost
 #v1.1.18:
