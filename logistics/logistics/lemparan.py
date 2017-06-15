@@ -339,7 +339,8 @@ def update_job_cost_import_taxes_pinv():
 						"parenttype": "Job Cost",
 						"account_head": b.account_head,
 						"description": b.description,
-						"cost_tax_amount": sum_pinv_tax
+						"cost_tax_amount": sum_pinv_tax,
+						"selling_tax_amount": 0
 					})
 					job_cost_tax.insert()
 
@@ -414,6 +415,7 @@ def update_job_cost_import_sum():
 		profit = flt(total_selling) - flt(total_buying)
 		job_cost = frappe.get_doc("Job Cost", jc.name)
 		job_cost.total_cost = total_buying
+		job_cost.total_selling = total_selling
 		job_cost.profit_loss = profit
 		job_cost.save()
 
