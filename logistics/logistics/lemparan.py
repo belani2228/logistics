@@ -246,6 +246,7 @@ def get_items_si_qoute(source_name, target_doc=None):
 def buat_job_cost():
 	insert_job_cost_import()
 	insert_job_cost_export()
+	hapus_job_cost_taxes()
 	update_job_cost_import_items_pinv()
 	update_job_cost_import_taxes_pinv()
 	update_job_cost_import_items_sinv()
@@ -283,6 +284,9 @@ def insert_job_cost_export():
 				"party": ri.party
 			})
 			job_cost.insert()
+
+def hapus_job_cost_taxes():
+	frappe.db.sql("""truncate `tabJob Cost Tax`""")
 
 def update_job_cost_import_items_pinv():
 	jobcost = frappe.db.sql("""select `name`, no_job from `tabJob Cost` where docstatus != '2'""", as_dict=1)
