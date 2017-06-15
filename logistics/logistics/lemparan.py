@@ -253,7 +253,7 @@ def buat_job_cost():
 	update_job_cost_import_sum()
 
 def insert_job_cost_import():
-	rekap = frappe.db.sql("""select * from `tabRekap Import` where docstatus != '2'""", as_dict=1)
+	rekap = frappe.db.sql("""select `name`, customer, date, bl_number, party from `tabRekap Import` where docstatus != '2'""", as_dict=1)
 	for ri in rekap:
 		cek_jc = frappe.db.get_value("Job Cost", {"no_job": ri.name}, "name")
 		if not cek_jc:
@@ -269,7 +269,7 @@ def insert_job_cost_import():
 			job_cost.insert()
 
 def insert_job_cost_export():
-	rekap = frappe.db.sql("""select * from `tabRekap Export` where docstatus != '2'""", as_dict=1)
+	rekap = frappe.db.sql("""select `name`, customer, date, bl_number, party from `tabRekap Export` where docstatus != '2'""", as_dict=1)
 	for ri in rekap:
 		cek_jc = frappe.db.get_value("Job Cost", {"no_job": ri.name}, "name")
 		if not cek_jc:
@@ -285,7 +285,7 @@ def insert_job_cost_export():
 			job_cost.insert()
 
 def update_job_cost_import_items_pinv():
-	jobcost = frappe.db.sql("""select * from `tabJob Cost` where docstatus != '2'""", as_dict=1)
+	jobcost = frappe.db.sql("""select `name`, no_job from `tabJob Cost` where docstatus != '2'""", as_dict=1)
 	for jc in jobcost:
 		pinv = frappe.db.sql("""select distinct(b.item_code), b.item_name, b.description from `tabPurchase Invoice` a
 		inner join `tabPurchase Invoice Item` b on a.`name` = b.parent
@@ -315,11 +315,11 @@ def update_job_cost_import_items_pinv():
 					job_cost_item.insert()
 
 def update_job_cost_import_taxes_pinv():
-	jobcost = frappe.db.sql("""select * from `tabJob Cost` where docstatus != '2'""", as_dict=1)
+	jobcost = frappe.db.sql("""select `name`, no_job from `tabJob Cost` where docstatus != '2'""", as_dict=1)
 	for jc in jobcost:
 		pinv = frappe.db.sql("""select distinct(ptc.account_head), ptc.description from `tabPurchase Taxes and Charges` ptc
 		inner join `tabPurchase Invoice` pi on ptc.parent = pi.`name`
-		where pi.no_job = %s""", jc.no_job, as_dict=1)
+		where pi.docstatus = '1' and pi.no_job = %s""", jc.no_job, as_dict=1)
 		if pinv:
 			for b in pinv:
 				cek_jc = frappe.db.sql("""select account_head from `tabJob Cost Tax` where docstatus != '2' and parent = %s and account_head = %s""", (jc.name, b.account_head))
@@ -344,7 +344,7 @@ def update_job_cost_import_taxes_pinv():
 					job_cost_tax.insert()
 
 def update_job_cost_import_items_sinv():
-	jobcost = frappe.db.sql("""select * from `tabJob Cost` where docstatus != '2'""", as_dict=1)
+	jobcost = frappe.db.sql("""select no_job, `name` from `tabJob Cost` where docstatus != '2'""", as_dict=1)
 	for jc in jobcost:
 		sinv = frappe.db.sql("""select distinct(b.item_code), b.item_name, b.description from `tabSales Invoice` a
 		inner join `tabSales Invoice Item` b on a.`name` = b.parent
@@ -374,11 +374,11 @@ def update_job_cost_import_items_sinv():
 					job_cost_item.insert()
 
 def update_job_cost_import_taxes_sinv():
-	jobcost = frappe.db.sql("""select * from `tabJob Cost` where docstatus != '2'""", as_dict=1)
+	jobcost = frappe.db.sql("""select no_job, `name` from `tabJob Cost` where docstatus != '2'""", as_dict=1)
 	for jc in jobcost:
 		sinv = frappe.db.sql("""select distinct(stc.account_head), stc.note from `tabSales Taxes and Charges` stc
 		inner join `tabSales Invoice` si on stc.parent = si.`name`
-		where si.no_job = %s""", jc.no_job, as_dict=1)
+		where si.docstatus = '1' and si.no_job = %s""", jc.no_job, as_dict=1)
 		if sinv:
 			for b in sinv:
 				cek_jc = frappe.db.sql("""select account_head from `tabJob Cost Tax` where docstatus != '2' and parent = %s and account_head = %s""", (jc.name, b.account_head))
@@ -403,7 +403,7 @@ def update_job_cost_import_taxes_sinv():
 					job_cost_tax.insert()
 
 def update_job_cost_import_sum():
-	jobcost = frappe.db.sql("""select * from `tabJob Cost` where docstatus != '2'""", as_dict=1)
+	jobcost = frappe.db.sql("""select `name` from `tabJob Cost` where docstatus != '2'""", as_dict=1)
 	for jc in jobcost:
 		sum_sell_item = frappe.db.sql("""select sum(`selling`) from `tabJob Cost Item` where parent = %s""", jc.name)[0][0]
 		sum_sell_tax = frappe.db.sql("""select sum(`selling_tax_amount`) from `tabJob Cost Tax` where parent = %s""", jc.name)[0][0]
