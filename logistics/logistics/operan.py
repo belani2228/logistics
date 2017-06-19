@@ -56,7 +56,6 @@ def update_jc_tax_from_sinv(sinv, jc):
 		if jct:
 			tax_sell = frappe.db.get_value("Job Cost Tax", jct, "selling_tax_amount")
 			tax_sell = tax_sell + tax.tax_amount
-#			frappe.db.sql("""update `tabJob Cost Tax` set selling_tax_amount = %s where `name` = %s""", (tax_sell, jci))
 			job_cost_tax = frappe.get_doc("Job Cost Tax", jct)
 			job_cost_tax.selling_tax_amount = tax_sell
 			job_cost_tax.save()
@@ -135,12 +134,12 @@ def cancel_jc_tax_from_sinv(sinv, jc):
 def delete_job_cost(jc):
 	jc_items = frappe.db.sql("""select * from `tabJob Cost Item` where parent = %s order by idx asc""", jc, as_dict=1)
 	for row in jc_items:
-		if row.cost <= 0 and row.selling <= 0:
+		if row.cost == 0 and row.selling == 0:
 			job_cost_item = frappe.get_doc("Job Cost Item", row.name)
 			job_cost_item.delete()
 	jc_tax = frappe.db.sql("""select * from `tabJob Cost Tax` where parent = %s order by idx asc""", jc, as_dict=1)
 	for rt in jc_tax:
-		if rt.cost_tax_amount <= 0 and rt.selling_tax_amount <= 0:
+		if rt.cost_tax_amount == 0 and rt.selling_tax_amount == 0:
 			job_cost_tax = frappe.get_doc("Job Cost Tax", rt.name)
 			job_cost_tax.delete()
 
@@ -172,7 +171,7 @@ def update_detail_items(pinv):
 	frappe.db.sql("""update `tabPurchase Invoice` set detail_items = %s where `name` = %s""", (descr, pinv))
 
 def update_dni_from_pinv(pinv):
-	pii = frappe.db.sql("""select * from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
+	pii = frappe.db.sql("""select deposite_note_detail from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
 	for row in pii:
 		if row.deposite_note_detail:
 			dni = frappe.get_doc("Deposite Note Item", row.deposite_note_detail)
