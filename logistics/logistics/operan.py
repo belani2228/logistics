@@ -137,9 +137,9 @@ def delete_job_cost(jc):
 		if flt(row.cost) == 0 and flt(row.selling) == 0:
 			job_cost_item = frappe.get_doc("Job Cost Item", row.name)
 			job_cost_item.delete()
-	jc_tax = frappe.db.sql("""select * from `tabJob Cost Tax` where parent = %s order by idx asc""", jc, as_dict=1)
-	for rt in jc_tax:
-		if flt(rt.cost_tax_amount) == 0 and flt(rt.selling_tax_amount) == 0:
+	jc_tax = frappe.db.sql("""select `name` from `tabJob Cost Tax` where parent = %s and cost_tax_amount = '0' and selling_tax_amount = '0' order by idx asc""", jc, as_dict=1)
+	if jc_tax:
+		for rt in jc_tax:
 			job_cost_tax = frappe.get_doc("Job Cost Tax", rt.name)
 			job_cost_tax.delete()
 
