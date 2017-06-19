@@ -134,12 +134,12 @@ def cancel_jc_tax_from_sinv(sinv, jc):
 def delete_job_cost(jc):
 	jc_items = frappe.db.sql("""select * from `tabJob Cost Item` where parent = %s order by idx asc""", jc, as_dict=1)
 	for row in jc_items:
-		if row.cost == 0 and row.selling == 0:
+		if flt(row.cost) == 0 and flt(row.selling) == 0:
 			job_cost_item = frappe.get_doc("Job Cost Item", row.name)
 			job_cost_item.delete()
 	jc_tax = frappe.db.sql("""select * from `tabJob Cost Tax` where parent = %s order by idx asc""", jc, as_dict=1)
 	for rt in jc_tax:
-		if rt.cost_tax_amount == 0 and rt.selling_tax_amount == 0:
+		if flt(rt.cost_tax_amount) == 0 and flt(rt.selling_tax_amount) == 0:
 			job_cost_tax = frappe.get_doc("Job Cost Tax", rt.name)
 			job_cost_tax.delete()
 

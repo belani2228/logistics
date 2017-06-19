@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.24'
+__version__ = '1.1.25'
 
+#v1.1.25:
 #v1.1.24:
 #v1.1.23:
 #v1.1.22:
