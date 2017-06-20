@@ -286,11 +286,11 @@ def insert_job_cost_export():
 			job_cost.insert()
 
 def hapus_job_cost_taxes():
-#	frappe.db.sql("truncate `tabJob Cost Tax`")
-	jc_tax = frappe.db.sql("""select `name` from `tabJob Cost Tax` order by idx asc""", as_dict=1)
-	for tax in jc_tax:
-		job_cost_tax = frappe.get_doc("Job Cost Tax", tax.name)
-		job_cost_tax.delete()
+	frappe.db.sql("truncate `tabJob Cost Tax`")
+#	jc_tax = frappe.db.sql("""select `name` from `tabJob Cost Tax`""", as_dict=1)
+#	for tax in jc_tax:
+#		job_cost_tax = frappe.get_doc("Job Cost Tax", tax.name)
+#		job_cost_tax.delete()
 
 def update_job_cost_import_items_pinv():
 	jobcost = frappe.db.sql("""select `name`, no_job from `tabJob Cost` where docstatus != '2'""", as_dict=1)
