@@ -21,9 +21,6 @@ def update_pi_from_sinv(sinv):
 	for row in sii:
 		if row.purchase_invoice:
 			frappe.db.sql("""update `tabPurchase Invoice Item` set sales_invoice = %s where `name` = %s""", (sinv, row.purchase_invoice_item))
-#			pii = frappe.get_doc("Purchase Invoice Item", row.purchase_invoice_item)
-#			pii.sales_invoice = sinv
-#			pii.save()
 
 def update_jc_item_from_sinv(sinv, jc):
 	sinv_items = frappe.db.sql("""select * from `tabSales Invoice Item` where parent = %s order by idx asc""", sinv, as_dict=1)
@@ -32,7 +29,6 @@ def update_jc_item_from_sinv(sinv, jc):
 		if jci:
 			sell = frappe.db.get_value("Job Cost Item", jci, "selling")
 			sell = sell + row.amount
-#			frappe.db.sql("""update `tabJob Cost Item` set selling = %s where `name` = %s""", (sell, jci))
 			job_cost_item = frappe.get_doc("Job Cost Item", jci)
 			job_cost_item.selling = sell
 			job_cost_item.save()
@@ -79,7 +75,6 @@ def update_jc_from_sinv(sinv, jc):
 	total_selling = flt(sum_sell_item) + flt(sum_sell_tax)
 	total_buying = flt(sum_buy_item) + flt(sum_buy_tax)
 	profit = flt(total_selling) - flt(total_buying)
-#	frappe.db.sql("""update `tabJob Cost` set total_selling = %s, profit_loss = %s where `name` = %s""", (total_selling, profit, jci))
 	job_cost = frappe.get_doc("Job Cost", jc)
 	job_cost.total_selling = total_selling
 	job_cost.profit_loss = profit
@@ -99,34 +94,29 @@ def cancel_doctype_related_with_sinv(doc, method):
 			cancel_sales_invoice_item_print(sinv)
 
 def cancel_pi_from_sinv(sinv):
-	sii = frappe.db.sql("""select * from `tabSales Invoice Item` where parent = %s""", sinv, as_dict=1)
+	sii = frappe.db.sql("""select purchase_invoice_item from `tabSales Invoice Item` where parent = %s""", sinv, as_dict=1)
 	for row in sii:
 		if row.purchase_invoice:
 			frappe.db.sql("""update `tabPurchase Invoice Item` set sales_invoice = NULL where `name` = %s""",  row.purchase_invoice_item)
-#			pii = frappe.get_doc("Purchase Invoice Item", row.purchase_invoice_item)
-#			pii.sales_invoice = None
-#			pii.save()
 
 def cancel_jc_item_from_sinv(sinv, jc):
-	sinv_items = frappe.db.sql("""select * from `tabSales Invoice Item` where parent = %s order by idx asc""", sinv, as_dict=1)
+	sinv_items = frappe.db.sql("""select item_code, amount from `tabSales Invoice Item` where parent = %s order by idx asc""", sinv, as_dict=1)
 	for row in sinv_items:
 		jci = frappe.db.get_value("Job Cost Item", {"parent": jc, "item_code": row.item_code}, "name")
 		if jci:
 			sell = frappe.db.get_value("Job Cost Item", jci, "selling")
 			sell = sell - row.amount
-#			frappe.db.sql("""update `tabJob Cost Item` set selling = %s where `name` = %s""", (sell, jci))
 			job_cost_item = frappe.get_doc("Job Cost Item", jci)
 			job_cost_item.selling = sell
 			job_cost_item.save()
 
 def cancel_jc_tax_from_sinv(sinv, jc):
-	sinv_taxes = frappe.db.sql("""select * from `tabSales Taxes and Charges` where parent = %s order by idx asc""", sinv, as_dict=1)
+	sinv_taxes = frappe.db.sql("""select account_head, tax_amount from `tabSales Taxes and Charges` where parent = %s order by idx asc""", sinv, as_dict=1)
 	for tax in sinv_taxes:
 		jct = frappe.db.get_value("Job Cost Tax", {"parent": jc, "account_head": tax.account_head}, "name")
 		if jct:
 			tax_sell = frappe.db.get_value("Job Cost Tax", jct, "selling_tax_amount")
 			tax_sell = tax_sell - tax.tax_amount
-#			frappe.db.sql("""update `tabJob Cost Tax` set selling_tax_amount = %s where `name` = %s""", (tax_sell, jci))
 			job_cost_tax = frappe.get_doc("Job Cost Tax", jct)
 			job_cost_tax.selling_tax_amount = tax_sell
 			job_cost_tax.save()
@@ -246,7 +236,7 @@ def update_jc_from_pinv(pinv, jc):
 	job_cost.save()
 
 def update_vt_from_pinv(pinv):
-	pinv_items = frappe.db.sql("""select * from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
+	pinv_items = frappe.db.sql("""select vendor_trucking_item from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
 	for row in pinv_items:
 		if row.vendor_trucking_item:
 			vti = frappe.get_doc("Vendor Trucking Item", row.vendor_trucking_item)
@@ -268,7 +258,7 @@ def cancel_doctype_related_with_pinv(doc, method):
 			delete_job_cost(jc)
 
 def cancel_dni_from_pinv(pinv):
-	pii = frappe.db.sql("""select * from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
+	pii = frappe.db.sql("""select deposite_note_detail from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
 	for row in pii:
 		if row.deposite_note_detail:
 			dni = frappe.get_doc("Deposite Note Item", row.deposite_note_detail)
@@ -285,7 +275,7 @@ def cancel_dn_from_pinv(pinv):
 			deposite_note.save()
 
 def cancel_jc_item_from_pinv(pinv, jc):
-	pinv_items = frappe.db.sql("""select * from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
+	pinv_items = frappe.db.sql("""select item_code, amount from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
 	for row in pinv_items:
 		jci = frappe.db.get_value("Job Cost Item", {"parent": jc, "item_code": row.item_code}, "name")
 		if jci:
@@ -296,7 +286,7 @@ def cancel_jc_item_from_pinv(pinv, jc):
 			job_cost_item.save()
 
 def cancel_jc_tax_from_pinv(pinv, jc):
-	pinv_taxes = frappe.db.sql("""select * from `tabPurchase Taxes and Charges` where parent = %s order by idx asc""", pinv, as_dict=1)
+	pinv_taxes = frappe.db.sql("""select account_head, tax_amount from `tabPurchase Taxes and Charges` where parent = %s order by idx asc""", pinv, as_dict=1)
 	for tax in pinv_taxes:
 		jct = frappe.db.get_value("Job Cost Tax", {"parent": jc, "account_head": tax.account_head}, "name")
 		if jct:
@@ -307,7 +297,7 @@ def cancel_jc_tax_from_pinv(pinv, jc):
 			job_cost_tax.save()
 
 def cancel_vt_from_pinv(pinv):
-	pinv_items = frappe.db.sql("""select * from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
+	pinv_items = frappe.db.sql("""select vendor_trucking_item from `tabPurchase Invoice Item` where parent = %s order by idx asc""", pinv, as_dict=1)
 	for row in pinv_items:
 		if row.vendor_trucking_item:
 			vti = frappe.get_doc("Vendor Trucking Item", row.vendor_trucking_item)
