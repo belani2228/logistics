@@ -123,6 +123,12 @@ def get_data():
 					"doctype": "Purchase Invoice",
 					"is_query_report": True
 				},
+				{
+					"type": "report",
+					"name": "Profit & Lost Per Customer",
+					"doctype": "Job Cost",
+					"is_query_report": True
+				},
 			]
 		},
 	]

@@ -1,8 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.27'
+__version__ = '1.1.29'
 
+#v1.1.29:
+#       - Add Report: Profit & Lost Per Customer
+#v1.1.28:
+#       - Minor fix on Sales Invoice Quotation
 #v1.1.27:
 #v1.1.26:
 #v1.1.25:

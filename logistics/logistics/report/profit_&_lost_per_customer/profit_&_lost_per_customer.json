@@ -1,0 +1,18 @@
+{
+ "add_total_row": 1, 
+ "apply_user_permissions": 1, 
+ "creation": "2017-06-21 13:16:01.761455", 
+ "disabled": 0, 
+ "docstatus": 0, 
+ "doctype": "Report", 
+ "idx": 0, 
+ "is_standard": "Yes", 
+ "modified": "2017-06-21 15:09:28.366399", 
+ "modified_by": "Administrator", 
+ "module": "Logistics", 
+ "name": "Profit & Lost Per Customer", 
+ "owner": "Administrator", 
+ "ref_doctype": "Job Cost", 
+ "report_name": "Profit & Lost Per Customer", 
+ "report_type": "Script Report"
+}

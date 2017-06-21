@@ -60,7 +60,10 @@ def update_si_quotation(doc, method):
 	for q in doc.quotation_items:
 		account = frappe.db.get_value("Item", q.item_code, ["income_account", "description"], as_dict=1)
 		siq = frappe.get_doc("Sales Invoice Quotation", q.name)
-		siq.income_account = account.income_account
+		if account.income_account:
+			siq.income_account = account.income_account
+		else:
+			siq.income_account = None
 		siq.note = account.description
 		siq.save()
 	update_sales_invoice_item_print(sinv)
