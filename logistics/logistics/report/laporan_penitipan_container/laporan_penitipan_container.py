@@ -59,7 +59,7 @@ def get_conditions(filters):
 
 def get_entries(filters):
 	conditions = get_conditions(filters)
-	return frappe.db.sql("""SELECT p1.no_job, p1.shipping_insturction, p1.do, p1.carrier,
+	return frappe.db.sql("""SELECT p1.no_job, p1.shipping_instruction, p1.do, p1.carrier,
 	p1.vessel, p1.party, p1.pod, p2.container_no, p2.gate_in_date, p2.gate_in_time,
 	p1.open_cy, p1.clossing_cy, p2.gate_out_date, p2.gate_out_time,
 	p2.waktu_penitipan, p2.storage, p2.total_storage, p2.lolo, p2.admin,
