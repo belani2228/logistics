@@ -119,6 +119,12 @@ def get_data():
 				},
 				{
 					"type": "report",
+					"name": "Laporan Price List Trucking",
+					"doctype": "Trucking Price List",
+					"is_query_report": True
+				},
+				{
+					"type": "report",
 					"name": "Purchase Invoice Monthly",
 					"doctype": "Purchase Invoice",
 					"is_query_report": True

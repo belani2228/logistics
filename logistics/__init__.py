@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.29'
+__version__ = '1.1.30'
 
+#v1.1.30:
+#       - Add Report: Laporan Price List Trucking
 #v1.1.29:
 #       - Add Report: Profit & Lost Per Customer
 #v1.1.28:
