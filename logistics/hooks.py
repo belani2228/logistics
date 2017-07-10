@@ -71,6 +71,8 @@ website_context = {
 # 	"Event": "frappe.desk.doctype.event.event.has_permission",
 # }
 
+#dump_report_map = "erpnext.startup.report_data_map.data_map"
+
 # Document Events
 # ---------------
 # Hook on document methods and events
