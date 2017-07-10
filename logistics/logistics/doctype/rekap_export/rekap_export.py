@@ -158,7 +158,7 @@ class RekapExport(Document):
 					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer, "docstatus": 1}, "name")
 					if cek_price_list:
 						if t.type_empty == 'CBM' or t.type_empty == 'KGS':
-							cpd = frappe.db.sql("""select `name`, `to`, `buying`, `selling` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list, t.type), as_dict=1)
+							cpd = frappe.db.sql("""select `name`, `to`, `buying`, `selling` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list, t.type_empty), as_dict=1)
 							if cpd:
 								qty = t.custom_size
 								price = 0
