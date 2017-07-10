@@ -149,11 +149,7 @@ class RekapExport(Document):
 	def trucking_price(self):
 		tp = 0
 		if self.daily_report == 'MULIA':
-			paket = self.get("empty_items")
-		else:
-			paket = self.get("items")
-		for t in paket:
-			if self.daily_report == 'MULIA':
+			for t in self.get("empty_items"):
 				if t.type_empty and t.size_cont_empty and t.vendor_trucking and t.region:
 					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer, "docstatus": 1}, "name")
 					if cek_price_list:
@@ -252,7 +248,8 @@ class RekapExport(Document):
 					t.trucking_price_list_item = None
 					t.trucking_price_list_item_buying = None
 					t.trucking_price_list_item_selling = None
-			else:
+		else:
+			for t in self.get("items"):
 				if t.type and t.size_cont and t.vendor_trucking and t.region:
 					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer, "docstatus":1}, "name")
 					if cek_price_list:
