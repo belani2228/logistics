@@ -135,6 +135,12 @@ def get_data():
 					"doctype": "Job Cost",
 					"is_query_report": True
 				},
+				{
+					"type": "page",
+					"name": "volume-import",
+					"label": _("Volume Import"),
+					"icon": "fa fa-bar-chart"
+				},
 			]
 		},
 	]

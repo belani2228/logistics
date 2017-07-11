@@ -5,6 +5,7 @@ frappe.pages['volume-import'].on_page_load = function(wrapper) {
 		single_column: true
 	});
 	new erpnext.VolumeImport(wrapper);
+	frappe.breadcrumbs.add("Logistics")
 };
 
 erpnext.VolumeImport = frappe.views.TreeGridReport.extend({
@@ -15,9 +16,8 @@ erpnext.VolumeImport = frappe.views.TreeGridReport.extend({
 			parent: $(wrapper).find('.layout-main'),
 			page: wrapper.page,
 			doctypes: ["Item", "Item Group", "Customer", "Customer Group", "Company",
-				"Fiscal Year", "Sales Invoice", "Sales Invoice Item",
-				"Sales Order", "Sales Order Item[Sales Analytics]",
-				"Delivery Note", "Delivery Note Item[Sales Analytics]"],
+				"Fiscal Year",
+				"Rekap Import", "Rekap Import Item"],
 			tree_grid: { show: true }
 		});
 
@@ -35,23 +35,6 @@ erpnext.VolumeImport = frappe.views.TreeGridReport.extend({
 				item_key: "customer",
 				formatter: function(item) {
 					return item.customer_name || item.name;
-				}
-			},
-			"Item Group": {
-				label: __("Item"),
-				show: true,
-				parent_field: "parent_item_group",
-				item_key: "item_code",
-				formatter: function(item) {
-					return item.name;
-				}
-			},
-			"Item": {
-				label: __("Item"),
-				show: false,
-				item_key: "item_code",
-				formatter: function(item) {
-					return item.name;
 				}
 			}
 		}
@@ -72,13 +55,11 @@ erpnext.VolumeImport = frappe.views.TreeGridReport.extend({
 		this.columns = std_columns.concat(this.columns);
 	},
 	filters: [
-		{fieldtype:"Select", fieldname: "tree_type", label: __("Tree Type"), options:["Customer Group", "Customer",
-			"Item Group", "Item"]},
-		{fieldtype:"Select", fieldname: "based_on", label: __("Based On"), options:["Sales Invoice",
-			"Sales Order", "Delivery Note", "Rekap Import"]},
+		{fieldtype:"Select", fieldname: "tree_type", label: __("Tree Type"), options:["Customer Group", "Customer"]},
+		{fieldtype:"Select", fieldname: "based_on", label: __("Based On"), options:["Rekap Import"]},
 		{fieldtype:"Select", fieldname: "value_or_qty", label:  __("Value or Qty"),
-			options:[{label: __("Quantity"), value: "Quantity"}, {label: __("Value"), value: "Value"}]},
-		{fieldtype:"Date", fieldname: "from_date", label: __("From Date")},
+			options:[{label: __("Quantity"), value: "Quantity"}]},
+		{fieldtype:"Date", fieldname: "from_date", label: __("From Date"), default:(frappe.datetime.get_today())},
 		{fieldtype:"Label", fieldname: "to", label: __("To")},
 		{fieldtype:"Date", fieldname: "to_date", label: __("To Date")},
 		{fieldtype:"Select", fieldname: "company", label: __("Company"), link:"Company",
@@ -129,10 +110,6 @@ erpnext.VolumeImport = frappe.views.TreeGridReport.extend({
 				var items = frappe.report_dump.data["Customer"];
 			} if(me.tree_type=='Customer Group') {
 				var items = this.prepare_tree("Customer", "Customer Group");
-			} else if(me.tree_type=="Item Group") {
-				var items = this.prepare_tree("Item", "Item Group");
-			} else if(me.tree_type=="Item") {
-				var items = frappe.report_dump.data["Item"];
 			}
 
 			me.item_type = me.tree_type
@@ -177,12 +154,12 @@ erpnext.VolumeImport = frappe.views.TreeGridReport.extend({
 
 		$.each(this.tl[this.based_on], function(i, tl) {
 			if (me.is_default('company') ? true : tl.company === me.company) {
-				var posting_date = dateutil.str_to_obj(tl.posting_date);
+				var posting_date = dateutil.str_to_obj(tl.date);
 				if (posting_date >= from_date && posting_date <= to_date) {
 					var item = me.item_by_name[tl[me.tree_grid.item_key]] ||
 						me.item_by_name['Not Set'];
 					if(item){
-						item[me.column_map[tl.posting_date].field] += (is_val ? tl.base_net_amount : tl.qty);
+						item[me.column_map[tl.date].field] += (is_val ? tl.base_net_amount : tl.qty);
 					}
 				}
 			}

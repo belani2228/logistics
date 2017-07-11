@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.32'
+__version__ = '1.1.33'
 
+#v1.1.33:
+#       - Add Report: Volume Import
 #v1.1.32:
-#       - Update Rekap Export Empty for Muliat
+#       - Update Rekap Export Empty for Mulia
 #v1.1.31:
 #       - Update Report: Laporan Penitipan Container
 #v1.1.30:
