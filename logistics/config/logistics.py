@@ -141,6 +141,12 @@ def get_data():
 					"label": _("Volume Import"),
 					"icon": "fa fa-bar-chart"
 				},
+				{
+					"type": "page",
+					"name": "volume-export",
+					"label": _("Volume Export"),
+					"icon": "fa fa-bar-chart"
+				},
 			]
 		},
 	]

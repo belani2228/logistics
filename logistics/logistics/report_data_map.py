@@ -309,5 +309,22 @@ data_map = {
 		"links": {
 			"parent": ["Rekap Import", "name"]
 		}
+	},
+	"Rekap Export": {
+		"columns": ["name", "customer", "date", "company"],
+		"conditions": ["docstatus < 2"],
+		"order_by": "date",
+		"links": {
+			"customer": ["Customer", "name"],
+            "company":["Company", "name"]
+		}
+	},
+	"Rekap Export Item": {
+		"columns": ["name", "parent", "qty"],
+		"conditions": ["docstatus < 2"],
+		"order_by": "parent",
+		"links": {
+			"parent": ["Rekap Export", "name"]
+		}
 	}
 }

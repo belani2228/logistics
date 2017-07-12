@@ -1,0 +1,29 @@
+{
+ "content": null, 
+ "creation": "2017-07-12 09:22:26.561669", 
+ "docstatus": 0, 
+ "doctype": "Page", 
+ "icon": "icon-bar-chart", 
+ "idx": 0, 
+ "modified": "2017-07-12 09:22:26.561669", 
+ "modified_by": "Administrator", 
+ "module": "Logistics", 
+ "name": "volume-export", 
+ "owner": "Administrator", 
+ "page_name": "volume-export", 
+ "roles": [
+  {
+   "role": "Analytics"
+  }, 
+  {
+   "role": "Sales Manager"
+  }, 
+  {
+   "role": "Maintenance Manager"
+  }
+ ], 
+ "script": null, 
+ "standard": "Yes", 
+ "style": null, 
+ "title": "Volume Export"
+}

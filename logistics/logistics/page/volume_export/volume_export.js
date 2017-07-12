@@ -1,22 +1,22 @@
-frappe.pages['volume-import'].on_page_load = function(wrapper) {
+frappe.pages['volume-export'].on_page_load = function(wrapper) {
 	var page = frappe.ui.make_app_page({
 		parent: wrapper,
-		title: 'Volume Import',
+		title: 'Volume Export',
 		single_column: true
 	});
-	new erpnext.VolumeImport(wrapper);
+	new erpnext.VolumeExport(wrapper);
 	frappe.breadcrumbs.add("Logistics")
 };
 
-erpnext.VolumeImport = frappe.views.TreeGridReport.extend({
+erpnext.VolumeExport = frappe.views.TreeGridReport.extend({
 	init: function(wrapper) {
 		this._super({
-			title: __("Volume Import"),
+			title: __("Volume Export"),
 			page: wrapper,
 			parent: $(wrapper).find('.layout-main'),
 			page: wrapper.page,
 			doctypes: ["Item", "Customer", "Customer Group", "Company",
-				"Fiscal Year", "Rekap Import", "Rekap Import Item"],
+				"Rekap Export", "Rekap Export Item"],
 			tree_grid: { show: true }
 		});
 
@@ -55,7 +55,7 @@ erpnext.VolumeImport = frappe.views.TreeGridReport.extend({
 	},
 	filters: [
 		{fieldtype:"Select", fieldname: "tree_type", label: __("Tree Type"), options:["Customer Group", "Customer"]},
-		{fieldtype:"Select", fieldname: "based_on", label: __("Based On"), options:["Rekap Import"]},
+		{fieldtype:"Select", fieldname: "based_on", label: __("Based On"), options:["Rekap Export"]},
 		{fieldtype:"Select", fieldname: "value_or_qty", label:  __("Value or Qty"),
 			options:[{label: __("Quantity"), value: "Quantity"}]},
 		{fieldtype:"Date", fieldname: "from_date", label: __("From Date")},
@@ -154,6 +154,7 @@ erpnext.VolumeImport = frappe.views.TreeGridReport.extend({
 		$.each(this.tl[this.based_on], function(i, tl) {
 			if (me.is_default('company') ? true : tl.company === me.company) {
 				var posting_date = dateutil.str_to_obj(tl.date);
+				var ukuran = this.size;
 				if (posting_date >= from_date && posting_date <= to_date) {
 					var item = me.item_by_name[tl[me.tree_grid.item_key]] ||
 						me.item_by_name['Not Set'];

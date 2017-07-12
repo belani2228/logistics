@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 __version__ = '1.1.33'
 
+#v1.1.34:
+#       - Add Report: Volume Export
 #v1.1.33:
 #       - Add Report: Volume Import
 #v1.1.32:
