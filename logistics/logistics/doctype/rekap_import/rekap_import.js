@@ -87,6 +87,12 @@ var date_for_series = function(frm){
 frappe.ui.form.on("Rekap Import", "validate", function(frm) {
 	date_for_series(frm);
 })
+frappe.ui.form.on("Rekap Import", "refresh", function(frm) {
+	if (cur_frm.doc.linked_doc != null && !cur_frm.doc.__islocal){
+		var df1 = frappe.meta.get_docfield("Rekap Import", "customer", cur_frm.doc.name);
+		df1.read_only = 1;
+	}
+});
 /*
 frappe.ui.form.on("Rekap Import", "validate", function(frm) {
 	if(cur_frm.doc.aju == '1'){
