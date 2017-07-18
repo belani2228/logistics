@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.35'
+__version__ = '1.1.36'
 
+#v1.1.36:
+#       - Updat rekap export, tdk bisa ganti customer jk sudah ada deposite note
 #v1.1.35:
 #       - Updat rekap import, tdk bisa ganti customer jk sudah ada deposite note
 #v1.1.34:

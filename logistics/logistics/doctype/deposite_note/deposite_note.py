@@ -16,15 +16,24 @@ class DepositeNote(Document):
 		self.check_double_item()
 
 	def on_submit(self):
-		frappe.db.sql("""update `tabRekap Import` set linked_doc = %s where `name` = %s""", (self.name, self.no_job))
+		if self.jenis_rekap == "Rekap Import":
+			frappe.db.sql("""update `tabRekap Import` set linked_doc = %s where `name` = %s""", (self.name, self.no_job))
+		else:
+			frappe.db.sql("""update `tabRekap Export` set linked_doc = %s where `name` = %s""", (self.name, self.no_job))
 
 	def on_cancel(self):
-		frappe.db.sql("""update `tabRekap Import` set linked_doc = null where `name` = %s""", self.no_job)
-		lain = frappe.db.sql("""select `name` from `tabDeposite Note` where docstatus = '1' and `no_job` = %s and `name` != %s limit 1""", (self.no_job, self.name))
-		if lain:
-			frappe.db.sql("""update `tabRekap Import` set linked_doc = %s where `name` = %s""", (lain, self.no_job))
+		if self.jenis_rekap == "Rekap Import":
+			lain = frappe.db.sql("""select `name` from `tabDeposite Note` where docstatus = '1' and `no_job` = %s and `name` != %s limit 1""", (self.no_job, self.name))
+			if lain:
+				frappe.db.sql("""update `tabRekap Import` set linked_doc = %s where `name` = %s""", (lain, self.no_job))
+			else:
+				frappe.db.sql("""update `tabRekap Import` set linked_doc = null where `name` = %s""", self.no_job)
 		else:
-			frappe.db.sql("""update `tabRekap Import` set linked_doc = null where `name` = %s""", self.no_job)
+			lain = frappe.db.sql("""select `name` from `tabDeposite Note` where docstatus = '1' and `no_job` = %s and `name` != %s limit 1""", (self.no_job, self.name))
+			if lain:
+				frappe.db.sql("""update `tabRekap Export` set linked_doc = %s where `name` = %s""", (lain, self.no_job))
+			else:
+				frappe.db.sql("""update `tabRekap Export` set linked_doc = null where `name` = %s""", self.no_job)
 
 	def set_count_item(self):
 		count1 = 0;

@@ -113,7 +113,12 @@ frappe.ui.form.on("Rekap Export", "get_items_from_empty_container", function(frm
 		msgprint("You must save this document")
 	}
 	})
-
+	frappe.ui.form.on("Rekap Export", "refresh", function(frm) {
+		if (cur_frm.doc.linked_doc != null && !cur_frm.doc.__islocal){
+			var df1 = frappe.meta.get_docfield("Rekap Export", "customer", cur_frm.doc.name);
+			df1.read_only = 1;
+		}
+	});
 //hitung selisih hari
 /*
 frappe.ui.form.on("Container List", "gate_in", function(frm, cdt, cdn) {
