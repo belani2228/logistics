@@ -136,6 +136,12 @@ def get_data():
 					"is_query_report": True
 				},
 				{
+					"type": "report",
+					"name": "Selling Sheet",
+					"doctype": "Job Cost",
+					"is_query_report": True
+				},
+				{
 					"type": "page",
 					"name": "volume-import",
 					"label": _("Volume Import"),

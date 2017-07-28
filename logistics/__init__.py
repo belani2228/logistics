@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.37'
+__version__ = '1.1.38'
 
+#v1.1.38:
+#       - Add Report: Selling Sheet
 #v1.1.37:
 #       - Updat job cost print format
 #v1.1.36:
