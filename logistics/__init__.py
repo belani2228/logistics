@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.38'
+__version__ = '1.1.39'
 
+#v1.1.39:
+#       - Rekap export mulia empty & full masuk ke vendor trucking
 #v1.1.38:
 #       - Add Report: Selling Sheet
 #v1.1.37:

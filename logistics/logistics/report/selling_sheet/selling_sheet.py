@@ -22,7 +22,7 @@ def get_columns():
 	"""return columns"""
 
 	columns = [
-		_("Item Code")+":Link/Item:200",
+		_("Item Code")+":Link/Item:250",
 		_("Import")+":Currency:150",
 		_("Export")+":Currency:150",
 		_("Total")+":Currency:150",

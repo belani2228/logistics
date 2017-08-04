@@ -249,6 +249,106 @@ class RekapExport(Document):
 					t.trucking_price_list_item = None
 					t.trucking_price_list_item_buying = None
 					t.trucking_price_list_item_selling = None
+			for t in self.get("full_items"):
+				if t.type and t.size_cont and t.vendor_trucking and t.region:
+					cek_price_list = frappe.db.get_value("Trucking Price List", {"wilayah": t.region, "vendor": t.vendor_trucking, "customer":self.customer, "docstatus": 1}, "name")
+					if cek_price_list:
+						if t.type == 'CBM' or t.type == 'KGS':
+							cek_cpd = frappe.db.get_value("Trucking Price List Item", {"parent": cek_price_list, "type": t.type}, "name")
+							if cek_cpd:
+								qty = t.custom_size
+								price = 0
+								sell_price = 0
+								cpd = frappe.db.sql("""select `name`, `to`, `buying`, `selling` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list, t.type_empty), as_dict=1)
+								for c1 in cpd:
+									if qty >= 1:
+										if qty >= c1.to:
+											price1 = c1.to * c1.buying
+											price1 = c1.to * c1.selling
+											price = price + price1
+											sell_price = sell_price + price2
+											qty = qty - c1.to
+										else:
+											price1 = qty * c1.buying
+											price2 = qty * c1.selling
+											price = price + price1
+											sell_price = sell_price + price2
+											qty = 0
+								t.trucking_price_list = cek_price_list
+								t.trucking_price_list_item = "--"
+								t.trucking_price_list_item_buying = price
+								t.trucking_price_list_item_selling = sell_price
+							else:
+								t.trucking_price_list = None
+								t.trucking_price_list_item = None
+								t.trucking_price_list_item_buying = None
+								t.trucking_price_list_item_selling = None
+						else:
+							cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list, "size_cont":t.size_cont, "type":t.type}, ["name", "buying", "selling"], as_dict=1)
+							if cpd:
+								t.trucking_price_list = cek_price_list
+								t.trucking_price_list_item = cpd.name
+								t.trucking_price_list_item_buying = cpd.buying
+								t.trucking_price_list_item_selling = cpd.selling
+							else:
+								t.trucking_price_list = None
+								t.trucking_price_list_item = None
+								t.trucking_price_list_item_buying = None
+								t.trucking_price_list_item_selling = None
+					else:
+						cek_price_list_all = frappe.db.sql("""select name from `tabTrucking Price List` where docstatus = '1' and wilayah = %s and vendor = %s and customer is null""", (t.region, t.vendor_trucking))
+						if cek_price_list_all:
+							if t.type == 'CBM' or t.type == 'KGS':
+								cpd = frappe.db.sql("""select `name`, `to`, `buying` from `tabTrucking Price List Item` where parent = %s and type = %s order by `from` asc""", (cek_price_list_all[0][0], t.type), as_dict=1)
+								if cpd:
+									qty = t.custom_size
+									price = 0
+									sell_price = 0
+									for c1 in cpd:
+										if qty >= 1:
+											if qty >= c1.to:
+												price1 = c1.to * c1.buying
+												price2 = c1.to * c1.selling
+												price = price + price1
+												sell_price = sell_price + price2
+												qty = qty - c1.to
+											else:
+												price1 = qty * c1.buying
+												price2 = qty * c1.selling
+												price = price + price1
+												sell_price = sell_price + price2
+												qty = 0
+									t.trucking_price_list = cek_price_list_all[0][0]
+									t.trucking_price_list_item = "--"
+									t.trucking_price_list_item_buying = price
+									t.trucking_price_list_item_selling = sell_price
+								else:
+									t.trucking_price_list = None
+									t.trucking_price_list_item = None
+									t.trucking_price_list_item_buying = None
+									t.trucking_price_list_item_selling = None
+							else:
+								cpd = frappe.db.get_value("Trucking Price List Item", {"parent":cek_price_list_all[0][0], "size_cont":t.size_cont, "type":t.type}, ["name", "buying"], as_dict=1)
+								if cpd:
+									t.trucking_price_list = cek_price_list_all[0][0]
+									t.trucking_price_list_item = cpd.name
+									t.trucking_price_list_item_buying = cpd.buying
+									t.trucking_price_list_item_selling = cpd.selling
+								else:
+									t.trucking_price_list = None
+									t.trucking_price_list_item = None
+									t.trucking_price_list_item_buying = None
+									t.trucking_price_list_item_selling = None
+						else:
+							t.trucking_price_list = None
+							t.trucking_price_list_item = None
+							t.trucking_price_list_item_buying = None
+							t.trucking_price_list_item_selling = None
+				else:
+					t.trucking_price_list = None
+					t.trucking_price_list_item = None
+					t.trucking_price_list_item_buying = None
+					t.trucking_price_list_item_selling = None
 		else:
 			for t in self.get("items"):
 				if t.type and t.size_cont and t.vendor_trucking and t.region:
@@ -429,53 +529,126 @@ class RekapExport(Document):
 		against_acc = []
 		delete = frappe.db.sql("""DELETE FROM `tabVendor Trucking Item` WHERE no_job = %s AND purchase_invoice IS NULL""", self.name)
 		if self.daily_report == 'MULIA':
-			paket = self.get("empty_items")
+			for v1 in self.get("empty_items"):
+				if v1.trucking_price_list and v1.trucking_price_list_item and v1.vendor_trucking not in against_acc:
+					cek_vendor = frappe.db.get_value("Vendor Trucking", {"period": period, "vendor": v1.vendor_trucking}, "name")
+					if not cek_vendor:
+						cari_supp = frappe.db.get_value("Supplier", v1.vendor_trucking, "supplier_name")
+						vt = frappe.get_doc({
+							"doctype": "Vendor Trucking",
+							"vendor": v1.vendor_trucking,
+							"vendor_name": cari_supp,
+							"period": period
+						})
+						vt.insert()
+						against_acc.append(v1.vendor_trucking)
+			for v in self.get("empty_items"):
+				if v.trucking_price_list and v.trucking_price_list_item:
+					cek_vendor = frappe.db.get_value("Vendor Trucking", {"period":period, "vendor":v.vendor_trucking}, "name")
+					cek_vendor_det = frappe.db.get_value("Vendor Trucking Item", {"parent":cek_vendor, "rekap_item": v.name}, "name")
+					if cek_vendor_det:
+						vti = frappe.get_doc("Vendor Trucking Item", cek_vendor_det)
+						vti.jenis_rekap = "Rekap Export"
+						vti.no_job = self.name
+						vti.container_no = v.container_no +' (Empty)'
+						vti.job_date = self.date
+						vti.region = v.region
+						vti.rekap_item = v.name
+						vti.buying_amount = v.trucking_price_list_item_buying
+						vti.selling_amount = v.trucking_price_list_item_selling
+						vti.save()
+					else:
+						vti = frappe.get_doc({
+							"doctype": "Vendor Trucking Item",
+							"parent": cek_vendor,
+							"parentfield": "items",
+							"parenttype": "Vendor Trucking",
+							"jenis_rekap": "Rekap Export",
+							"no_job": self.name,
+							"container_no": v.container_no +' (Empty)',
+							"job_date": self.date,
+							"region": v.region,
+							"rekap_item": v.name,
+							"buying_amount": v.trucking_price_list_item_buying,
+							"selling_amount": v.trucking_price_list_item_selling
+						})
+						vti.insert()
+			for v in self.get("full_items"):
+				if v.trucking_price_list and v.trucking_price_list_item:
+					cek_vendor = frappe.db.get_value("Vendor Trucking", {"period":period, "vendor":v.vendor_trucking}, "name")
+					cek_vendor_det = frappe.db.get_value("Vendor Trucking Item", {"parent":cek_vendor, "rekap_item": v.name}, "name")
+					if cek_vendor_det:
+						vti = frappe.get_doc("Vendor Trucking Item", cek_vendor_det)
+						vti.jenis_rekap = "Rekap Export"
+						vti.no_job = self.name
+						vti.container_no = v.container_no +' (Full)'
+						vti.job_date = self.date
+						vti.region = v.region
+						vti.rekap_item = v.name
+						vti.buying_amount = v.trucking_price_list_item_buying
+						vti.selling_amount = v.trucking_price_list_item_selling
+						vti.save()
+					else:
+						vti = frappe.get_doc({
+							"doctype": "Vendor Trucking Item",
+							"parent": cek_vendor,
+							"parentfield": "items",
+							"parenttype": "Vendor Trucking",
+							"jenis_rekap": "Rekap Export",
+							"no_job": self.name,
+							"container_no": v.container_no +' (Full)',
+							"job_date": self.date,
+							"region": v.region,
+							"rekap_item": v.name,
+							"buying_amount": v.trucking_price_list_item_buying,
+							"selling_amount": v.trucking_price_list_item_selling
+						})
+						vti.insert()
 		else:
-			paket = self.get("items")
-		for v1 in paket:
-			if v1.trucking_price_list and v1.trucking_price_list_item and v1.vendor_trucking not in against_acc:
-				cek_vendor = frappe.db.get_value("Vendor Trucking", {"period": period, "vendor": v1.vendor_trucking}, "name")
-				if not cek_vendor:
-					cari_supp = frappe.db.get_value("Supplier", v1.vendor_trucking, "supplier_name")
-					vt = frappe.get_doc({
-						"doctype": "Vendor Trucking",
-						"vendor": v1.vendor_trucking,
-						"vendor_name": cari_supp,
-						"period": period
-					})
-					vt.insert()
-					against_acc.append(v1.vendor_trucking)
-		for v in paket:
-			if v.trucking_price_list and v.trucking_price_list_item:
-				cek_vendor = frappe.db.get_value("Vendor Trucking", {"period":period, "vendor":v.vendor_trucking}, "name")
-				cek_vendor_det = frappe.db.get_value("Vendor Trucking Item", {"parent":cek_vendor, "rekap_item": v.name}, "name")
-				if cek_vendor_det:
-					vti = frappe.get_doc("Vendor Trucking Item", cek_vendor_det)
-					vti.jenis_rekap = "Rekap Export"
-					vti.no_job = self.name
-					vti.container_no = v.container_no
-					vti.job_date = self.date
-					vti.region = v.region
-					vti.rekap_item = v.name
-					vti.buying_amount = v.trucking_price_list_item_buying
-					vti.selling_amount = v.trucking_price_list_item_selling
-					vti.save()
-				else:
-					vti = frappe.get_doc({
-						"doctype": "Vendor Trucking Item",
-						"parent": cek_vendor,
-						"parentfield": "items",
-						"parenttype": "Vendor Trucking",
-						"jenis_rekap": "Rekap Export",
-						"no_job": self.name,
-						"container_no": v.container_no,
-						"job_date": self.date,
-						"region": v.region,
-						"rekap_item": v.name,
-						"buying_amount": v.trucking_price_list_item_buying,
-						"selling_amount": v.trucking_price_list_item_selling
-					})
-					vti.insert()
+			for v1 in self.get("items"):
+				if v1.trucking_price_list and v1.trucking_price_list_item and v1.vendor_trucking not in against_acc:
+					cek_vendor = frappe.db.get_value("Vendor Trucking", {"period": period, "vendor": v1.vendor_trucking}, "name")
+					if not cek_vendor:
+						cari_supp = frappe.db.get_value("Supplier", v1.vendor_trucking, "supplier_name")
+						vt = frappe.get_doc({
+							"doctype": "Vendor Trucking",
+							"vendor": v1.vendor_trucking,
+							"vendor_name": cari_supp,
+							"period": period
+						})
+						vt.insert()
+						against_acc.append(v1.vendor_trucking)
+			for v in paket:
+				if v.trucking_price_list and v.trucking_price_list_item:
+					cek_vendor = frappe.db.get_value("Vendor Trucking", {"period":period, "vendor":v.vendor_trucking}, "name")
+					cek_vendor_det = frappe.db.get_value("Vendor Trucking Item", {"parent":cek_vendor, "rekap_item": v.name}, "name")
+					if cek_vendor_det:
+						vti = frappe.get_doc("Vendor Trucking Item", cek_vendor_det)
+						vti.jenis_rekap = "Rekap Export"
+						vti.no_job = self.name
+						vti.container_no = v.container_no
+						vti.job_date = self.date
+						vti.region = v.region
+						vti.rekap_item = v.name
+						vti.buying_amount = v.trucking_price_list_item_buying
+						vti.selling_amount = v.trucking_price_list_item_selling
+						vti.save()
+					else:
+						vti = frappe.get_doc({
+							"doctype": "Vendor Trucking Item",
+							"parent": cek_vendor,
+							"parentfield": "items",
+							"parenttype": "Vendor Trucking",
+							"jenis_rekap": "Rekap Export",
+							"no_job": self.name,
+							"container_no": v.container_no,
+							"job_date": self.date,
+							"region": v.region,
+							"rekap_item": v.name,
+							"buying_amount": v.trucking_price_list_item_buying,
+							"selling_amount": v.trucking_price_list_item_selling
+						})
+						vti.insert()
 
 	def on_submit(self):
 		frappe.db.set(self, 'status', 'Submitted')
