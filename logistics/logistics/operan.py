@@ -241,6 +241,7 @@ def update_vt_from_pinv(pinv):
 		if row.vendor_trucking_item:
 			vti = frappe.get_doc("Vendor Trucking Item", row.vendor_trucking_item)
 			vti.purchase_invoice = pinv
+			vti.for_print = '0'
 			vti.save()
 
 def cancel_doctype_related_with_pinv(doc, method):
