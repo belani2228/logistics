@@ -8,7 +8,7 @@ frappe.query_reports["Rekap Export Report"] = {
 			"label": __("Daily Report"),
 			"width": "80",
 			"fieldtype": "Select",
-			"options": ["ROMAN & ULTRA PRIMA", "MULIA", "BT", "SPV"],
+			"options": ["ROMAN, ULTRA PRIMA & BUNGASARI", "MULIA", "BT", "SPV"],
 			"reqd": 1
 		},
 		{

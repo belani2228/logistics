@@ -12,9 +12,9 @@ def execute(filters=None):
 	data = []
 
 	for ri in sl_entries:
-		data.append([ri.name, ri.customer, ri.date, ri.shipper, ri.stuffing, ri.commodity,
+		data.append([ri.name, ri.customer, ri.date, ri.stuffing, ri.commodity,
 		ri.no_invoice, ri.kategori_export, ri.no_do, ri.received_do, ri.carrier,
-		ri.pod, ri.qty, ri.size, ri.type, ri.vessel, ri.etd, ri.open_cy,
+		ri.pod, ri.party, ri.vessel, ri.etd, ri.open_cy,
 		ri.clossing_cy, ri.aju, ri.nopen, ri.date_of_peb, ri.peb, ri.npe,
 		ri.packing_list, ri.invoice, ri.date_of_received_npe_fiat, ri.bl_ok,
 		ri.pick_up_bl, ri.surrender_bl, ri.date_of_submit_to_pkk, ri.date_of_submit_to_quarantine,
@@ -30,7 +30,6 @@ def get_columns():
 		_("No Job")+":Link/Rekap Export:130",
 		_("Customer")+":Link/Customer:120",
 		_("Date")+":Date:100",
-		_("Shipper")+":Link/Shipper:100",
 		_("Stuffing")+":Date:100",
 		_("Commodity")+":Link/Commodity:100",
 		_("No Invoice")+"::100",
@@ -39,9 +38,7 @@ def get_columns():
 		_("Received DO")+":Datetime:130",
 		_("Carrier")+":Link/Supplier:120",
 		_("Destination")+":Link/Port:120",
-		_("Qty")+":Float:50",
-		_("Size")+"::50",
-		_("Type")+"::50",
+		_("Party")+"::120",
 		_("Vessel")+"::140",
 		_("ETD")+":Date:100",
 		_("Open CY")+":Datetime:130",
@@ -87,9 +84,9 @@ def get_conditions(filters):
 
 def get_entries(filters):
 	conditions = get_conditions(filters)
-	return frappe.db.sql("""SELECT daily_report, `name`, customer, `date`, shipper, stuffing,
+	return frappe.db.sql("""SELECT daily_report, `name`, customer, `date`, stuffing,
 	commodity, no_invoice, kategori_export, no_do, received_do, carrier, pod,
-	qty, size, type, vessel, etd, open_cy, clossing_cy, aju, nopen, date_of_peb,
+	party, vessel, etd, open_cy, clossing_cy, aju, nopen, date_of_peb,
 	peb, npe, packing_list, invoice, date_of_received_npe_fiat, bl_ok,
 	pick_up_bl, surrender_bl, date_of_submit_to_pkk, date_of_submit_to_quarantine,
 	send_draft_pytho_to_bt, date_of_draft_ok, date_of_issue_pytho
