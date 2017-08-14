@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.40'
+__version__ = '1.1.41'
 
+#v1.1.41:
+#       - Add Laporan Kelengkapan Dokumen
 #v1.1.40:
 #       - Update on_submit Purchase Invoice
 #v1.1.39:

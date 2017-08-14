@@ -107,14 +107,20 @@ def get_data():
 				},
 				{
 					"type": "report",
-					"name": "Laporan Penitipan Container",
-					"doctype": "Penitipan Container",
+					"name": "Laporan Harian Per Customer",
+					"doctype": "Rekap Import",
 					"is_query_report": True
 				},
 				{
 					"type": "report",
-					"name": "Laporan Harian Per Customer",
-					"doctype": "Rekap Import",
+					"name": "Laporan Kelengkapan Dokumen",
+					"doctype": "Customer",
+					"is_query_report": True
+				},
+				{
+					"type": "report",
+					"name": "Laporan Penitipan Container",
+					"doctype": "Penitipan Container",
 					"is_query_report": True
 				},
 				{
