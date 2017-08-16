@@ -618,7 +618,7 @@ class RekapExport(Document):
 						})
 						vt.insert()
 						against_acc.append(v1.vendor_trucking)
-			for v in paket:
+			for v in self.get("items"):
 				if v.trucking_price_list and v.trucking_price_list_item:
 					cek_vendor = frappe.db.get_value("Vendor Trucking", {"period":period, "vendor":v.vendor_trucking}, "name")
 					cek_vendor_det = frappe.db.get_value("Vendor Trucking Item", {"parent":cek_vendor, "rekap_item": v.name}, "name")
