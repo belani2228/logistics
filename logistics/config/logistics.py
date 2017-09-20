@@ -83,6 +83,12 @@ def get_data():
 			"items": [
 				{
 					"type": "report",
+					"name": "Activity User",
+					"doctype": "Communication",
+					"is_query_report": True
+				},
+				{
+					"type": "report",
 					"name": "Rekap Import Report",
 					"doctype": "Rekap Import",
 					"is_query_report": True

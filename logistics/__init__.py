@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.43'
+__version__ = '1.1.44'
 
+#v1.1.44:
+#       - Add Report: Activity User
 #v1.1.43:
 #       - Fix update_vendor_trucking in rekap_export.py
 #v1.1.42:
