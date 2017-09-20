@@ -34,9 +34,9 @@ def get_conditions(filters):
 	if filters.get("user"):
 		conditions += " and `owner` = '%s'" % frappe.db.escape(filters["user"])
 	if filters.get("from_date"):
-		conditions += " and creation >= '%s'" % frappe.db.escape(filters["from_date"])
+		conditions += " and creation >= '%s 00:00:00.000000'" % frappe.db.escape(filters["from_date"])
 	if filters.get("to_date"):
-		conditions += " and creation <= '%s'" % frappe.db.escape(filters["to_date"])
+		conditions += " and creation <= '%s 23:59:59.999999'" % frappe.db.escape(filters["to_date"])
 	return conditions
 
 def get_entries(filters):
