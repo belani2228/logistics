@@ -96,8 +96,8 @@ def cancel_doctype_related_with_sinv(doc, method):
 def cancel_pi_from_sinv(sinv):
 	sii = frappe.db.sql("""select purchase_invoice_item from `tabSales Invoice Item` where parent = %s""", sinv, as_dict=1)
 	for row in sii:
-		if row.purchase_invoice:
-			frappe.db.sql("""update `tabPurchase Invoice Item` set sales_invoice = NULL where `name` = %s""",  row.purchase_invoice_item)
+		if row.purchase_invoice_item:
+			frappe.db.sql("""update `tabPurchase Invoice Item` set sales_invoice = null where `name` = %s""",  row.purchase_invoice_item)
 
 def cancel_jc_item_from_sinv(sinv, jc):
 	sinv_items = frappe.db.sql("""select item_code, amount from `tabSales Invoice Item` where parent = %s order by idx asc""", sinv, as_dict=1)
