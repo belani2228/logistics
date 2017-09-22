@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-__version__ = '1.1.45'
+__version__ = '1.1.46'
 
+#v1.1.46:
+#       - Fix Title in Deposite Note when duplicate/copy
 #v1.1.45:
 #       - Update Sales Invoice cancel, fix hapus no sales invoice di purchase invoice
 #v1.1.44:
